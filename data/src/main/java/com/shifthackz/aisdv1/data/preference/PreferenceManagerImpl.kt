@@ -10,6 +10,7 @@ import com.shifthackz.aisdv1.domain.entity.DarkThemeToken
 import com.shifthackz.aisdv1.domain.entity.FeatureTag
 import com.shifthackz.aisdv1.domain.entity.Grid
 import com.shifthackz.aisdv1.domain.entity.HuggingFaceModel
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.Settings
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -124,6 +125,14 @@ class PreferenceManagerImpl(
         onChanged = ::onPreferencesChanged,
     )
 
+    override var modelType: ModelType by preferences.delegates.complexString(
+        key = KEY_MODEL_TYPE,
+        default = ModelType.SD_1_5,
+        serialize = { type -> type.name },
+        deserialize = { name -> ModelType.entries.find { it.name == name } ?: ModelType.SD_1_5 },
+        onChanged = ::onPreferencesChanged,
+    )
+
     override var hordeApiKey: String by preferences.delegates.string(
         key = KEY_HORDE_API_KEY,
         onChanged = ::onPreferencesChanged,
@@ -232,6 +241,7 @@ class PreferenceManagerImpl(
             Settings(
                 serverUrl = automatic1111ServerUrl,
                 sdModel = sdModel,
+                modelType = modelType,
                 demoMode = demoMode,
                 developerMode = developerMode,
                 localDiffusionAllowCancel = localOnnxAllowCancel,
@@ -277,6 +287,7 @@ class PreferenceManagerImpl(
         const val KEY_FORM_PROMPT_TAGGED_INPUT = "key_prompt_tagged_input_kb"
         const val KEY_SERVER_SOURCE = "key_server_source"
         const val KEY_SD_MODEL = "key_sd_model"
+        const val KEY_MODEL_TYPE = "key_model_type"
         const val KEY_HORDE_API_KEY = "key_horde_api_key"
         const val KEY_OPEN_AI_API_KEY = "key_open_ai_api_key"
         const val KEY_HUGGING_FACE_API_KEY = "key_hugging_face_api_key"

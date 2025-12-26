@@ -126,6 +126,7 @@ val viewModelModule = module {
             dispatchersProvider = get(),
             generationFormUpdateEvent = get(),
             getStableDiffusionSamplersUseCase = get(),
+            getForgeModulesUseCase = get(),
             observeHordeProcessStatusUseCase = get(),
             observeLocalDiffusionProcessStatusUseCase = get(),
             saveLastResultToCacheUseCase = get(),

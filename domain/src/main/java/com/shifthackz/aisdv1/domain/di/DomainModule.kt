@@ -44,6 +44,8 @@ import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCa
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCase
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteGalleryItemUseCase
@@ -148,6 +150,7 @@ internal val useCasesModule = module {
     factoryOf(::FetchAndGetLorasUseCaseImpl) bind FetchAndGetLorasUseCase::class
     factoryOf(::FetchAndGetHyperNetworksUseCaseImpl) bind FetchAndGetHyperNetworksUseCase::class
     factoryOf(::FetchAndGetEmbeddingsUseCaseImpl) bind FetchAndGetEmbeddingsUseCase::class
+    factoryOf(::GetForgeModulesUseCaseImpl) bind GetForgeModulesUseCase::class
     factoryOf(::SplashNavigationUseCaseImpl) bind SplashNavigationUseCase::class
     factoryOf(::GetConfigurationUseCaseImpl) bind GetConfigurationUseCase::class
     factoryOf(::SetServerConfigurationUseCaseImpl) bind SetServerConfigurationUseCase::class

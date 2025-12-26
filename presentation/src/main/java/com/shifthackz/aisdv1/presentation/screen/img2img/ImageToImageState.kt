@@ -3,11 +3,16 @@ package com.shifthackz.aisdv1.presentation.screen.img2img
 import android.graphics.Bitmap
 import androidx.compose.runtime.Immutable
 import com.shifthackz.aisdv1.core.model.UiText
+import com.shifthackz.aisdv1.domain.entity.ADetailerConfig
+import com.shifthackz.aisdv1.domain.entity.ForgeModule
+import com.shifthackz.aisdv1.domain.entity.HiresConfig
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.OpenAiModel
 import com.shifthackz.aisdv1.domain.entity.OpenAiQuality
 import com.shifthackz.aisdv1.domain.entity.OpenAiSize
 import com.shifthackz.aisdv1.domain.entity.OpenAiStyle
+import com.shifthackz.aisdv1.domain.entity.Scheduler
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.StabilityAiClipGuidance
 import com.shifthackz.aisdv1.domain.entity.StabilityAiStylePreset
@@ -24,6 +29,7 @@ data class ImageToImageState(
     override val onBoardingDemo: Boolean = false,
     override val screenModal: Modal = Modal.None,
     override val mode: ServerSource = ServerSource.AUTOMATIC1111,
+    override val modelType: ModelType = ModelType.SD_1_5,
     override val advancedToggleButtonVisible: Boolean = true,
     override val advancedOptionsVisible: Boolean = false,
     override val formPromptTaggedInput: Boolean = false,
@@ -33,12 +39,18 @@ data class ImageToImageState(
     override val height: String = 512.toString(),
     override val samplingSteps: Int = 20,
     override val cfgScale: Float = 7f,
+    override val distilledCfgScale: Float = 3.5f,
     override val restoreFaces: Boolean = false,
     override val seed: String = "",
     override val subSeed: String = "",
     override val subSeedStrength: Float = 0f,
     override val selectedSampler: String = "",
     override val availableSamplers: List<String> = emptyList(),
+    override val selectedScheduler: Scheduler = Scheduler.AUTOMATIC,
+    override val availableForgeModules: List<ForgeModule> = emptyList(),
+    override val selectedForgeModules: List<ForgeModule> = emptyList(),
+    override val aDetailerConfig: ADetailerConfig = ADetailerConfig.DISABLED,
+    override val hiresConfig: HiresConfig = HiresConfig.DISABLED,
     override val selectedStylePreset: StabilityAiStylePreset = StabilityAiStylePreset.NONE,
     override val selectedClipGuidancePreset: StabilityAiClipGuidance = StabilityAiClipGuidance.NONE,
     override val openAiModel: OpenAiModel = OpenAiModel.DALL_E_2,
@@ -65,6 +77,7 @@ data class ImageToImageState(
         onBoardingDemo: Boolean,
         screenModal: Modal,
         mode: ServerSource,
+        modelType: ModelType,
         advancedToggleButtonVisible: Boolean,
         advancedOptionsVisible: Boolean,
         formPromptTaggedInput: Boolean,
@@ -74,12 +87,18 @@ data class ImageToImageState(
         height: String,
         samplingSteps: Int,
         cfgScale: Float,
+        distilledCfgScale: Float,
         restoreFaces: Boolean,
         seed: String,
         subSeed: String,
         subSeedStrength: Float,
         selectedSampler: String,
         availableSamplers: List<String>,
+        selectedScheduler: Scheduler,
+        availableForgeModules: List<ForgeModule>,
+        selectedForgeModules: List<ForgeModule>,
+        aDetailerConfig: ADetailerConfig,
+        hiresConfig: HiresConfig,
         selectedStylePreset: StabilityAiStylePreset,
         selectedClipGuidancePreset: StabilityAiClipGuidance,
         openAiModel: OpenAiModel,
@@ -95,6 +114,7 @@ data class ImageToImageState(
         onBoardingDemo = onBoardingDemo,
         screenModal = screenModal,
         mode = mode,
+        modelType = modelType,
         advancedToggleButtonVisible = advancedToggleButtonVisible,
         advancedOptionsVisible = advancedOptionsVisible,
         formPromptTaggedInput = formPromptTaggedInput,
@@ -104,12 +124,18 @@ data class ImageToImageState(
         height = height,
         samplingSteps = samplingSteps,
         cfgScale = cfgScale,
+        distilledCfgScale = distilledCfgScale,
         restoreFaces = restoreFaces,
         seed = seed,
         subSeed = subSeed,
         subSeedStrength = subSeedStrength,
         selectedSampler = selectedSampler,
         availableSamplers = availableSamplers,
+        selectedScheduler = selectedScheduler,
+        availableForgeModules = availableForgeModules,
+        selectedForgeModules = selectedForgeModules,
+        aDetailerConfig = aDetailerConfig,
+        hiresConfig = hiresConfig,
         selectedStylePreset = selectedStylePreset,
         selectedClipGuidancePreset = selectedClipGuidancePreset,
         openAiModel = openAiModel,
@@ -149,6 +175,7 @@ fun ImageToImageState.mapToPayload(): ImageToImagePayload = with(this) {
         subSeed = subSeed.trim(),
         subSeedStrength = subSeedStrength,
         sampler = selectedSampler,
+        scheduler = selectedScheduler,
         nsfw = if (mode == ServerSource.HORDE) nsfw else false,
         batchCount = batchCount,
         inPaintingMaskInvert = inPaintModel.maskMode.inverse,
@@ -158,5 +185,6 @@ fun ImageToImageState.mapToPayload(): ImageToImagePayload = with(this) {
         maskBlur = inPaintModel.maskBlur,
         stabilityAiClipGuidance = selectedClipGuidancePreset.takeIf { mode == ServerSource.STABILITY_AI },
         stabilityAiStylePreset = selectedStylePreset.takeIf { mode == ServerSource.STABILITY_AI },
+        aDetailer = aDetailerConfig.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: ADetailerConfig.DISABLED,
     )
 }

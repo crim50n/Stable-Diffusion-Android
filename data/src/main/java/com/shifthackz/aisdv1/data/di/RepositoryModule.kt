@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.PowerManager
 import com.shifthackz.aisdv1.data.repository.DownloadableModelRepositoryImpl
 import com.shifthackz.aisdv1.data.repository.EmbeddingsRepositoryImpl
+import com.shifthackz.aisdv1.data.repository.ForgeModulesRepositoryImpl
 import com.shifthackz.aisdv1.data.repository.GenerationResultRepositoryImpl
 import com.shifthackz.aisdv1.data.repository.HordeGenerationRepositoryImpl
 import com.shifthackz.aisdv1.data.repository.HuggingFaceGenerationRepositoryImpl
@@ -29,6 +30,7 @@ import com.shifthackz.aisdv1.data.repository.TemporaryGenerationResultRepository
 import com.shifthackz.aisdv1.data.repository.WakeLockRepositoryImpl
 import com.shifthackz.aisdv1.domain.repository.DownloadableModelRepository
 import com.shifthackz.aisdv1.domain.repository.EmbeddingsRepository
+import com.shifthackz.aisdv1.domain.repository.ForgeModulesRepository
 import com.shifthackz.aisdv1.domain.repository.GenerationResultRepository
 import com.shifthackz.aisdv1.domain.repository.HordeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.HuggingFaceGenerationRepository
@@ -82,6 +84,7 @@ val repositoryModule = module {
     factoryOf(::LorasRepositoryImpl) bind LorasRepository::class
     factoryOf(::StableDiffusionHyperNetworksRepositoryImpl) bind StableDiffusionHyperNetworksRepository::class
     factoryOf(::EmbeddingsRepositoryImpl) bind EmbeddingsRepository::class
+    factoryOf(::ForgeModulesRepositoryImpl) bind ForgeModulesRepository::class
     factoryOf(::ServerConfigurationRepositoryImpl) bind ServerConfigurationRepository::class
     factoryOf(::GenerationResultRepositoryImpl) bind GenerationResultRepository::class
     factoryOf(::RandomImageRepositoryImpl) bind RandomImageRepository::class

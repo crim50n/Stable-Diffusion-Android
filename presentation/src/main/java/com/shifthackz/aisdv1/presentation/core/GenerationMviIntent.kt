@@ -1,7 +1,11 @@
 package com.shifthackz.aisdv1.presentation.core
 
 import android.graphics.Bitmap
+import com.shifthackz.aisdv1.domain.entity.ADetailerConfig
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
+import com.shifthackz.aisdv1.domain.entity.ForgeModule
+import com.shifthackz.aisdv1.domain.entity.HiresConfig
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.OpenAiModel
 import com.shifthackz.aisdv1.domain.entity.OpenAiQuality
 import com.shifthackz.aisdv1.domain.entity.OpenAiSize
@@ -38,6 +42,10 @@ sealed interface GenerationMviIntent : MviIntent {
 
         data class CfgScale(val value: Float) : Update
 
+        data class DistilledCfgScale(val value: Float) : Update
+
+        data class ModelTypeChange(val value: ModelType) : Update
+
         data class RestoreFaces(val value: Boolean) : Update
 
         data class Seed(val value: String) : Update
@@ -51,6 +59,14 @@ sealed interface GenerationMviIntent : MviIntent {
         data class Nsfw(val value: Boolean) : Update
 
         data class Batch(val value: Int) : Update
+
+        data class Scheduler(val value: com.shifthackz.aisdv1.domain.entity.Scheduler) : Update
+
+        data class ADetailer(val value: ADetailerConfig) : Update
+
+        data class Hires(val value: HiresConfig) : Update
+
+        data class ForgeModules(val value: List<ForgeModule>) : Update
 
         sealed interface OpenAi : Update {
 

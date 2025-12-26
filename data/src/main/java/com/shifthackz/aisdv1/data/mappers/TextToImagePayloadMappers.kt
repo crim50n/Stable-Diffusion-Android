@@ -2,6 +2,7 @@ package com.shifthackz.aisdv1.data.mappers
 
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.OpenAiModel
+import com.shifthackz.aisdv1.domain.entity.Scheduler
 import com.shifthackz.aisdv1.domain.entity.StabilityAiClipGuidance
 import com.shifthackz.aisdv1.domain.entity.StabilityAiSampler
 import com.shifthackz.aisdv1.domain.entity.StabilityAiStylePreset
@@ -9,6 +10,7 @@ import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
 import com.shifthackz.aisdv1.network.request.HordeGenerationAsyncRequest
 import com.shifthackz.aisdv1.network.request.HuggingFaceGenerationRequest
 import com.shifthackz.aisdv1.network.request.OpenAiRequest
+import com.shifthackz.aisdv1.network.request.OverrideSettings
 import com.shifthackz.aisdv1.network.request.StabilityTextToImageRequest
 import com.shifthackz.aisdv1.network.request.SwarmUiGenerationRequest
 import com.shifthackz.aisdv1.network.request.TextToImageRequest
@@ -22,6 +24,7 @@ fun TextToImagePayload.mapToRequest(): TextToImageRequest = with(this) {
         negativePrompt = negativePrompt,
         steps = samplingSteps,
         cfgScale = cfgScale,
+        distilledCfgScale = distilledCfgScale,
         width = width,
         height = height,
         restoreFaces = restoreFaces,
@@ -29,6 +32,19 @@ fun TextToImagePayload.mapToRequest(): TextToImageRequest = with(this) {
         subSeed = subSeed.trim().ifEmpty { null },
         subSeedStrength = subSeedStrength,
         samplerIndex = sampler,
+        scheduler = scheduler.takeIf { it != Scheduler.AUTOMATIC }?.alias,
+        alwaysOnScripts = aDetailer.toAlwaysOnScripts(),
+        enableHr = hires.enabled.takeIf { it },
+        hrUpscaler = hires.upscaler.takeIf { hires.enabled },
+        hrScale = hires.scale.takeIf { hires.enabled },
+        hrSecondPassSteps = hires.steps.takeIf { hires.enabled && it > 0 },
+        hrCfg = hires.hrCfg?.takeIf { hires.enabled },
+        hrDistilledCfg = hires.hrDistilledCfg?.takeIf { hires.enabled },
+        hrAdditionalModules = if (hires.enabled) emptyList() else null,
+        denoisingStrength = hires.denoisingStrength.takeIf { hires.enabled },
+        overrideSettings = forgeModules.takeIf { it.isNotEmpty() }?.let { modules ->
+            OverrideSettings(forgeAdditionalModules = modules.map { it.path })
+        },
     )
 }
 

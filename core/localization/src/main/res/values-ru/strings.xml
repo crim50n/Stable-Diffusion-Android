@@ -10,7 +10,7 @@
     <string name="retry">Повторить</string>
     <string name="delete">Удалить</string>
     <string name="download">Загрузить</string>
-    <string name="width">Длина</string>
+    <string name="width">Ширина</string>
     <string name="height">Высота</string>
     <string name="browse">Просмотр</string>
     <string name="apply">Применить</string>
@@ -71,7 +71,22 @@
     <string name="hint_offline_generation">Генерация без интернета</string>
     <string name="hint_own_server">Собственный сервер</string>
     <string name="hint_cfg_scale">CFG Шкала: %1$s</string>
+    <string name="hint_distilled_cfg_scale">Distilled CFG Scale: %1$s</string>
+    <string name="hint_model_type">Тип модели</string>
+    <string name="hint_vae_text_encoder">VAE / Text Encoder</string>
     <string name="hint_sampler">Метод выборки</string>
+    <string name="hint_scheduler">Планировщик</string>
+    <string name="hint_adetailer">ADetailer</string>
+    <string name="hint_adetailer_enabled">Включить ADetailer</string>
+    <string name="hint_adetailer_model">Модель детекции</string>
+    <string name="hint_adetailer_confidence">Порог уверенности: %1$s</string>
+    <string name="hint_adetailer_denoising">Шумоподавление: %1$s</string>
+    <string name="hint_hires">Hires. Fix</string>
+    <string name="hint_hires_enabled">Включить Hires. Fix</string>
+    <string name="hint_hires_upscaler">Апскейлер</string>
+    <string name="hint_hires_scale">Масштаб: %1$s</string>
+    <string name="hint_hires_steps">Шаги: %1$s (0 = как в первом проходе)</string>
+    <string name="hint_hires_denoising">Шумоподавление: %1$s</string>
     <string name="hint_style_preset">Стиль</string>
     <string name="hint_clip_guidance_preset">Клиппинг пресет</string>
     <string name="hint_restore_faces">Восстановление лиц</string>
@@ -130,7 +145,7 @@
     <string name="hint_stability_ai_about">О Stability AI</string>
     <string name="hint_stability_ai_engine">Stability AI движок</string>
 
-    <string name="hint_swarm_ui_title">Укажите свйой URL-адрес Swarm UI</string>
+    <string name="hint_swarm_ui_title">Укажите свой URL-адрес Swarm UI</string>
     <string name="hint_swarm_ui_sub_title">Модульный веб-интерфейс Stable Diffusion, в котором особое внимание уделяется обеспечению легкого доступа к инструментам, высокой производительности и расширяемости.</string>
 
     <string name="hint_local_diffusion_sub_title">Эта конфигурация использует Microsoft ONNX и позволяет запускать генерации Stable Diffusion на вашем телефоне без необходимости подключаться к удаленному серверу/облаку.</string>

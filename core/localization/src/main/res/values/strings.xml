@@ -89,7 +89,22 @@
     <string name="hint_offline_generation">Offline generation</string>
     <string name="hint_own_server">Own Server</string>
     <string name="hint_cfg_scale">CFG Scale: %1$s</string>
+    <string name="hint_distilled_cfg_scale">Distilled CFG Scale: %1$s</string>
+    <string name="hint_model_type">Model type</string>
+    <string name="hint_vae_text_encoder">VAE / Text Encoder</string>
     <string name="hint_sampler">Sampling method</string>
+    <string name="hint_scheduler">Scheduler</string>
+    <string name="hint_adetailer">ADetailer</string>
+    <string name="hint_adetailer_enabled">Enable ADetailer</string>
+    <string name="hint_adetailer_model">Detection model</string>
+    <string name="hint_adetailer_confidence">Confidence: %1$s</string>
+    <string name="hint_adetailer_denoising">Denoising: %1$s</string>
+    <string name="hint_hires">Hires. Fix</string>
+    <string name="hint_hires_enabled">Enable Hires. Fix</string>
+    <string name="hint_hires_upscaler">Upscaler</string>
+    <string name="hint_hires_scale">Scale: %1$s</string>
+    <string name="hint_hires_steps">Steps: %1$s (0 = same)</string>
+    <string name="hint_hires_denoising">Denoising: %1$s</string>
     <string name="hint_style_preset">Style preset</string>
     <string name="hint_clip_guidance_preset">Clip guidance preset</string>
     <string name="hint_restore_faces">Restore faces</string>

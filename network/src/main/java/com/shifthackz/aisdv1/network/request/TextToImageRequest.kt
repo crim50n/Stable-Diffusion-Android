@@ -11,6 +11,8 @@ data class TextToImageRequest(
     val steps: Int,
     @SerializedName("cfg_scale")
     val cfgScale: Float,
+    @SerializedName("distilled_cfg_scale")
+    val distilledCfgScale: Float? = null,
     @SerializedName("width")
     val width: Int,
     @SerializedName("height")
@@ -25,4 +27,26 @@ data class TextToImageRequest(
     val subSeedStrength: Float?,
     @SerializedName("sampler_index")
     val samplerIndex: String,
+    @SerializedName("scheduler")
+    val scheduler: String? = null,
+    @SerializedName("alwayson_scripts")
+    val alwaysOnScripts: Map<String, Any>? = null,
+    @SerializedName("enable_hr")
+    val enableHr: Boolean? = null,
+    @SerializedName("hr_upscaler")
+    val hrUpscaler: String? = null,
+    @SerializedName("hr_scale")
+    val hrScale: Float? = null,
+    @SerializedName("hr_second_pass_steps")
+    val hrSecondPassSteps: Int? = null,
+    @SerializedName("hr_cfg")
+    val hrCfg: Float? = null,
+    @SerializedName("hr_distilled_cfg")
+    val hrDistilledCfg: Float? = null,
+    @SerializedName("hr_additional_modules")
+    val hrAdditionalModules: List<String>? = null,
+    @SerializedName("denoising_strength")
+    val denoisingStrength: Float? = null,
+    @SerializedName("override_settings")
+    val overrideSettings: OverrideSettings? = null,
 )
