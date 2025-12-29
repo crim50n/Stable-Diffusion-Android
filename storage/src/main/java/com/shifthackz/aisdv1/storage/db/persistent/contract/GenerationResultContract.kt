@@ -22,4 +22,7 @@ internal object GenerationResultContract {
     const val SUB_SEED_STRENGTH = "sub_seed_strength"
     const val DENOISING_STRENGTH = "denoising_strength"
     const val HIDDEN = "hidden"
+    const val MEDIA_PATH = "media_path"
+    const val INPUT_MEDIA_PATH = "input_media_path"
+    const val MEDIA_TYPE = "media_type"
 }

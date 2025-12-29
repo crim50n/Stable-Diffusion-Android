@@ -45,4 +45,10 @@ data class GenerationResultEntity(
     val denoisingStrength: Float,
     @ColumnInfo(name = GenerationResultContract.HIDDEN, defaultValue = "0")
     val hidden: Boolean,
+    @ColumnInfo(name = GenerationResultContract.MEDIA_PATH, defaultValue = "")
+    val mediaPath: String,
+    @ColumnInfo(name = GenerationResultContract.INPUT_MEDIA_PATH, defaultValue = "")
+    val inputMediaPath: String,
+    @ColumnInfo(name = GenerationResultContract.MEDIA_TYPE, defaultValue = "IMAGE")
+    val mediaType: String,
 )

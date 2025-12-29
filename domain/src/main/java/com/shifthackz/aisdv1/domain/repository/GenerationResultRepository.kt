@@ -9,6 +9,8 @@ interface GenerationResultRepository {
 
     fun getAll(): Single<List<AiGenerationResult>>
 
+    fun getAllIds(): Single<List<Long>>
+
     fun getPage(limit: Int, offset: Int): Single<List<AiGenerationResult>>
 
     fun getMediaStoreInfo(): Single<MediaStoreInfo>
@@ -26,4 +28,10 @@ interface GenerationResultRepository {
     fun deleteAll(): Completable
 
     fun toggleVisibility(id: Long): Single<Boolean>
+
+    /**
+     * Migrates existing gallery items from base64 storage to file-based storage.
+     * This runs in the background at app startup.
+     */
+    fun migrateBase64ToFiles(): Completable
 }

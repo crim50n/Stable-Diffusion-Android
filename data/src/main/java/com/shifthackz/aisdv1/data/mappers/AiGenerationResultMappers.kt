@@ -1,6 +1,7 @@
 package com.shifthackz.aisdv1.data.mappers
 
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
+import com.shifthackz.aisdv1.domain.entity.MediaType
 import com.shifthackz.aisdv1.storage.db.persistent.entity.GenerationResultEntity
 
 //region DOMAIN --> ENTITY
@@ -27,6 +28,9 @@ fun AiGenerationResult.mapDomainToEntity(): GenerationResultEntity = with(this) 
         subSeedStrength = subSeedStrength,
         denoisingStrength = denoisingStrength,
         hidden = hidden,
+        mediaPath = mediaPath,
+        inputMediaPath = inputMediaPath,
+        mediaType = mediaType.key,
     )
 }
 //endregion
@@ -55,6 +59,9 @@ fun GenerationResultEntity.mapEntityToDomain(): AiGenerationResult = with(this) 
         subSeedStrength = subSeedStrength,
         denoisingStrength = denoisingStrength,
         hidden = hidden,
+        mediaPath = mediaPath,
+        inputMediaPath = inputMediaPath,
+        mediaType = MediaType.parse(mediaType),
     )
 }
 //endregion

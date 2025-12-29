@@ -15,6 +15,12 @@ interface GenerationResultDao {
     @Query("SELECT * FROM ${GenerationResultContract.TABLE} ORDER BY ${GenerationResultContract.CREATED_AT} DESC")
     fun query(): Single<List<GenerationResultEntity>>
 
+    @Query("SELECT ${GenerationResultContract.ID} FROM ${GenerationResultContract.TABLE} ORDER BY ${GenerationResultContract.CREATED_AT} DESC")
+    fun queryAllIds(): Single<List<Long>>
+
+    @Query("SELECT ${GenerationResultContract.ID} FROM ${GenerationResultContract.TABLE} ORDER BY ${GenerationResultContract.CREATED_AT} DESC LIMIT :limit OFFSET :offset")
+    fun queryPageIds(limit: Int, offset: Int): Single<List<Long>>
+
     @Query("SELECT * FROM ${GenerationResultContract.TABLE} ORDER BY ${GenerationResultContract.CREATED_AT} DESC LIMIT :limit OFFSET :offset ")
     fun queryPage(limit: Int, offset: Int): Single<List<GenerationResultEntity>>
 

@@ -18,8 +18,10 @@ internal abstract class CoreMediaStoreRepository(
 ) {
 
     protected fun exportToMediaStore(result: AiGenerationResult): Completable {
-        if (preferenceManager.saveToMediaStore) return export(result)
-        return Completable.complete()
+        if (!preferenceManager.saveToMediaStore) return Completable.complete()
+        // Skip export if there's no image data (e.g., FalAi uses mediaPath directly)
+        if (result.image.isEmpty()) return Completable.complete()
+        return export(result)
     }
 
     protected fun getInfo(): Single<MediaStoreInfo> = Single.create { emitter ->

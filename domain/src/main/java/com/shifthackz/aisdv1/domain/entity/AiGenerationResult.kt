@@ -21,6 +21,9 @@ data class AiGenerationResult(
     val subSeedStrength: Float,
     val denoisingStrength: Float,
     val hidden: Boolean,
+    val mediaPath: String = "",
+    val inputMediaPath: String = "",
+    val mediaType: MediaType = MediaType.IMAGE,
 ) {
     enum class Type(val key: String) {
         TEXT_TO_IMAGE("txt2img"),
