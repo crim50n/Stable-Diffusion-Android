@@ -10,4 +10,6 @@ sealed interface GalleryDetailEffect : MviEffect {
     data class ShareGenerationParams(val state: GalleryDetailState) : GalleryDetailEffect
 
     data class ShareClipBoard(val text: String) : GalleryDetailEffect
+
+    data object ImageSavedToGallery : GalleryDetailEffect
 }

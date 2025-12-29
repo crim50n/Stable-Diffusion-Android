@@ -34,9 +34,17 @@ sealed interface GalleryIntent : MviIntent {
 
     data object DismissDialog : GalleryIntent
 
-    data class OpenItem(val item: GalleryGridItemUi) : GalleryIntent
+    data class OpenItem(val item: GalleryGridItemUi, val index: Int) : GalleryIntent
+
+    data object ClearScrollPosition : GalleryIntent
 
     data class OpenMediaStoreFolder(val uri: Uri) : GalleryIntent
+
+    sealed interface SaveToGallery : GalleryIntent {
+        enum class All : SaveToGallery {
+            Request, Confirm;
+        }
+    }
 
     data class Drawer(val intent: DrawerIntent) : GalleryIntent
 

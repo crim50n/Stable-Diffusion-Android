@@ -6,5 +6,9 @@ sealed interface LoggerIntent : MviIntent {
 
     data object ReadLogs : LoggerIntent
 
+    data object CopyLogs : LoggerIntent
+
+    data object ShareLogs : LoggerIntent
+
     data object NavigateBack : LoggerIntent
 }

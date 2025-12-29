@@ -11,7 +11,7 @@ sealed interface GalleryDetailIntent : MviIntent {
     data class CopyToClipboard(val content: CharSequence) : GalleryDetailIntent
 
     enum class SendTo : GalleryDetailIntent {
-        Img2Img, Txt2Img;
+        Img2Img, Txt2Img, FalAi;
     }
 
     enum class Export : GalleryDetailIntent {
@@ -24,7 +24,13 @@ sealed interface GalleryDetailIntent : MviIntent {
 
     data object ToggleVisibility : GalleryDetailIntent
 
+    data object ToggleControlsVisibility : GalleryDetailIntent
+
+    data object SaveToGallery : GalleryDetailIntent
+
     data object Report : GalleryDetailIntent
 
     data object DismissDialog : GalleryDetailIntent
+
+    data class PageChanged(val index: Int) : GalleryDetailIntent
 }

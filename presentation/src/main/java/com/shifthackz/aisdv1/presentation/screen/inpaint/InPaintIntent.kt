@@ -19,8 +19,12 @@ sealed interface InPaintIntent : MviIntent {
     data class DrawPathBmp(val bitmap: Bitmap?) : InPaintIntent
 
     enum class Action : InPaintIntent {
-        Undo, Clear;
+        Undo, Clear, ToggleDrawing, ResetZoom;
     }
+
+    data class UpdateZoomScale(val scale: Float) : InPaintIntent
+
+    data class UpdateZoomOffset(val offsetX: Float, val offsetY: Float) : InPaintIntent
 
     sealed interface Update : InPaintIntent {
 

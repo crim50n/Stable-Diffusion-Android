@@ -22,7 +22,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,21 +39,41 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.shifthackz.aisdv1.core.common.extensions.copyToClipboard
 import com.shifthackz.android.core.mvi.MviComponent
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import android.content.Intent
 import com.shifthackz.aisdv1.core.localization.R as LocalizationR
 
 @Composable
 fun LoggerScreen() {
+    val context = LocalContext.current
     MviComponent(
         viewModel = koinViewModel<LoggerViewModel>(),
+        processEffect = { effect ->
+            when (effect) {
+                is LoggerEffect.CopyToClipboard -> {
+                    context.copyToClipboard(effect.text)
+                }
+                is LoggerEffect.ShareLog -> {
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, effect.text)
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    context.startActivity(shareIntent)
+                }
+            }
+        }
     ) { state, processIntent ->
         LoggerScreenContent(
             state = state,
@@ -93,17 +116,41 @@ private fun LoggerScreenContent(
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
-                        IconButton(
-                            onClick = {
-                                processIntent(LoggerIntent.ReadLogs)
-                            },
-                            content = {
-                                Icon(
-                                    Icons.Default.Refresh,
-                                    contentDescription = "Refresh",
-                                )
-                            },
-                        )
+                        Row {
+                            IconButton(
+                                onClick = {
+                                    processIntent(LoggerIntent.CopyLogs)
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.Default.ContentCopy,
+                                        contentDescription = "Copy",
+                                    )
+                                },
+                            )
+                            IconButton(
+                                onClick = {
+                                    processIntent(LoggerIntent.ShareLogs)
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.Default.Save,
+                                        contentDescription = "Save",
+                                    )
+                                },
+                            )
+                            IconButton(
+                                onClick = {
+                                    processIntent(LoggerIntent.ReadLogs)
+                                },
+                                content = {
+                                    Icon(
+                                        Icons.Default.Refresh,
+                                        contentDescription = "Refresh",
+                                    )
+                                },
+                            )
+                        }
                     }
                 }
             )

@@ -7,7 +7,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import com.mr0xf00.easycrop.AspectRatio
 import com.mr0xf00.easycrop.CropError
 import com.mr0xf00.easycrop.CropResult
 import com.mr0xf00.easycrop.CropperStyle
@@ -27,20 +26,6 @@ fun CropImageModal(
     val imageCropper = rememberImageCropper()
     val state = imageCropper.cropState
     state?.let {
-        LaunchedEffect(Unit) {
-            it.region = when {
-                it.region.height > it.region.width -> it.region.copy(
-                    bottom = it.region.width,
-                )
-
-                it.region.width > it.region.height -> it.region.copy(
-                    right = it.region.height
-                )
-
-                else -> it.region
-            }
-            it.aspectLock = true
-        }
         ImageCropperDialog(
             state = it,
             style = CropperStyle(
@@ -48,7 +33,6 @@ fun CropImageModal(
                 overlay = MaterialTheme.colorScheme.surface,
                 guidelines = CropperStyleGuidelines(),
                 shapes = listOf(RectCropShape),
-                aspects = listOf(AspectRatio(1, 1)),
             ),
         )
     }

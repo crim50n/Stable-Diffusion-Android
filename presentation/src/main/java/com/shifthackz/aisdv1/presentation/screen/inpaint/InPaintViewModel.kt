@@ -120,6 +120,22 @@ class InPaintViewModel(
                     model = state.model.copy(maskMode = intent.value)
                 )
             }
+
+            InPaintIntent.Action.ToggleDrawing -> updateState { state ->
+                state.copy(isDrawing = !state.isDrawing)
+            }
+
+            InPaintIntent.Action.ResetZoom -> updateState { state ->
+                state.copy(zoomScale = 1f, zoomOffsetX = 0f, zoomOffsetY = 0f)
+            }
+
+            is InPaintIntent.UpdateZoomScale -> updateState { state ->
+                state.copy(zoomScale = intent.scale)
+            }
+
+            is InPaintIntent.UpdateZoomOffset -> updateState { state ->
+                state.copy(zoomOffsetX = intent.offsetX, zoomOffsetY = intent.offsetY)
+            }
         }
     }
 }

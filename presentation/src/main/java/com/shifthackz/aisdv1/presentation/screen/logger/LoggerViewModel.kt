@@ -5,14 +5,13 @@ import com.shifthackz.aisdv1.core.common.log.FileLoggingTree
 import com.shifthackz.aisdv1.core.common.schedulers.DispatchersProvider
 import com.shifthackz.aisdv1.core.viewmodel.MviRxViewModel
 import com.shifthackz.aisdv1.presentation.navigation.router.main.MainRouter
-import com.shifthackz.android.core.mvi.EmptyEffect
 import java.io.File
 
 class LoggerViewModel(
     dispatchersProvider: DispatchersProvider,
     private val fileProviderDescriptor: FileProviderDescriptor,
     private val mainRouter: MainRouter,
-) : MviRxViewModel<LoggerState, LoggerIntent, EmptyEffect>() {
+) : MviRxViewModel<LoggerState, LoggerIntent, LoggerEffect>() {
 
     override val initialState = LoggerState()
 
@@ -25,6 +24,8 @@ class LoggerViewModel(
     override fun processIntent(intent: LoggerIntent) {
         when (intent) {
             LoggerIntent.ReadLogs -> readLogs()
+            LoggerIntent.CopyLogs -> emitEffect(LoggerEffect.CopyToClipboard(state.value.text))
+            LoggerIntent.ShareLogs -> emitEffect(LoggerEffect.ShareLog(state.value.text))
             LoggerIntent.NavigateBack -> mainRouter.navigateBack()
         }
     }

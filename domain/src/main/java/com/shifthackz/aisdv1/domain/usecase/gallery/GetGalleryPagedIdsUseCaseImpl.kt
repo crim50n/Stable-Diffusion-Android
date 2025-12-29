@@ -1,0 +1,11 @@
+package com.shifthackz.aisdv1.domain.usecase.gallery
+
+import com.shifthackz.aisdv1.domain.repository.GenerationResultRepository
+import io.reactivex.rxjava3.core.Single
+
+class GetGalleryPagedIdsUseCaseImpl(
+    private val repository: GenerationResultRepository,
+) : GetGalleryPagedIdsUseCase {
+
+    override fun invoke(): Single<List<Long>> = repository.getAllIds()
+}

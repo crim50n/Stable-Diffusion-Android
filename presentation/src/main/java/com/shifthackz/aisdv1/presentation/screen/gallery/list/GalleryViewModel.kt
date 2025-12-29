@@ -16,7 +16,9 @@ import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteGalleryItemsUseCase
+import com.shifthackz.aisdv1.domain.usecase.gallery.GetAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetMediaStoreInfoUseCase
+import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.usecase.generation.GetGenerationResultPagedUseCase
 import com.shifthackz.aisdv1.presentation.model.Modal
 import com.shifthackz.aisdv1.presentation.navigation.router.drawer.DrawerRouter
@@ -40,6 +42,8 @@ class GalleryViewModel(
     private val schedulersProvider: SchedulersProvider,
     private val mainRouter: MainRouter,
     private val drawerRouter: DrawerRouter,
+    private val mediaStoreGateway: MediaStoreGateway,
+    private val getAllGalleryUseCase: GetAllGalleryUseCase,
 ) : MviRxViewModel<GalleryState, GalleryIntent, GalleryEffect>() {
 
     override val initialState = GalleryState()
@@ -99,7 +103,16 @@ class GalleryViewModel(
 
             GalleryIntent.Export.Selection.Confirm -> launchGalleryExport(false)
 
-            is GalleryIntent.OpenItem -> mainRouter.navigateToGalleryDetails(intent.item.id)
+            is GalleryIntent.OpenItem -> {
+                android.util.Log.d("GalleryScroll", "OpenItem: saving index ${intent.index}")
+                updateState { it.copy(scrollToItemIndex = intent.index) }
+                mainRouter.navigateToGalleryDetails(intent.item.id)
+            }
+
+            GalleryIntent.ClearScrollPosition -> {
+                android.util.Log.d("GalleryScroll", "ClearScrollPosition called")
+                updateState { it.copy(scrollToItemIndex = null) }
+            }
 
             is GalleryIntent.OpenMediaStoreFolder -> emitEffect(GalleryEffect.OpenUri(intent.uri))
 
@@ -156,6 +169,12 @@ class GalleryViewModel(
             GalleryIntent.Dropdown.Close -> updateState {
                 it.copy(dropdownMenuShow = false)
             }
+
+            GalleryIntent.SaveToGallery.All.Request -> setActiveModal(
+                Modal.ConfirmSaveToGallery(saveAll = true)
+            )
+
+            GalleryIntent.SaveToGallery.All.Confirm -> saveAllToGallery()
         }
     }
 
@@ -193,5 +212,41 @@ class GalleryViewModel(
 
     private fun setActiveModal(dialog: Modal) = updateState {
         it.copy(screenModal = dialog, dropdownMenuShow = false)
+    }
+
+    private fun saveAllToGallery() {
+        !getAllGalleryUseCase()
+            .doOnSubscribe { setActiveModal(Modal.ExportInProgress) }
+            .flatMapObservable { io.reactivex.rxjava3.core.Observable.fromIterable(it) }
+            .flatMapSingle { item ->
+                base64ToBitmapConverter(Base64ToBitmapConverter.Input(item.image))
+                    .map { output -> item to output }
+            }
+            .flatMapCompletable { (item, output) ->
+                Completable.fromAction {
+                    val stream = java.io.ByteArrayOutputStream()
+                    output.bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
+                    mediaStoreGateway.exportToFile(
+                        fileName = "sdai_${item.id}_${System.currentTimeMillis()}",
+                        content = stream.toByteArray(),
+                    )
+                }
+            }
+            .subscribeOn(schedulersProvider.io)
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(
+                onError = { t ->
+                    setActiveModal(
+                        Modal.Error(
+                            (t.localizedMessage ?: "Something went wrong").asUiText()
+                        )
+                    )
+                    errorLog(t)
+                },
+                onComplete = {
+                    setActiveModal(Modal.None)
+                    emitEffect(GalleryEffect.AllImagesSavedToGallery)
+                }
+            )
     }
 }

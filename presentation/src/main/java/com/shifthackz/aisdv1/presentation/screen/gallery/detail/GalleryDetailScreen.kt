@@ -1,10 +1,15 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 
 package com.shifthackz.aisdv1.presentation.screen.gallery.detail
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +20,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -22,10 +30,12 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Report
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,8 +46,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,6 +70,7 @@ import com.shifthackz.aisdv1.core.model.asUiText
 import com.shifthackz.aisdv1.core.sharing.shareFile
 import com.shifthackz.android.core.mvi.MviComponent
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
+import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.presentation.modal.ModalRenderer
 import com.shifthackz.aisdv1.presentation.theme.colors
 import com.shifthackz.aisdv1.presentation.utils.Constants
@@ -94,6 +109,14 @@ fun GalleryDetailScreen(itemId: Long) {
                 is GalleryDetailEffect.ShareClipBoard -> {
                     clipboardManager.setText(AnnotatedString(effect.text))
                 }
+
+                GalleryDetailEffect.ImageSavedToGallery -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(LocalizationR.string.gallery_save_success),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
             }
         },
     ) { state, intentHandler ->
@@ -111,33 +134,75 @@ private fun ScreenContent(
     state: GalleryDetailState,
     processIntent: (GalleryDetailIntent) -> Unit = {},
 ) {
-    Box(modifier = modifier) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(stringResource(id = LocalizationR.string.title_gallery_details))
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                processIntent(GalleryDetailIntent.NavigateBack)
-                            },
-                            content = {
-                                Icon(
-                                    Icons.AutoMirrored.Outlined.ArrowBack,
-                                    contentDescription = "Back button",
-                                )
-                            },
-                        )
-                    },
-                    actions = {
-                        AnimatedVisibility(
-                            visible = state.selectedTab != GalleryDetailState.Tab.INFO,
-                            enter = fadeIn(),
-                            exit = fadeOut(),
-                        ) {
+    val isImageTab = state.selectedTab == GalleryDetailState.Tab.IMAGE ||
+                     state.selectedTab == GalleryDetailState.Tab.ORIGINAL
+    val showControls = state.controlsVisible || !isImageTab
+
+    Box(
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
+    ) {
+        // Image content - fills entire screen when controls hidden
+        when (state) {
+            is GalleryDetailState.Content -> GalleryDetailContentState(
+                modifier = Modifier.fillMaxSize(),
+                state = state,
+                onCopyTextClick = {
+                    processIntent(GalleryDetailIntent.CopyToClipboard(it))
+                },
+                onPageChanged = { page ->
+                    processIntent(GalleryDetailIntent.PageChanged(page))
+                },
+                onImageTap = {
+                    if (isImageTab) {
+                        processIntent(GalleryDetailIntent.ToggleControlsVisibility)
+                    }
+                },
+            )
+
+            is GalleryDetailState.Loading -> Unit
+        }
+
+        // Top bar overlay
+        AnimatedVisibility(
+            visible = showControls,
+            enter = fadeIn(animationSpec = tween(200)) +
+                    slideInVertically(animationSpec = tween(200)) { -it },
+            exit = fadeOut(animationSpec = tween(200)) +
+                   slideOutVertically(animationSpec = tween(200)) { -it },
+            modifier = Modifier.align(Alignment.TopCenter),
+        ) {
+            CenterAlignedTopAppBar(
+                title = {},
+                modifier = Modifier.statusBarsPadding(),
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            processIntent(GalleryDetailIntent.NavigateBack)
+                        },
+                        content = {
+                            Icon(
+                                Icons.AutoMirrored.Outlined.ArrowBack,
+                                contentDescription = "Back button",
+                            )
+                        },
+                    )
+                },
+                actions = {
+                    AnimatedVisibility(
+                        visible = state.selectedTab != GalleryDetailState.Tab.INFO,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        Row {
+                            IconButton(
+                                onClick = { processIntent(GalleryDetailIntent.SaveToGallery) },
+                                content = {
+                                    Icon(
+                                        imageVector = Icons.Default.Save,
+                                        contentDescription = "Save",
+                                    )
+                                },
+                            )
                             IconButton(
                                 onClick = { processIntent(GalleryDetailIntent.Export.Image) },
                                 content = {
@@ -151,32 +216,25 @@ private fun ScreenContent(
                             )
                         }
                     }
-                )
-            },
-            content = { paddingValues ->
-                val contentModifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-
-                when (state) {
-                    is GalleryDetailState.Content -> GalleryDetailContentState(
-                        modifier = contentModifier,
-                        state = state,
-                        onCopyTextClick = {
-                            processIntent(GalleryDetailIntent.CopyToClipboard(it))
-                        },
-                    )
-
-                    is GalleryDetailState.Loading -> Unit
                 }
-            },
-            bottomBar = {
-                GalleryDetailNavigationBar(
-                    state = state,
-                    processIntent = processIntent,
-                )
-            },
-        )
+            )
+        }
+
+        // Bottom bar overlay
+        AnimatedVisibility(
+            visible = showControls,
+            enter = fadeIn(animationSpec = tween(200)) +
+                    slideInVertically(animationSpec = tween(200)) { it },
+            exit = fadeOut(animationSpec = tween(200)) +
+                   slideOutVertically(animationSpec = tween(200)) { it },
+            modifier = Modifier.align(Alignment.BottomCenter),
+        ) {
+            GalleryDetailNavigationBar(
+                state = state,
+                processIntent = processIntent,
+            )
+        }
+
         ModalRenderer(screenModal = state.screenModal) {
             (it as? GalleryDetailIntent)?.let(processIntent::invoke)
         }
@@ -188,56 +246,70 @@ private fun GalleryDetailNavigationBar(
     state: GalleryDetailState,
     processIntent: (GalleryDetailIntent) -> Unit = {},
 ) {
-    Column(
-        modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.surface),
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
     ) {
-        if (state is GalleryDetailState.Content) {
-            if (state.showReportButton) {
-                OutlinedButton(
+        Column {
+            if (state is GalleryDetailState.Content) {
+                if (state.showReportButton) {
+                    OutlinedButton(
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp, vertical = 4.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        onClick = { processIntent(GalleryDetailIntent.Report) },
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            imageVector = Icons.Default.Report,
+                            contentDescription = "Report",
+                        )
+                        Text(
+                            text = stringResource(LocalizationR.string.report_title),
+                            color = LocalContentColor.current
+                        )
+                    }
+                }
+                Row(
                     modifier = Modifier
-                        .padding(horizontal = 24.dp, vertical = 4.dp)
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                    onClick = { processIntent(GalleryDetailIntent.Report) },
+                        .padding(horizontal = 16.dp, vertical = 2.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        imageVector = Icons.Default.Report,
-                        contentDescription = "Report",
-                    )
-                    Text(
-                        text = stringResource(LocalizationR.string.report_title),
-                        color = LocalContentColor.current
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 2.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                IconButton(
-                    onClick = { processIntent(GalleryDetailIntent.SendTo.Txt2Img) },
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = PresentationR.drawable.ic_text),
-                        contentDescription = "txt2img",
-                        tint = LocalContentColor.current,
-                    )
-                }
-                IconButton(
-                    onClick = { processIntent(GalleryDetailIntent.SendTo.Img2Img) },
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = PresentationR.drawable.ic_image),
-                        contentDescription = "img2img",
-                        tint = LocalContentColor.current,
-                    )
+                if (state.currentSource == ServerSource.FAL_AI) {
+                    // Fal AI button - show for all images when Fal AI is active source
+                    IconButton(
+                        onClick = { processIntent(GalleryDetailIntent.SendTo.FalAi) },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(id = PresentationR.drawable.ic_text),
+                            contentDescription = "Fal AI",
+                            tint = LocalContentColor.current,
+                        )
+                    }
+                } else {
+                    // Standard txt2img/img2img buttons for all other sources
+                    IconButton(
+                        onClick = { processIntent(GalleryDetailIntent.SendTo.Txt2Img) },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(id = PresentationR.drawable.ic_text),
+                            contentDescription = "txt2img",
+                            tint = LocalContentColor.current,
+                        )
+                    }
+                    IconButton(
+                        onClick = { processIntent(GalleryDetailIntent.SendTo.Img2Img) },
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(id = PresentationR.drawable.ic_image),
+                            contentDescription = "img2img",
+                            tint = LocalContentColor.current,
+                        )
+                    }
                 }
                 IconButton(
                     onClick = { processIntent(GalleryDetailIntent.ToggleVisibility) },
@@ -296,6 +368,7 @@ private fun GalleryDetailNavigationBar(
                 )
             }
         }
+        }
     }
 
 }
@@ -305,26 +378,97 @@ private fun GalleryDetailContentState(
     modifier: Modifier = Modifier,
     state: GalleryDetailState.Content,
     onCopyTextClick: (CharSequence) -> Unit = {},
+    onPageChanged: (Int) -> Unit = {},
+    onImageTap: () -> Unit = {},
 ) {
     Column(
         modifier = modifier,
     ) {
         when (state.selectedTab) {
-            GalleryDetailState.Tab.IMAGE -> ZoomableImage(
-                modifier = Modifier.fillMaxSize(),
-                source = ZoomableImageSource.Bmp(state.bitmap),
-                hideImage = state.hidden,
-            )
+            GalleryDetailState.Tab.IMAGE -> {
+                if (state.galleryIds.size > 1) {
+                    // key() ensures pager is recreated with correct initialPage after deletion
+                    key(state.galleryIds) {
+                        val pagerState = rememberPagerState(
+                            initialPage = state.currentIndex,
+                            pageCount = { state.galleryIds.size }
+                        )
+
+                        LaunchedEffect(pagerState) {
+                            snapshotFlow { pagerState.settledPage }
+                                .collect { page ->
+                                    if (page != state.currentIndex) {
+                                        onPageChanged(page)
+                                    }
+                                }
+                        }
+
+                        // Animate to target page (swipe effect for deletion)
+                        LaunchedEffect(state.animateToPage) {
+                            state.animateToPage?.let { targetPage ->
+                                if (targetPage in 0 until pagerState.pageCount &&
+                                    pagerState.currentPage != targetPage) {
+                                    pagerState.animateScrollToPage(targetPage)
+                                }
+                            }
+                        }
+
+                        HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxSize(),
+                        beyondViewportPageCount = 1,
+                    ) { page ->
+                        // Get bitmap from cache, or use current bitmap for current page
+                        val pageBitmap = state.getBitmapForPage(page)
+                            ?: if (page == state.currentIndex) state.bitmap else null
+
+                        if (pageBitmap != null) {
+                            ZoomableImage(
+                                modifier = Modifier.fillMaxSize(),
+                                source = ZoomableImageSource.Bmp(pageBitmap),
+                                hideImage = page == state.currentIndex && state.hidden,
+                                consumeGesturesWhenNotZoomed = false,
+                                onTap = onImageTap,
+                            )
+                        } else {
+                            // Show loading indicator while bitmap is being loaded
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(MaterialTheme.colorScheme.background),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(48.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+                        }
+                    }
+                } else {
+                    ZoomableImage(
+                        modifier = Modifier.fillMaxSize(),
+                        source = ZoomableImageSource.Bmp(state.bitmap),
+                        hideImage = state.hidden,
+                        onTap = onImageTap,
+                    )
+                }
+            }
 
             GalleryDetailState.Tab.ORIGINAL -> state.inputBitmap?.let { bmp ->
                 ZoomableImage(
                     modifier = Modifier.fillMaxSize(),
                     source = ZoomableImageSource.Bmp(bmp),
+                    onTap = onImageTap,
                 )
             }
 
             GalleryDetailState.Tab.INFO -> GalleryDetailsTable(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .padding(top = 64.dp),
                 state = state,
                 onCopyTextClick = onCopyTextClick,
             )
@@ -363,20 +507,32 @@ private fun GalleryDetailsTable(
             color = colorOddText,
             onCopyTextClick = onCopyTextClick,
         )
+        if (state.isFalAi) {
+            // Fal AI specific fields
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorOddBg),
+                name = "Endpoint".asUiText(),
+                value = state.sampler,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+        }
         GalleryDetailRow(
-            modifier = Modifier.background(color = colorOddBg),
+            modifier = Modifier.background(color = if (state.isFalAi) colorEvenBg else colorOddBg),
             name = LocalizationR.string.gallery_info_field_prompt.asUiText(),
             value = state.prompt,
             color = colorOddText,
             onCopyTextClick = onCopyTextClick,
         )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorEvenBg),
-            name = LocalizationR.string.gallery_info_field_negative_prompt.asUiText(),
-            value = state.negativePrompt,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
+        if (!state.isFalAi || state.negativePrompt.asString().isNotBlank()) {
+            GalleryDetailRow(
+                modifier = Modifier.background(color = if (state.isFalAi) colorOddBg else colorEvenBg),
+                name = LocalizationR.string.gallery_info_field_negative_prompt.asUiText(),
+                value = state.negativePrompt,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+        }
         GalleryDetailRow(
             modifier = Modifier.background(color = colorOddBg),
             name = LocalizationR.string.gallery_info_field_size.asUiText(),
@@ -384,62 +540,69 @@ private fun GalleryDetailsTable(
             color = colorOddText,
             onCopyTextClick = onCopyTextClick,
         )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorEvenBg),
-            name = LocalizationR.string.gallery_info_field_sampling_steps.asUiText(),
-            value = state.samplingSteps,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorOddBg),
-            name = LocalizationR.string.gallery_info_field_cfg.asUiText(),
-            value = state.cfgScale,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorEvenBg),
-            name = LocalizationR.string.gallery_info_field_restore_faces.asUiText(),
-            value = state.restoreFaces,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorOddBg),
-            name = LocalizationR.string.gallery_info_field_sampler.asUiText(),
-            value = state.sampler,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorEvenBg),
-            name = LocalizationR.string.gallery_info_field_seed.asUiText(),
-            value = state.seed,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorOddBg),
-            name = LocalizationR.string.gallery_info_field_sub_seed.asUiText(),
-            value = state.subSeed,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        GalleryDetailRow(
-            modifier = Modifier.background(color = colorEvenBg),
-            name = LocalizationR.string.gallery_info_field_sub_seed_strength.asUiText(),
-            value = state.subSeedStrength,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
-        if (state.generationType == AiGenerationResult.Type.IMAGE_TO_IMAGE) GalleryDetailRow(
-            modifier = Modifier.background(color = colorOddBg),
-            name = LocalizationR.string.gallery_info_field_denoising_strength.asUiText(),
-            value = state.denoisingStrength,
-            color = colorOddText,
-            onCopyTextClick = onCopyTextClick,
-        )
+        if (!state.isFalAi) {
+            // SD specific fields - hide for Fal AI
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorEvenBg),
+                name = LocalizationR.string.gallery_info_field_sampling_steps.asUiText(),
+                value = state.samplingSteps,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorOddBg),
+                name = LocalizationR.string.gallery_info_field_cfg.asUiText(),
+                value = state.cfgScale,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorEvenBg),
+                name = LocalizationR.string.gallery_info_field_restore_faces.asUiText(),
+                value = state.restoreFaces,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorOddBg),
+                name = LocalizationR.string.gallery_info_field_sampler.asUiText(),
+                value = state.sampler,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+        }
+        if (state.seed.asString().isNotBlank()) {
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorEvenBg),
+                name = LocalizationR.string.gallery_info_field_seed.asUiText(),
+                value = state.seed,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+        }
+        if (!state.isFalAi) {
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorOddBg),
+                name = LocalizationR.string.gallery_info_field_sub_seed.asUiText(),
+                value = state.subSeed,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorEvenBg),
+                name = LocalizationR.string.gallery_info_field_sub_seed_strength.asUiText(),
+                value = state.subSeedStrength,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+            if (state.generationType == AiGenerationResult.Type.IMAGE_TO_IMAGE) GalleryDetailRow(
+                modifier = Modifier.background(color = colorOddBg),
+                name = LocalizationR.string.gallery_info_field_denoising_strength.asUiText(),
+                value = state.denoisingStrength,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+        }
     }
 }
 

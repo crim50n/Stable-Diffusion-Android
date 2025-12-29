@@ -29,8 +29,8 @@ data class InPaintModel(
     }
 
     enum class Area(val fullRes: Boolean) {
-        WholePicture(true),
-        OnlyMasked(false);
+        WholePicture(false),
+        OnlyMasked(true);
     }
 
     fun clear(): InPaintModel = copy(

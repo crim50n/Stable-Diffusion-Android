@@ -17,7 +17,14 @@ data class InPaintState(
     val selectedTab: Tab = Tab.IMAGE,
     val size: Int = 16,
     val model: InPaintModel = InPaintModel(),
+    val zoomScale: Float = 1f,
+    val zoomOffsetX: Float = 0f,
+    val zoomOffsetY: Float = 0f,
+    val isDrawing: Boolean = false,
 ) : MviState {
+
+    val isZoomed: Boolean
+        get() = zoomScale > 1.05f
 
     enum class Tab(
         @StringRes val label: Int,

@@ -33,27 +33,39 @@ class GalleryPagingSource(
             offset = pageNext * Constants.PAGINATION_PAYLOAD_SIZE,
         )
             .subscribeOn(schedulersProvider.computation)
-            .flatMapObservable { Observable.fromIterable(it) }
+            .flatMapObservable { list -> Observable.fromIterable(list) }
             .map { ai -> Triple(ai.id, ai.hidden, ai.image) }
-            .map { (id, hidden, base64) -> Triple(id, hidden, Input(base64)) }
-            .concatMapSingle { (id, hidden, input) ->
-                base64ToBitmapConverter(input).map { out -> Triple(id, hidden, out) }
-            }
-            .map(::mapOutputToUi)
+            .map { triple -> Triple(triple.first, triple.second, Input(triple.third)) }
+            // Use flatMap with maxConcurrency for parallel file loading
+            .flatMap(
+                { triple: Triple<Long, Boolean, Input> ->
+                    base64ToBitmapConverter(triple.third)
+                        .map { out -> Triple(triple.first, triple.second, out) }
+                        .toObservable()
+                },
+                MAX_CONCURRENT_LOADS, // maxConcurrency - load multiple images in parallel
+            )
+            .map { triple -> mapOutputToUi(triple) }
             .toList()
+            // Sort by id descending to maintain order after parallel loading
+            .map { payload -> payload.sortedByDescending { item -> item.id } }
             .map { payload ->
-                LoadResult.Page(
-                    data = payload,
-                    prevKey = if (pageNext == FIRST_KEY) null else pageNext - 1,
-                    nextKey = if (payload.isEmpty()) null else pageNext + 1,
-                ).let(GalleryPagingSource::Wrapper)
+                Wrapper(
+                    LoadResult.Page(
+                        data = payload,
+                        prevKey = if (pageNext == FIRST_KEY) null else pageNext - 1,
+                        nextKey = if (payload.isEmpty()) null else pageNext + 1,
+                    )
+                )
             }
-            .onErrorReturn { t ->
+            .onErrorReturn { t: Throwable ->
                 errorLog(t)
                 Wrapper(LoadResult.Error(t))
             }
-            .map(Wrapper::loadResult)
+            .map { wrapper -> wrapper.loadResult }
     }
+
+    private data class Wrapper(val loadResult: GalleryPagedResult)
 
     private fun mapOutputToUi(output: Triple<Long, Boolean, Output>) = GalleryGridItemUi(
         output.first,
@@ -61,9 +73,8 @@ class GalleryPagingSource(
         output.second,
     )
 
-    private data class Wrapper(val loadResult: GalleryPagedResult)
-
     companion object {
         const val FIRST_KEY = 0
+        const val MAX_CONCURRENT_LOADS = 8 // Parallel image loading for smoother scrolling
     }
 }

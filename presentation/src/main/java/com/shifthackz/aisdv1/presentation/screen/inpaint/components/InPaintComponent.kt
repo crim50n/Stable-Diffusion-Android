@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Picture
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +12,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -27,8 +31,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.draw
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.shifthackz.aisdv1.presentation.model.InPaintModel
@@ -44,21 +50,77 @@ fun InPaintComponent(
     inPaint: InPaintModel = InPaintModel(),
     bitmap: Bitmap? = null,
     capWidth: Int = 16,
+    scale: Float = 1f,
+    offsetX: Float = 0f,
+    offsetY: Float = 0f,
+    onScaleChanged: (Float) -> Unit = {},
+    onOffsetChanged: (Float, Float) -> Unit = { _, _ -> },
     onPathDrawn: (Path) -> Unit = {},
     onPathBitmapDrawn: (Bitmap?) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
+    val aspectRatio = bitmap?.let {
+        if (it.width > 0 && it.height > 0) it.width.toFloat() / it.height.toFloat()
+        else 1f
+    } ?: 1f
+
+    // Local zoom state for smooth gestures
+    var localScale by remember { mutableFloatStateOf(scale) }
+    var localOffsetX by remember { mutableFloatStateOf(offsetX) }
+    var localOffsetY by remember { mutableFloatStateOf(offsetY) }
+
+    // Sync with external state
+    LaunchedEffect(scale, offsetX, offsetY) {
+        localScale = scale
+        localOffsetX = offsetX
+        localOffsetY = offsetY
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(1f),
+            .aspectRatio(aspectRatio)
+            .clipToBounds()
+            .let {
+                if (!drawMode) {
+                    it.pointerInput(Unit) {
+                        detectTransformGestures { _, pan, zoom, _ ->
+                            val newScale = (localScale * zoom).coerceIn(1f, 5f)
+                            localScale = newScale
+                            onScaleChanged(newScale)
+                            if (newScale > 1f) {
+                                localOffsetX += pan.x
+                                localOffsetY += pan.y
+                                onOffsetChanged(localOffsetX, localOffsetY)
+                            } else {
+                                localOffsetX = 0f
+                                localOffsetY = 0f
+                                onOffsetChanged(0f, 0f)
+                            }
+                        }
+                    }
+                } else {
+                    it
+                }
+            },
+        contentAlignment = Alignment.Center,
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(
+                    scaleX = localScale,
+                    scaleY = localScale,
+                    translationX = localOffsetX,
+                    translationY = localOffsetY,
+                ),
+        ) {
         bitmap?.takeIf { it.width != 0 && it.height != 0 }?.asImageBitmap()?.let {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 bitmap = it,
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
             )
         }
         inPaint.bitmap?.takeIf { it.width != 0 && it.height != 0 }?.asImageBitmap()?.let {
@@ -67,7 +129,7 @@ fun InPaintComponent(
                     .fillMaxSize(),
                 bitmap = it,
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
             )
         }
         var motionEvent by remember { mutableStateOf(MotionEvent.Idle) }
@@ -172,6 +234,7 @@ fun InPaintComponent(
 
             inPaint.paths.forEach { (p, c) -> draw(p, c) }
             draw(currentPath, capWidth)
+        }
         }
     }
 }

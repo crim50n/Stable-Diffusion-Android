@@ -7,6 +7,7 @@ package com.shifthackz.aisdv1.presentation.screen.gallery.list
 
 import android.content.Intent
 import android.provider.DocumentsContract
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -14,6 +15,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -44,6 +47,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
@@ -61,14 +65,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -98,7 +108,6 @@ import com.shifthackz.aisdv1.presentation.widget.work.BackgroundWorkWidget
 import com.shifthackz.android.core.mvi.MviComponent
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import kotlin.random.Random
 import com.shifthackz.aisdv1.core.localization.R as LocalizationR
 
 @Composable
@@ -128,6 +137,14 @@ fun GalleryScreen() {
                 GalleryEffect.Refresh -> {
                     lazyGalleryItems.refresh()
                 }
+
+                GalleryEffect.AllImagesSavedToGallery -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(LocalizationR.string.gallery_save_all_success),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
             }
         },
     ) { state, intentHandler ->
@@ -150,6 +167,47 @@ fun GalleryScreenContent(
     processIntent: (GalleryIntent) -> Unit = {},
 ) {
     val listState = rememberLazyGridState()
+
+    // Check if we have a scroll target on first composition (returning from detail)
+    val hasScrollTarget = state.scrollToItemIndex != null
+    var isRestoringScroll by remember { mutableStateOf(hasScrollTarget) }
+
+    android.util.Log.d("GalleryScroll", "Composition: hasScrollTarget=$hasScrollTarget, isRestoringScroll=$isRestoringScroll, scrollToItemIndex=${state.scrollToItemIndex}")
+
+    // Scroll to saved position
+    LaunchedEffect(Unit) {
+        android.util.Log.d("GalleryScroll", "LaunchedEffect started, scrollToItemIndex=${state.scrollToItemIndex}")
+        val targetIndex = state.scrollToItemIndex
+        if (targetIndex == null) {
+            android.util.Log.d("GalleryScroll", "No target, clearing isRestoringScroll")
+            isRestoringScroll = false
+            return@LaunchedEffect
+        }
+
+        android.util.Log.d("GalleryScroll", "Waiting for items, target=$targetIndex")
+        // Wait for initial load
+        while (lazyGalleryItems.itemCount == 0) {
+            delay(50)
+        }
+
+        // Keep loading pages until we have enough items
+        while (lazyGalleryItems.itemCount <= targetIndex) {
+            if (lazyGalleryItems.itemCount > 0) {
+                lazyGalleryItems[lazyGalleryItems.itemCount - 1]
+            }
+            delay(100)
+        }
+
+        // Scroll to target position
+        android.util.Log.d("GalleryScroll", "Scrolling to $targetIndex")
+        listState.scrollToItem(targetIndex)
+        android.util.Log.d("GalleryScroll", "Scroll done, clearing flags")
+        isRestoringScroll = false
+        processIntent(GalleryIntent.ClearScrollPosition)
+    }
+
+    // Show shimmer while restoring
+    val showShimmerForScrollRestore = isRestoringScroll
 
     val emptyStatePredicate: () -> Boolean = {
         lazyGalleryItems.loadState.refresh is LoadState.NotLoading
@@ -319,6 +377,23 @@ fun GalleryScreenContent(
                                 DropdownMenuItem(
                                     leadingIcon = {
                                         Icon(
+                                            imageVector = Icons.Default.Save,
+                                            contentDescription = "Save to Gallery",
+                                        )
+                                    },
+                                    text = {
+                                        Text(
+                                            text = stringResource(id = LocalizationR.string.gallery_menu_save_all)
+                                        )
+                                    },
+                                    onClick = {
+                                        processIntent(GalleryIntent.Dropdown.Close)
+                                        processIntent(GalleryIntent.SaveToGallery.All.Request)
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    leadingIcon = {
+                                        Icon(
                                             imageVector = Icons.Default.Delete,
                                             contentDescription = "Delete",
                                         )
@@ -350,47 +425,47 @@ fun GalleryScreenContent(
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surfaceTint),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
+                        Row(
                             modifier = Modifier
-                                .padding(start = 16.dp),
-                            text = stringResource(
-                                id = LocalizationR.string.gallery_menu_selected,
-                                "${state.selection.size}",
-                            ),
-                            style = MaterialTheme.typography.bodyLarge,
-                            lineHeight = 17.sp,
-                            fontWeight = FontWeight.W400,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        TextButton(
-                            modifier = Modifier.padding(end = 16.dp),
-                            onClick = {
-                                if (state.selection.isNotEmpty()) {
-                                    processIntent(GalleryIntent.UnselectAll)
-                                } else {
-                                    processIntent(GalleryIntent.ChangeSelectionMode(false))
-                                }
-                            },
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.surfaceTint),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            val resId = if (state.selection.isNotEmpty()) {
-                                LocalizationR.string.gallery_menu_unselect_all
-                            } else {
-                                LocalizationR.string.cancel
-                            }
                             Text(
-                                text = stringResource(resId).toUpperCase(Locale.current),
-                                textAlign = TextAlign.Center,
-                                color = LocalContentColor.current,
+                                modifier = Modifier
+                                    .padding(start = 16.dp),
+                                text = stringResource(
+                                    id = LocalizationR.string.gallery_menu_selected,
+                                    "${state.selection.size}",
+                                ),
+                                style = MaterialTheme.typography.bodyLarge,
+                                lineHeight = 17.sp,
+                                fontWeight = FontWeight.W400,
                             )
+                            Spacer(modifier = Modifier.weight(1f))
+                            TextButton(
+                                modifier = Modifier.padding(end = 16.dp),
+                                onClick = {
+                                    if (state.selection.isNotEmpty()) {
+                                        processIntent(GalleryIntent.UnselectAll)
+                                    } else {
+                                        processIntent(GalleryIntent.ChangeSelectionMode(false))
+                                    }
+                                },
+                            ) {
+                                val resId = if (state.selection.isNotEmpty()) {
+                                    LocalizationR.string.gallery_menu_unselect_all
+                                } else {
+                                    LocalizationR.string.cancel
+                                }
+                                Text(
+                                    text = stringResource(resId).toUpperCase(Locale.current),
+                                    textAlign = TextAlign.Center,
+                                    color = LocalContentColor.current,
+                                )
+                            }
                         }
                     }
-                }
                 AnimatedVisibility(
                     visible = state.mediaStoreInfo.isNotEmpty && !state.selectionMode,
                     enter = fadeIn(),
@@ -458,7 +533,8 @@ fun GalleryScreenContent(
                     }
                 }
 
-                else -> LazyVerticalGrid(
+                else -> Box(modifier = Modifier.fillMaxSize()) {
+                    LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(top = paddingValues.calculateTopPadding()),
@@ -468,16 +544,24 @@ fun GalleryScreenContent(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     state = listState,
                 ) {
-                    items(lazyGalleryItems) { item ->
+                    items(
+                        count = lazyGalleryItems.itemCount,
+                        key = { index -> "${lazyGalleryItems.peek(index)?.id ?: "null"}_$index" },
+                    ) { index ->
+                        val item = lazyGalleryItems[index]
                         if (item != null) {
                             val selected = state.selection.contains(item.id)
                             GalleryUiItem(
                                 modifier = Modifier
-                                    .animateItem(tween(500))
-                                    .shake(
-                                        enabled = state.selectionMode && !selected,
-                                        animationDurationMillis = 188,
-                                        animationStartOffset = Random.nextInt(0, 320),
+                                    .animateItem(tween(300))
+                                    .then(
+                                        if (state.selectionMode && !selected) {
+                                            Modifier.shake(
+                                                enabled = true,
+                                                animationDurationMillis = 188,
+                                                animationStartOffset = (item.id % 320).toInt(),
+                                            )
+                                        } else Modifier
                                     ),
                                 item = item,
                                 selectionMode = state.selectionMode,
@@ -490,7 +574,7 @@ fun GalleryScreenContent(
                                     processIntent(GalleryIntent.ToggleItemSelection(item.id))
                                 },
                                 onClick = {
-                                    processIntent(GalleryIntent.OpenItem(it))
+                                    processIntent(GalleryIntent.OpenItem(it, index))
                                 },
                             )
                         } else {
@@ -498,6 +582,36 @@ fun GalleryScreenContent(
                         }
                     }
                     items(2) { Spacer(modifier = Modifier.height(32.dp)) }
+                }
+                    // Shimmer overlay while restoring scroll position
+                    AnimatedVisibility(
+                        visible = showShimmerForScrollRestore,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        LazyVerticalGrid(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(top = paddingValues.calculateTopPadding()),
+                            columns = GridCells.Fixed(state.grid.size),
+                            contentPadding = PaddingValues(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                        ) {
+                            val max = when (state.grid) {
+                                Grid.Fixed2 -> 6
+                                Grid.Fixed3 -> 12
+                                Grid.Fixed4 -> 20
+                                Grid.Fixed5 -> 30
+                            }
+                            repeat(max) {
+                                item(it) {
+                                    GalleryUiItemShimmer()
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -557,7 +671,7 @@ fun GalleryUiItem(
                         }
                     },
                 ),
-            bitmap = item.bitmap.asImageBitmap(),
+            bitmap = item.imageBitmap, // Use cached ImageBitmap
             contentScale = ContentScale.Crop,
             contentDescription = "gallery_item",
         )
