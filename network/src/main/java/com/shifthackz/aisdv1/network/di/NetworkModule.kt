@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.Strictness
 import com.shifthackz.aisdv1.network.api.automatic1111.Automatic1111RestApi
+import com.shifthackz.aisdv1.network.api.falai.FalAiApi
 import com.shifthackz.aisdv1.network.api.horde.HordeRestApi
 import com.shifthackz.aisdv1.network.api.huggingface.HuggingFaceApi
 import com.shifthackz.aisdv1.network.api.huggingface.HuggingFaceInferenceApi
@@ -178,6 +179,12 @@ val networkModule = module {
         get<Retrofit.Builder>()
             .withBaseUrl(get<ApiUrlProvider>().stabilityAiApiUrl)
             .create(StabilityAiApi::class.java)
+    }
+
+    single {
+        get<Retrofit.Builder>()
+            .withBaseUrl(get<ApiUrlProvider>().falAiApiUrl)
+            .create(FalAiApi::class.java)
     }
 
     singleOf(::ImageCdnRestApiImpl) bind ImageCdnRestApi::class

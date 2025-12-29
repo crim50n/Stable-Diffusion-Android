@@ -24,6 +24,8 @@ import com.shifthackz.aisdv1.domain.usecase.connectivity.TestHuggingFaceApiKeyUs
 import com.shifthackz.aisdv1.domain.usecase.connectivity.TestHuggingFaceApiKeyUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.connectivity.TestOpenAiApiKeyUseCase
 import com.shifthackz.aisdv1.domain.usecase.connectivity.TestOpenAiApiKeyUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.connectivity.TestFalAiApiKeyUseCase
+import com.shifthackz.aisdv1.domain.usecase.connectivity.TestFalAiApiKeyUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.connectivity.TestStabilityAiApiKeyUseCase
 import com.shifthackz.aisdv1.domain.usecase.connectivity.TestStabilityAiApiKeyUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.connectivity.TestSwarmUiConnectivityUseCase
@@ -44,6 +46,8 @@ import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCa
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCase
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteGalleryItemUseCase
@@ -54,10 +58,14 @@ import com.shifthackz.aisdv1.domain.usecase.gallery.GetAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetAllGalleryUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetGalleryItemsUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetGalleryItemsUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
+import com.shifthackz.aisdv1.domain.usecase.gallery.GetGalleryPagedIdsUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetMediaStoreInfoUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetMediaStoreInfoUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.ToggleImageVisibilityUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.ToggleImageVisibilityUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.generation.FalAiGenerationUseCase
+import com.shifthackz.aisdv1.domain.usecase.generation.FalAiGenerationUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.generation.GetGenerationResultPagedUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.GetGenerationResultPagedUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.generation.GetGenerationResultUseCase
@@ -104,6 +112,8 @@ import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToMediaPipeUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToMediaPipeUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToOpenAiUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToOpenAiUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToFalAiUseCase
+import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToFalAiUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToStabilityAiUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToStabilityAiUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToSwarmUiUseCase
@@ -131,6 +141,7 @@ import org.koin.dsl.module
 internal val useCasesModule = module {
     factoryOf(::TextToImageUseCaseImpl) bind TextToImageUseCase::class
     factoryOf(::ImageToImageUseCaseImpl) bind ImageToImageUseCase::class
+    factoryOf(::FalAiGenerationUseCaseImpl) bind FalAiGenerationUseCase::class
     factoryOf(::PingStableDiffusionServiceUseCaseImpl) bind PingStableDiffusionServiceUseCase::class
     factoryOf(::ClearAppCacheUseCaseImpl) bind ClearAppCacheUseCase::class
     factoryOf(::DataPreLoaderUseCaseImpl) bind DataPreLoaderUseCase::class
@@ -140,6 +151,7 @@ internal val useCasesModule = module {
     factoryOf(::GetGenerationResultPagedUseCaseImpl) bind GetGenerationResultPagedUseCase::class
     factoryOf(::GetAllGalleryUseCaseImpl) bind GetAllGalleryUseCase::class
     factoryOf(::GetGalleryItemsUseCaseImpl) bind GetGalleryItemsUseCase::class
+    factoryOf(::GetGalleryPagedIdsUseCaseImpl) bind GetGalleryPagedIdsUseCase::class
     factoryOf(::GetGenerationResultUseCaseImpl) bind GetGenerationResultUseCase::class
     factoryOf(::DeleteGalleryItemUseCaseImpl) bind DeleteGalleryItemUseCase::class
     factoryOf(::DeleteGalleryItemsUseCaseImpl) bind DeleteGalleryItemsUseCase::class
@@ -148,6 +160,7 @@ internal val useCasesModule = module {
     factoryOf(::FetchAndGetLorasUseCaseImpl) bind FetchAndGetLorasUseCase::class
     factoryOf(::FetchAndGetHyperNetworksUseCaseImpl) bind FetchAndGetHyperNetworksUseCase::class
     factoryOf(::FetchAndGetEmbeddingsUseCaseImpl) bind FetchAndGetEmbeddingsUseCase::class
+    factoryOf(::GetForgeModulesUseCaseImpl) bind GetForgeModulesUseCase::class
     factoryOf(::SplashNavigationUseCaseImpl) bind SplashNavigationUseCase::class
     factoryOf(::GetConfigurationUseCaseImpl) bind GetConfigurationUseCase::class
     factoryOf(::SetServerConfigurationUseCaseImpl) bind SetServerConfigurationUseCase::class
@@ -156,6 +169,7 @@ internal val useCasesModule = module {
     factoryOf(::TestHuggingFaceApiKeyUseCaseImpl) bind TestHuggingFaceApiKeyUseCase::class
     factoryOf(::TestOpenAiApiKeyUseCaseImpl) bind TestOpenAiApiKeyUseCase::class
     factoryOf(::TestStabilityAiApiKeyUseCaseImpl) bind TestStabilityAiApiKeyUseCase::class
+    factoryOf(::TestFalAiApiKeyUseCaseImpl) bind TestFalAiApiKeyUseCase::class
     factoryOf(::TestSwarmUiConnectivityUseCaseImpl) bind TestSwarmUiConnectivityUseCase::class
     factoryOf(::SaveGenerationResultUseCaseImpl) bind SaveGenerationResultUseCase::class
     factoryOf(::ObserveSeverConnectivityUseCaseImpl) bind ObserveSeverConnectivityUseCase::class
@@ -182,6 +196,7 @@ internal val useCasesModule = module {
     factoryOf(::ConnectToHuggingFaceUseCaseImpl) bind ConnectToHuggingFaceUseCase::class
     factoryOf(::ConnectToOpenAiUseCaseImpl) bind ConnectToOpenAiUseCase::class
     factoryOf(::ConnectToStabilityAiUseCaseImpl) bind ConnectToStabilityAiUseCase::class
+    factoryOf(::ConnectToFalAiUseCaseImpl) bind ConnectToFalAiUseCase::class
     factoryOf(::FetchAndGetHuggingFaceModelsUseCaseImpl) bind FetchAndGetHuggingFaceModelsUseCase::class
     factoryOf(::ObserveStabilityAiCreditsUseCaseImpl) bind ObserveStabilityAiCreditsUseCase::class
     factoryOf(::FetchAndGetStabilityAiEnginesUseCaseImpl) bind FetchAndGetStabilityAiEnginesUseCase::class

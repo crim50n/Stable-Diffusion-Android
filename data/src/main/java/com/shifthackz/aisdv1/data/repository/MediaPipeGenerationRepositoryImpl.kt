@@ -8,6 +8,7 @@ import com.shifthackz.aisdv1.data.mappers.mapLocalDiffusionToAiGenResult
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.mediapipe.MediaPipe
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
@@ -21,6 +22,7 @@ internal class MediaPipeGenerationRepositoryImpl(
     base64ToBitmapConverter: Base64ToBitmapConverter,
     localDataSource: GenerationResultDataSource.Local,
     backgroundWorkObserver: BackgroundWorkObserver,
+    mediaFileManager: MediaFileManager,
     preferenceManager: PreferenceManager,
     private val schedulersProvider: SchedulersProvider,
     private val mediaPipe: MediaPipe,
@@ -31,6 +33,7 @@ internal class MediaPipeGenerationRepositoryImpl(
     localDataSource = localDataSource,
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
+    mediaFileManager = mediaFileManager,
 ), MediaPipeGenerationRepository {
 
     override fun generateFromText(payload: TextToImagePayload): Single<AiGenerationResult> = mediaPipe

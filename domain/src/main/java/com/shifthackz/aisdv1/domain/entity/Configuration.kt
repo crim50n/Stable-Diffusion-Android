@@ -14,6 +14,7 @@ data class Configuration(
     val huggingFaceModel: String = "",
     val stabilityAiApiKey: String = "",
     val stabilityAiEngineId: String = "",
+    val falAiApiKey: String = "",
     val authCredentials: AuthorizationCredentials = AuthorizationCredentials.None,
     val localOnnxModelId: String = "",
     val localOnnxModelPath: String = "",

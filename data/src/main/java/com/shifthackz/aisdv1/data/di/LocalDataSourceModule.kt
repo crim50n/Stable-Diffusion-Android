@@ -1,9 +1,12 @@
 package com.shifthackz.aisdv1.data.di
 
+import com.shifthackz.aisdv1.data.feature.MediaFileManagerImpl
 import com.shifthackz.aisdv1.data.gateway.DatabaseClearGatewayImpl
 import com.shifthackz.aisdv1.data.gateway.mediastore.MediaStoreGatewayFactory
 import com.shifthackz.aisdv1.data.local.DownloadableModelLocalDataSource
 import com.shifthackz.aisdv1.data.local.EmbeddingsLocalDataSource
+import com.shifthackz.aisdv1.data.local.FalAiEndpointBuiltInDataSource
+import com.shifthackz.aisdv1.data.local.FalAiEndpointLocalDataSource
 import com.shifthackz.aisdv1.data.local.GenerationResultLocalDataSource
 import com.shifthackz.aisdv1.data.local.HuggingFaceModelsLocalDataSource
 import com.shifthackz.aisdv1.data.local.LorasLocalDataSource
@@ -16,6 +19,7 @@ import com.shifthackz.aisdv1.data.local.SupportersLocalDataSource
 import com.shifthackz.aisdv1.data.local.SwarmUiModelsLocalDataSource
 import com.shifthackz.aisdv1.domain.datasource.DownloadableModelDataSource
 import com.shifthackz.aisdv1.domain.datasource.EmbeddingsDataSource
+import com.shifthackz.aisdv1.domain.datasource.FalAiEndpointDataSource
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.HuggingFaceModelsDataSource
 import com.shifthackz.aisdv1.domain.datasource.LorasDataSource
@@ -26,6 +30,7 @@ import com.shifthackz.aisdv1.domain.datasource.StableDiffusionModelsDataSource
 import com.shifthackz.aisdv1.domain.datasource.StableDiffusionSamplersDataSource
 import com.shifthackz.aisdv1.domain.datasource.SupportersDataSource
 import com.shifthackz.aisdv1.domain.datasource.SwarmUiModelsDataSource
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.gateway.DatabaseClearGateway
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.factoryOf
@@ -35,6 +40,7 @@ import org.koin.dsl.module
 
 val localDataSourceModule = module {
     singleOf(::DatabaseClearGatewayImpl) bind DatabaseClearGateway::class
+    single<MediaFileManager> { MediaFileManagerImpl(androidContext(), get()) }
     // !!! Do not use [factoryOf] for StabilityAiCreditsLocalDataSource, it has default constructor
     single<StabilityAiCreditsDataSource.Local> { StabilityAiCreditsLocalDataSource() }
     factoryOf(::StableDiffusionModelsLocalDataSource) bind StableDiffusionModelsDataSource.Local::class
@@ -48,5 +54,7 @@ val localDataSourceModule = module {
     factoryOf(::DownloadableModelLocalDataSource) bind DownloadableModelDataSource.Local::class
     factoryOf(::HuggingFaceModelsLocalDataSource) bind HuggingFaceModelsDataSource.Local::class
     factoryOf(::SupportersLocalDataSource) bind SupportersDataSource.Local::class
+    factoryOf(::FalAiEndpointLocalDataSource) bind FalAiEndpointDataSource.Local::class
+    factoryOf(::FalAiEndpointBuiltInDataSource) bind FalAiEndpointDataSource.BuiltIn::class
     factory { MediaStoreGatewayFactory(androidContext(), get()).invoke() }
 }

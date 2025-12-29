@@ -26,6 +26,8 @@ sealed interface Modal {
 
     data class ConfirmExport(val exportAll: Boolean) : Modal
 
+    data class ConfirmSaveToGallery(val saveAll: Boolean) : Modal
+
     data object ExportInProgress : Modal
 
     data object ConnectLocalHost : Modal

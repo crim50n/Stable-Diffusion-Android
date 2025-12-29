@@ -2,6 +2,7 @@ package com.shifthackz.aisdv1.domain.preference
 
 import com.shifthackz.aisdv1.core.common.schedulers.SchedulersToken
 import com.shifthackz.aisdv1.domain.entity.Grid
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.Settings
 import io.reactivex.rxjava3.core.Completable
@@ -24,12 +25,15 @@ interface PreferenceManager {
     var formPromptTaggedInput: Boolean
     var source: ServerSource
     var sdModel: String
+    var modelType: ModelType
     var hordeApiKey: String
     var openAiApiKey: String
     var huggingFaceApiKey: String
     var huggingFaceModel: String
     var stabilityAiApiKey: String
     var stabilityAiEngineId: String
+    var falAiApiKey: String
+    var falAiSelectedEndpointId: String
     var onBoardingComplete: Boolean
     var forceSetupAfterUpdate: Boolean
     var localOnnxModelId: String
@@ -46,4 +50,7 @@ interface PreferenceManager {
 
     fun observe(): Flowable<Settings>
     fun refresh(): Completable
+
+    fun saveFalAiEndpointParams(endpointId: String, params: Map<String, Any?>)
+    fun getFalAiEndpointParams(endpointId: String): Map<String, Any?>
 }

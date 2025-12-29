@@ -5,6 +5,7 @@ import com.shifthackz.aisdv1.core.common.schedulers.SchedulersToken
 data class Settings(
     val serverUrl: String = "",
     val sdModel: String = "",
+    val modelType: ModelType = ModelType.SD_1_5,
     val demoMode: Boolean = false,
     val developerMode: Boolean = false,
     val localDiffusionAllowCancel: Boolean = false,

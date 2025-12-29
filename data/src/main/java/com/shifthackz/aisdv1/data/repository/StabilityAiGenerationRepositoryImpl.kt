@@ -9,6 +9,7 @@ import com.shifthackz.aisdv1.domain.datasource.StabilityAiGenerationDataSource
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -21,6 +22,7 @@ internal class StabilityAiGenerationRepositoryImpl(
     backgroundWorkObserver: BackgroundWorkObserver,
     private val base64ToBitmapConverter: Base64ToBitmapConverter,
     localDataSource: GenerationResultDataSource.Local,
+    mediaFileManager: MediaFileManager,
     private val preferenceManager: PreferenceManager,
     private val generationRds: StabilityAiGenerationDataSource.Remote,
     private val creditsRds: StabilityAiCreditsDataSource.Remote,
@@ -31,6 +33,7 @@ internal class StabilityAiGenerationRepositoryImpl(
     localDataSource = localDataSource,
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
+    mediaFileManager = mediaFileManager,
 ), StabilityAiGenerationRepository {
 
     override fun validateApiKey() = generationRds.validateApiKey()

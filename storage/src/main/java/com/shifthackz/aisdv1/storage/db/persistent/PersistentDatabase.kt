@@ -18,6 +18,7 @@ import com.shifthackz.aisdv1.storage.db.persistent.entity.*
         LocalModelEntity::class,
         HuggingFaceModelEntity::class,
         SupporterEntity::class,
+        FalAiEndpointEntity::class,
     ],
     autoMigrations = [
         /**
@@ -49,6 +50,15 @@ import com.shifthackz.aisdv1.storage.db.persistent.entity.*
          * - [GenerationResultContract.HIDDEN]
          */
         AutoMigration(from = 6, to = 7),
+        /**
+         * Added [FalAiEndpointEntity].
+         * Added 1 field to [FalAiEndpointEntity]: GROUP
+         * Added 3 fields to [GenerationResultEntity] for file-based media storage:
+         * - [GenerationResultContract.MEDIA_PATH]
+         * - [GenerationResultContract.INPUT_MEDIA_PATH]
+         * - [GenerationResultContract.MEDIA_TYPE]
+         */
+        AutoMigration(from = 7, to = 8),
     ],
 )
 @TypeConverters(
@@ -60,9 +70,10 @@ internal abstract class PersistentDatabase : RoomDatabase() {
     abstract fun localModelDao(): LocalModelDao
     abstract fun huggingFaceModelDao(): HuggingFaceModelDao
     abstract fun supporterDao(): SupporterDao
+    abstract fun falAiEndpointDao(): FalAiEndpointDao
 
     companion object {
         const val DB_NAME = "ai_sd_v1_storage_db"
-        const val DB_VERSION = 7
+        const val DB_VERSION = 8
     }
 }

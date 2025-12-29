@@ -10,6 +10,7 @@ import com.shifthackz.aisdv1.presentation.model.LaunchSource
 import com.shifthackz.aisdv1.presentation.screen.debug.DebugMenuViewModel
 import com.shifthackz.aisdv1.presentation.screen.donate.DonateViewModel
 import com.shifthackz.aisdv1.presentation.screen.drawer.DrawerViewModel
+import com.shifthackz.aisdv1.presentation.screen.falai.FalAiGenerationViewModel
 import com.shifthackz.aisdv1.presentation.screen.gallery.detail.GalleryDetailViewModel
 import com.shifthackz.aisdv1.presentation.screen.gallery.list.GalleryViewModel
 import com.shifthackz.aisdv1.presentation.screen.home.HomeNavigationViewModel
@@ -55,6 +56,7 @@ val viewModelModule = module {
     viewModelOf(::BackgroundWorkViewModel)
     viewModelOf(::LoggerViewModel)
     viewModelOf(::DownloadDialogViewModel)
+    viewModelOf(::FalAiGenerationViewModel)
 
     viewModel { parameters ->
         OnBoardingViewModel(
@@ -77,6 +79,7 @@ val viewModelModule = module {
             getLocalOnnxModelsUseCase = get(),
             getLocalMediaPipeModelsUseCase = get(),
             fetchAndGetHuggingFaceModelsUseCase = get(),
+            falAiEndpointRepository = get(),
             urlValidator = get(),
             stringValidator = get(),
             filePathValidator = get(),
@@ -96,8 +99,10 @@ val viewModelModule = module {
             itemId = parameters.get(),
             dispatchersProvider = get(),
             buildInfoProvider = get(),
+            preferenceManager = get(),
             getGenerationResultUseCase = get(),
             getLastResultFromCacheUseCase = get(),
+            getGalleryPagedIdsUseCase = get(),
             deleteGalleryItemUseCase = get(),
             toggleImageVisibilityUseCase = get(),
             galleryDetailBitmapExporter = get(),
@@ -105,6 +110,7 @@ val viewModelModule = module {
             schedulersProvider = get(),
             generationFormUpdateEvent = get(),
             mainRouter = get(),
+            mediaStoreGateway = get(),
         )
     }
 
@@ -126,6 +132,7 @@ val viewModelModule = module {
             dispatchersProvider = get(),
             generationFormUpdateEvent = get(),
             getStableDiffusionSamplersUseCase = get(),
+            getForgeModulesUseCase = get(),
             observeHordeProcessStatusUseCase = get(),
             observeLocalDiffusionProcessStatusUseCase = get(),
             saveLastResultToCacheUseCase = get(),

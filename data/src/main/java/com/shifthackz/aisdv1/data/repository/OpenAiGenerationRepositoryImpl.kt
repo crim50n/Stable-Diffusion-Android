@@ -5,6 +5,7 @@ import com.shifthackz.aisdv1.data.core.CoreGenerationRepository
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.OpenAiGenerationDataSource
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -16,6 +17,7 @@ internal class OpenAiGenerationRepositoryImpl(
     localDataSource: GenerationResultDataSource.Local,
     preferenceManager: PreferenceManager,
     backgroundWorkObserver: BackgroundWorkObserver,
+    mediaFileManager: MediaFileManager,
     private val remoteDataSource: OpenAiGenerationDataSource.Remote,
 ) : CoreGenerationRepository(
     mediaStoreGateway = mediaStoreGateway,
@@ -23,6 +25,7 @@ internal class OpenAiGenerationRepositoryImpl(
     localDataSource = localDataSource,
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
+    mediaFileManager = mediaFileManager,
 ), OpenAiGenerationRepository {
 
     override fun validateApiKey() = remoteDataSource.validateApiKey()

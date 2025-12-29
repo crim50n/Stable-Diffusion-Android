@@ -10,4 +10,5 @@ interface ApiUrlProvider {
     val huggingFaceInferenceApiUrl: String
     val openAiApiUrl: String
     val stabilityAiApiUrl: String
+    val falAiApiUrl: String
 }

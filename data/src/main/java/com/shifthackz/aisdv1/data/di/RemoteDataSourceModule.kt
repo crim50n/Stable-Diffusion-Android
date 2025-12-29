@@ -4,6 +4,8 @@ import com.shifthackz.aisdv1.core.common.extensions.fixUrlSlashes
 import com.shifthackz.aisdv1.data.gateway.ServerConnectivityGatewayImpl
 import com.shifthackz.aisdv1.data.provider.ServerUrlProvider
 import com.shifthackz.aisdv1.data.remote.DownloadableModelRemoteDataSource
+import com.shifthackz.aisdv1.data.remote.FalAiEndpointRemoteDataSource
+import com.shifthackz.aisdv1.data.remote.FalAiGenerationRemoteDataSource
 import com.shifthackz.aisdv1.data.remote.HordeGenerationRemoteDataSource
 import com.shifthackz.aisdv1.data.remote.HordeStatusSource
 import com.shifthackz.aisdv1.data.remote.HuggingFaceGenerationRemoteDataSource
@@ -29,6 +31,8 @@ import com.shifthackz.aisdv1.data.remote.SwarmUiModelsRemoteDataSource
 import com.shifthackz.aisdv1.data.remote.SwarmUiSessionDataSourceImpl
 import com.shifthackz.aisdv1.domain.datasource.DownloadableModelDataSource
 import com.shifthackz.aisdv1.domain.datasource.EmbeddingsDataSource
+import com.shifthackz.aisdv1.domain.datasource.FalAiEndpointDataSource
+import com.shifthackz.aisdv1.domain.datasource.FalAiGenerationDataSource
 import com.shifthackz.aisdv1.domain.datasource.HordeGenerationDataSource
 import com.shifthackz.aisdv1.domain.datasource.HuggingFaceGenerationDataSource
 import com.shifthackz.aisdv1.domain.datasource.HuggingFaceModelsDataSource
@@ -96,12 +100,14 @@ val remoteDataSourceModule = module {
     factoryOf(::StabilityAiGenerationRemoteDataSource) bind StabilityAiGenerationDataSource.Remote::class
     factoryOf(::StabilityAiCreditsRemoteDataSource) bind StabilityAiCreditsDataSource.Remote::class
     factoryOf(::StabilityAiEnginesRemoteDataSource) bind StabilityAiEnginesDataSource.Remote::class
+    factoryOf(::FalAiGenerationRemoteDataSource) bind FalAiGenerationDataSource.Remote::class
+    factoryOf(::FalAiEndpointRemoteDataSource) bind FalAiEndpointDataSource.Remote::class
     factoryOf(::ReportRemoteDataSource) bind ReportDataSource.Remote::class
 
     factory<ServerConnectivityGateway> {
         val lambda: () -> Boolean = {
             val prefs = get<PreferenceManager>()
-            prefs.source == ServerSource.AUTOMATIC1111 || prefs.source == ServerSource.SWARM_UI
+            prefs.source != ServerSource.AUTOMATIC1111 && prefs.source != ServerSource.SWARM_UI
         }
         val monitor = get<ConnectivityMonitor> { parametersOf(lambda) }
         ServerConnectivityGatewayImpl(monitor, get())

@@ -25,6 +25,7 @@ import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalMediaPipeModels
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.huggingface.FetchAndGetHuggingFaceModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.GetConfigurationUseCase
+import com.shifthackz.aisdv1.domain.repository.FalAiEndpointRepository
 import com.shifthackz.aisdv1.presentation.model.LaunchSource
 import com.shifthackz.aisdv1.presentation.model.Modal
 import com.shifthackz.aisdv1.presentation.navigation.router.main.MainRouter
@@ -44,6 +45,7 @@ class ServerSetupViewModel(
     getLocalOnnxModelsUseCase: GetLocalOnnxModelsUseCase,
     getLocalMediaPipeModelsUseCase: GetLocalMediaPipeModelsUseCase,
     fetchAndGetHuggingFaceModelsUseCase: FetchAndGetHuggingFaceModelsUseCase,
+    falAiEndpointRepository: FalAiEndpointRepository,
     private val urlValidator: UrlValidator,
     private val stringValidator: CommonStringValidator,
     private val filePathValidator: FilePathValidator,
@@ -94,6 +96,7 @@ class ServerSetupViewModel(
                         huggingFaceApiKey = configuration.huggingFaceApiKey,
                         openAiApiKey = configuration.openAiApiKey,
                         stabilityAiApiKey = configuration.stabilityAiApiKey,
+                        falAiApiKey = configuration.falAiApiKey,
                         localOnnxModels = onnxModels.mapToUi(),
                         localOnnxCustomModel = onnxModels.mapLocalCustomOnnxSwitchState(),
                         localOnnxCustomModelPath = configuration.localOnnxModelPath,
@@ -109,6 +112,29 @@ class ServerSetupViewModel(
                     )
                         .withCredentials(configuration.authCredentials)
                         .withHordeApiKey(configuration.hordeApiKey)
+                }
+            }
+
+        // Load FalAi endpoints
+        !falAiEndpointRepository.getAll()
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(::errorLog) { endpoints ->
+                val selectedId = preferenceManager.falAiSelectedEndpointId
+                val selected = endpoints.firstOrNull { it.endpointId == selectedId }
+                    ?: endpoints.firstOrNull()
+                updateState { state ->
+                    state.copy(
+                        falAiEndpoints = endpoints.map { endpoint ->
+                            ServerSetupState.FalAiEndpointUi(
+                                id = endpoint.id,
+                                endpointId = endpoint.endpointId,
+                                title = endpoint.title,
+                                category = endpoint.category.name,
+                                isCustom = endpoint.isCustom,
+                            )
+                        },
+                        falAiSelectedEndpoint = selected?.endpointId ?: "",
+                    )
                 }
             }
     }
@@ -221,6 +247,14 @@ class ServerSetupViewModel(
             it.copy(stabilityAiApiKey = intent.key)
         }
 
+        is ServerSetupIntent.UpdateFalAiApiKey -> updateState {
+            it.copy(falAiApiKey = intent.key)
+        }
+
+        is ServerSetupIntent.UpdateFalAiEndpoint -> updateState {
+            it.copy(falAiSelectedEndpoint = intent.endpoint.endpointId)
+        }
+
         ServerSetupIntent.ConnectToLocalHost -> connectToServer()
 
         is ServerSetupIntent.SelectLocalModelPath -> updateState { state ->
@@ -246,6 +280,7 @@ class ServerSetupViewModel(
             ServerSource.HUGGING_FACE -> connectToHuggingFace()
             ServerSource.OPEN_AI -> connectToOpenAi()
             ServerSource.STABILITY_AI -> connectToStabilityAi()
+            ServerSource.FAL_AI -> connectToFalAi()
             ServerSource.SWARM_UI -> connectToSwarmUi()
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> connectToMediaPipe()
         }
@@ -329,6 +364,14 @@ class ServerSetupViewModel(
             }
             validation.isValid
         }
+
+        ServerSource.FAL_AI -> {
+            val validation = stringValidator(currentState.falAiApiKey)
+            updateState {
+                it.copy(falAiApiKeyValidationError = validation.mapToUi())
+            }
+            validation.isValid
+        }
     }
 
     private fun validateServerUrlAndCredentials(url: String): Boolean {
@@ -395,6 +438,11 @@ class ServerSetupViewModel(
 
     private fun connectToStabilityAi() = setupConnectionInterActor.connectToStabilityAi(
         apiKey = currentState.stabilityAiApiKey,
+    )
+
+    private fun connectToFalAi() = setupConnectionInterActor.connectToFalAi(
+        apiKey = currentState.falAiApiKey,
+        endpointId = currentState.falAiSelectedEndpoint,
     )
 
     private fun connectToHorde(): Single<Result<Unit>> {

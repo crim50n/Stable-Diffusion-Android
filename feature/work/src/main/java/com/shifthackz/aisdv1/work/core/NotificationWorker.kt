@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import com.shifthackz.aisdv1.core.common.appbuild.ActivityIntentProvider
 import com.shifthackz.aisdv1.core.common.extensions.isAppInForeground
 import com.shifthackz.aisdv1.core.notification.PushNotificationManager
+import io.reactivex.rxjava3.core.Single
 
 internal abstract class NotificationWorker(
     context: Context,
@@ -23,6 +24,35 @@ internal abstract class NotificationWorker(
     abstract val notificationId: Int
 
     abstract val genericNotificationId: Int
+
+    override val foregroundInfo: Single<ForegroundInfo>
+        get() = Single.fromCallable {
+            pushNotificationManager.createNotificationChannel()
+            val notification = pushNotificationManager.createNotification(
+                "Generation in progress",
+                "Your image is being generated..."
+            ) {
+                setOngoing(true)
+                setProgress(0, 0, true)
+                setAutoCancel(false)
+                setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+                setContentIntent(
+                    PendingIntent.getActivity(
+                        applicationContext,
+                        0,
+                        activityIntentProvider().also { intent ->
+                            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        },
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+                    ),
+                )
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ForegroundInfo(notificationId, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+            } else {
+                ForegroundInfo(notificationId, notification)
+            }
+        }
 
     fun showGenericNotification(text: String, body: String?) {
         pushNotificationManager.createNotificationChannel()

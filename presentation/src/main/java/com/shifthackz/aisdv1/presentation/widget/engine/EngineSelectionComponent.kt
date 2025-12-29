@@ -66,6 +66,7 @@ fun EngineSelectionComponent(
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> Unit
             ServerSource.HORDE -> Unit
             ServerSource.OPEN_AI -> Unit
+            ServerSource.FAL_AI -> Unit
         }
     }
 }

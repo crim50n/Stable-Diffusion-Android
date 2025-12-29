@@ -7,6 +7,7 @@ import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.presentation.screen.setup.ServerSetupIntent
 import com.shifthackz.aisdv1.presentation.screen.setup.ServerSetupState
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.Automatic1111Form
+import com.shifthackz.aisdv1.presentation.screen.setup.forms.FalAiForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.HordeForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.HuggingFaceForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.LocalDiffusionForm
@@ -51,6 +52,11 @@ fun ConfigurationStep(
             )
 
             ServerSource.STABILITY_AI -> StabilityAiForm(
+                state = state,
+                processIntent = processIntent,
+            )
+
+            ServerSource.FAL_AI -> FalAiForm(
                 state = state,
                 processIntent = processIntent,
             )

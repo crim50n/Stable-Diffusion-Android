@@ -9,11 +9,13 @@ import com.shifthackz.aisdv1.core.common.file.FileProviderDescriptor
 import com.shifthackz.aisdv1.core.notification.PushNotificationManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
+import com.shifthackz.aisdv1.domain.usecase.generation.FalAiGenerationUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ImageToImageUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.InterruptGenerationUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveHordeProcessStatusUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveLocalDiffusionProcessStatusUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.TextToImageUseCase
+import com.shifthackz.aisdv1.work.task.FalAiTask
 import com.shifthackz.aisdv1.work.task.ImageToImageTask
 import com.shifthackz.aisdv1.work.task.TextToImageTask
 
@@ -23,6 +25,7 @@ class SdaiWorkerFactory(
     private val preferenceManager: PreferenceManager,
     private val textToImageUseCase: TextToImageUseCase,
     private val imageToImageUseCase: ImageToImageUseCase,
+    private val falAiGenerationUseCase: FalAiGenerationUseCase,
     private val observeHordeProcessStatusUseCase: ObserveHordeProcessStatusUseCase,
     private val observeLocalDiffusionProcessStatusUseCase: ObserveLocalDiffusionProcessStatusUseCase,
     private val interruptGenerationUseCase: InterruptGenerationUseCase,
@@ -58,6 +61,20 @@ class SdaiWorkerFactory(
                 backgroundWorkObserver = backgroundWorkObserver,
                 preferenceManager = preferenceManager,
                 imageToImageUseCase = imageToImageUseCase,
+                observeHordeProcessStatusUseCase = observeHordeProcessStatusUseCase,
+                observeLocalDiffusionProcessStatusUseCase = observeLocalDiffusionProcessStatusUseCase,
+                interruptGenerationUseCase = interruptGenerationUseCase,
+                fileProviderDescriptor = fileProviderDescriptor,
+            )
+
+            FalAiTask::class.java.name -> FalAiTask(
+                context = appContext,
+                workerParameters = workerParameters,
+                pushNotificationManager = pushNotificationManager,
+                activityIntentProvider = activityIntentProvider,
+                backgroundWorkObserver = backgroundWorkObserver,
+                preferenceManager = preferenceManager,
+                falAiGenerationUseCase = falAiGenerationUseCase,
                 observeHordeProcessStatusUseCase = observeHordeProcessStatusUseCase,
                 observeLocalDiffusionProcessStatusUseCase = observeLocalDiffusionProcessStatusUseCase,
                 interruptGenerationUseCase = interruptGenerationUseCase,

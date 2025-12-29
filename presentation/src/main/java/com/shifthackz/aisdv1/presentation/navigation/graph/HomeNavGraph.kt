@@ -4,34 +4,65 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.shifthackz.aisdv1.core.model.asUiText
+import com.shifthackz.aisdv1.domain.entity.ServerSource
+import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.presentation.model.NavItem
 import com.shifthackz.aisdv1.presentation.navigation.NavigationRoute
 import com.shifthackz.aisdv1.presentation.navigation.router.home.HomeRouter
+import com.shifthackz.aisdv1.presentation.screen.falai.FalAiGenerationScreen
 import com.shifthackz.aisdv1.presentation.screen.gallery.list.GalleryScreen
 import com.shifthackz.aisdv1.presentation.screen.home.HomeNavigationScreen
 import com.shifthackz.aisdv1.presentation.screen.img2img.ImageToImageScreen
 import com.shifthackz.aisdv1.presentation.screen.settings.SettingsScreen
 import com.shifthackz.aisdv1.presentation.screen.txt2img.TextToImageScreen
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import org.koin.compose.koinInject
 import com.shifthackz.aisdv1.core.localization.R as LocalizationR
 import com.shifthackz.aisdv1.presentation.R as PresentationR
 
 fun NavGraphBuilder.homeScreenNavGraph() {
     composable<NavigationRoute.Home> {
-        HomeNavigationScreen(
-            navItems = listOf(
+        val preferenceManager: PreferenceManager = koinInject()
+        var serverSource by remember { mutableStateOf(preferenceManager.source) }
+
+        DisposableEffect(preferenceManager) {
+            val disposable: Disposable = preferenceManager
+                .observe()
+                .map { it.source }
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { source -> serverSource = source }
+
+            onDispose { disposable.dispose() }
+        }
+
+        val navItems = when (serverSource) {
+            ServerSource.FAL_AI -> listOf(
+                falAiTab(),
+                galleryTab(),
+                settingsTab(),
+            )
+            else -> listOf(
                 txt2ImgTab(),
                 img2imgTab(),
                 galleryTab(),
                 settingsTab(),
-            ),
-        )
+            )
+        }
+
+        HomeNavigationScreen(navItems = navItems)
     }
 }
 
@@ -73,6 +104,20 @@ fun galleryTab() = NavItem(
     content = {
         HomeTabBase(NavigationRoute.HomeNavigation.Gallery) {
             GalleryScreen()
+        }
+    },
+)
+
+fun falAiTab() = NavItem(
+    name = "Fal AI".asUiText(),
+    navRoute = NavigationRoute.HomeNavigation.FalAi,
+    icon = NavItem.Icon.Resource(
+        resId = PresentationR.drawable.ic_text,
+        modifier = Modifier.size(24.dp),
+    ),
+    content = {
+        HomeTabBase(NavigationRoute.HomeNavigation.FalAi) {
+            FalAiGenerationScreen()
         }
     },
 )

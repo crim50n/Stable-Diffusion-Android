@@ -61,7 +61,7 @@ internal abstract class Rx3Worker(
         return convert(SingleFutureAdapter(), foregroundInfo)
     }
 
-    val foregroundInfo: Single<ForegroundInfo>
+    open val foregroundInfo: Single<ForegroundInfo>
         get() {
             val message = (
                     "Expedited WorkRequests require a RxWorker to provide an implementation for"

@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.rx.kotlin)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.google.gson)
 }

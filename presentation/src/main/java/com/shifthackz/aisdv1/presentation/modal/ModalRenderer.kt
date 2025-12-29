@@ -33,6 +33,7 @@ import com.shifthackz.aisdv1.presentation.modal.ldscheduler.LDSchedulerBottomShe
 import com.shifthackz.aisdv1.presentation.modal.tag.EditTagDialog
 import com.shifthackz.aisdv1.presentation.model.Modal
 import com.shifthackz.aisdv1.presentation.screen.debug.DebugMenuIntent
+import com.shifthackz.aisdv1.presentation.screen.falai.FalAiGenerationIntent
 import com.shifthackz.aisdv1.presentation.screen.gallery.detail.GalleryDetailIntent
 import com.shifthackz.aisdv1.presentation.screen.gallery.list.GalleryIntent
 import com.shifthackz.aisdv1.presentation.screen.inpaint.InPaintIntent
@@ -64,6 +65,7 @@ fun ModalRenderer(
         processIntent(InPaintIntent.ScreenModal.Dismiss)
         processIntent(DebugMenuIntent.DismissModal)
         processIntent(ReportIntent.DismissError)
+        processIntent(FalAiGenerationIntent.DismissModal)
     }
     val context = LocalContext.current
     when (screenModal) {
@@ -252,6 +254,16 @@ fun ModalRenderer(
                     GalleryIntent.Export.Selection.Confirm
                 }
                 processIntent(intent)
+            },
+            onDismissRequest = dismiss,
+        )
+
+        is Modal.ConfirmSaveToGallery -> DecisionInteractiveDialog(
+            title = LocalizationR.string.interaction_save_to_gallery_title.asUiText(),
+            text = LocalizationR.string.interaction_save_to_gallery_sub_title.asUiText(),
+            confirmActionResId = LocalizationR.string.action_save,
+            onConfirmAction = {
+                processIntent(GalleryIntent.SaveToGallery.All.Confirm)
             },
             onDismissRequest = dismiss,
         )

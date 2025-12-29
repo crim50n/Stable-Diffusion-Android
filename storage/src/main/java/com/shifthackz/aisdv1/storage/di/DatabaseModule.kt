@@ -51,5 +51,6 @@ val databaseModule = module {
     single { get<PersistentDatabase>().localModelDao() }
     single { get<PersistentDatabase>().huggingFaceModelDao() }
     single { get<PersistentDatabase>().supporterDao() }
+    single { get<PersistentDatabase>().falAiEndpointDao() }
     //endregion
 }

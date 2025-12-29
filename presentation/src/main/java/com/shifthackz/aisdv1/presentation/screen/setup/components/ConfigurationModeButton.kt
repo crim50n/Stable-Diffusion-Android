@@ -77,6 +77,7 @@ fun ConfigurationModeButton(
                     ServerSource.HORDE,
                     ServerSource.OPEN_AI,
                     ServerSource.STABILITY_AI,
+                    ServerSource.FAL_AI,
                     ServerSource.HUGGING_FACE -> Icons.Default.Cloud
 
                     ServerSource.LOCAL_MICROSOFT_ONNX,
@@ -100,6 +101,7 @@ fun ConfigurationModeButton(
             ServerSource.OPEN_AI -> LocalizationR.string.hint_open_ai_sub_title
             ServerSource.LOCAL_MICROSOFT_ONNX -> LocalizationR.string.hint_local_diffusion_sub_title
             ServerSource.STABILITY_AI -> LocalizationR.string.hint_stability_ai_sub_title
+            ServerSource.FAL_AI -> LocalizationR.string.hint_fal_ai_sub_title
             ServerSource.SWARM_UI -> LocalizationR.string.hint_swarm_ui_sub_title
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> LocalizationR.string.hint_mediapipe_sub_title
         }

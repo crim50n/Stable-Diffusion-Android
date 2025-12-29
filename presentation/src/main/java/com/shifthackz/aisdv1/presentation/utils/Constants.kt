@@ -3,7 +3,7 @@ package com.shifthackz.aisdv1.presentation.utils
 import com.shifthackz.aisdv1.presentation.navigation.NavigationRoute.HomeNavigation
 
 object Constants {
-    const val PAGINATION_PAYLOAD_SIZE = 1000
+    const val PAGINATION_PAYLOAD_SIZE = 30
     const val DEBUG_MENU_ACCESS_TAPS = 7
 
     const val SUB_SEED_STRENGTH_MIN = 0f
@@ -46,6 +46,7 @@ object Constants {
     val homeRoutes = listOf(
         HomeNavigation.TxtToImg,
         HomeNavigation.ImgToImg,
+        HomeNavigation.FalAi,
         HomeNavigation.Gallery,
         HomeNavigation.Settings,
     )

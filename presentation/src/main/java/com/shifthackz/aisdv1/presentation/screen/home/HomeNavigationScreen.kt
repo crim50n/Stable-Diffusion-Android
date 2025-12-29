@@ -119,6 +119,10 @@ fun HomeNavigationScreen(
                                     item.content?.invoke()
                                 }
 
+                                HomeNavigation.FalAi -> composable<HomeNavigation.FalAi> {
+                                    item.content?.invoke()
+                                }
+
                                 HomeNavigation.Settings -> composable<HomeNavigation.Settings> {
                                     item.content?.invoke()
                                 }

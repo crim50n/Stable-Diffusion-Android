@@ -5,11 +5,14 @@ import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import com.shifthackz.aisdv1.core.common.file.FileProviderDescriptor
+import com.shifthackz.aisdv1.domain.entity.FalAiPayload
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundTaskManager
 import com.shifthackz.aisdv1.work.di.WorkManagerProvider
 import com.shifthackz.aisdv1.work.mappers.toByteArray
+import com.shifthackz.aisdv1.work.mappers.toByteArray as toFalAiByteArray
+import com.shifthackz.aisdv1.work.task.FalAiTask
 import com.shifthackz.aisdv1.work.task.ImageToImageTask
 import com.shifthackz.aisdv1.work.task.TextToImageTask
 import org.koin.java.KoinJavaComponent.inject
@@ -23,6 +26,10 @@ internal class BackgroundTaskManagerImpl : BackgroundTaskManager {
 
     override fun scheduleImageToImageTask(payload: ImageToImagePayload) {
         runWork<ImageToImageTask>(payload.toByteArray(), Constants.FILE_IMAGE_TO_IMAGE)
+    }
+
+    override fun scheduleFalAiTask(payload: FalAiPayload) {
+        runWork<FalAiTask>(payload.toByteArray(), Constants.FILE_FAL_AI)
     }
 
     override fun retryLastTextToImageTask(): Result<Unit> {
@@ -41,6 +48,17 @@ internal class BackgroundTaskManagerImpl : BackgroundTaskManager {
             val bytes = readPayload(Constants.FILE_IMAGE_TO_IMAGE)
                 ?: return Result.failure(Throwable("Payload is null."))
             runWork<ImageToImageTask>(bytes, Constants.FILE_IMAGE_TO_IMAGE)
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    override fun retryLastFalAiTask(): Result<Unit> {
+        try {
+            val bytes = readPayload(Constants.FILE_FAL_AI)
+                ?: return Result.failure(Throwable("Payload is null."))
+            runWork<FalAiTask>(bytes, Constants.FILE_FAL_AI)
             return Result.success(Unit)
         } catch (e: Exception) {
             return Result.failure(e)

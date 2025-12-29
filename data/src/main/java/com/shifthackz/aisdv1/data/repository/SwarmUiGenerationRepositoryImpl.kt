@@ -8,6 +8,7 @@ import com.shifthackz.aisdv1.domain.datasource.SwarmUiSessionDataSource
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -20,6 +21,7 @@ internal class SwarmUiGenerationRepositoryImpl(
     base64ToBitmapConverter: Base64ToBitmapConverter,
     localDataSource: GenerationResultDataSource.Local,
     backgroundWorkObserver: BackgroundWorkObserver,
+    mediaFileManager: MediaFileManager,
     private val preferenceManager: PreferenceManager,
     private val session: SwarmUiSessionDataSource,
     private val remoteDataSource: SwarmUiGenerationDataSource.Remote,
@@ -29,6 +31,7 @@ internal class SwarmUiGenerationRepositoryImpl(
     localDataSource = localDataSource,
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
+    mediaFileManager = mediaFileManager,
 ), SwarmUiGenerationRepository {
 
     override fun checkApiAvailability(): Completable = session

@@ -10,6 +10,7 @@ import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.presentation.core.GenerationFormUpdateEvent
 import com.shifthackz.aisdv1.presentation.navigation.NavigationEffect
+import com.shifthackz.aisdv1.presentation.navigation.NavigationRoute
 import com.shifthackz.aisdv1.presentation.navigation.router.home.HomeRouter
 import com.shifthackz.android.core.mvi.EmptyState
 import io.reactivex.rxjava3.core.Observable
@@ -39,6 +40,13 @@ class HomeNavigationViewModel(
         !generationFormUpdateEvent
             .observeRoute()
             .map(AiGenerationResult.Type::mapToRoute)
+            .map(HomeNavigationIntent::Route)
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(::errorLog, EmptyLambda, ::processIntent)
+
+        !generationFormUpdateEvent
+            .observeFalAiRoute()
+            .map { NavigationRoute.HomeNavigation.FalAi }
             .map(HomeNavigationIntent::Route)
             .subscribeOnMainThread(schedulersProvider)
             .subscribeBy(::errorLog, EmptyLambda, ::processIntent)

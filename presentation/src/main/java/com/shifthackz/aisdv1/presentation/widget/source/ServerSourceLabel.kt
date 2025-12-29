@@ -20,5 +20,6 @@ fun ServerSource.getNameUiText(): UiText = when (this) {
     ServerSource.HUGGING_FACE -> LocalizationR.string.srv_type_hugging_face
     ServerSource.OPEN_AI -> LocalizationR.string.srv_type_open_ai
     ServerSource.STABILITY_AI -> LocalizationR.string.srv_type_stability_ai
+    ServerSource.FAL_AI -> LocalizationR.string.srv_type_fal_ai
     ServerSource.SWARM_UI -> LocalizationR.string.srv_type_swarm_ui
 }.asUiText()

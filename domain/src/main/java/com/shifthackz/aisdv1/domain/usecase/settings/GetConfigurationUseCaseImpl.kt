@@ -23,6 +23,7 @@ internal class GetConfigurationUseCaseImpl(
             huggingFaceModel = preferenceManager.huggingFaceModel,
             stabilityAiApiKey = preferenceManager.stabilityAiApiKey,
             stabilityAiEngineId = preferenceManager.stabilityAiEngineId,
+            falAiApiKey = preferenceManager.falAiApiKey,
             authCredentials = authorizationStore.getAuthorizationCredentials(),
             localOnnxModelId = preferenceManager.localOnnxModelId,
             localOnnxModelPath = preferenceManager.localOnnxCustomModelPath,

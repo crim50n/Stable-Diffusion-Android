@@ -4,6 +4,7 @@ import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
+import com.shifthackz.aisdv1.domain.repository.FalAiGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.HordeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.HuggingFaceGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepository
@@ -21,6 +22,7 @@ internal class TextToImageUseCaseImpl(
     private val huggingFaceGenerationRepository: HuggingFaceGenerationRepository,
     private val openAiGenerationRepository: OpenAiGenerationRepository,
     private val stabilityAiGenerationRepository: StabilityAiGenerationRepository,
+    private val falAiGenerationRepository: FalAiGenerationRepository,
     private val swarmUiGenerationRepository: SwarmUiGenerationRepository,
     private val localDiffusionGenerationRepository: LocalDiffusionGenerationRepository,
     private val mediaPipeGenerationRepository: MediaPipeGenerationRepository,
@@ -41,6 +43,7 @@ internal class TextToImageUseCaseImpl(
         ServerSource.AUTOMATIC1111 -> stableDiffusionGenerationRepository.generateFromText(payload)
         ServerSource.OPEN_AI -> openAiGenerationRepository.generateFromText(payload)
         ServerSource.STABILITY_AI -> stabilityAiGenerationRepository.generateFromText(payload)
+        ServerSource.FAL_AI -> falAiGenerationRepository.generateFromText(payload)
         ServerSource.SWARM_UI -> swarmUiGenerationRepository.generateFromText(payload)
         ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> mediaPipeGenerationRepository.generateFromText(payload)
     }

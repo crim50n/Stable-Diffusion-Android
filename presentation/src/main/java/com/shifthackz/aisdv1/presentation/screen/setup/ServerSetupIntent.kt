@@ -28,9 +28,13 @@ sealed interface ServerSetupIntent : MviIntent {
 
     data class UpdateStabilityAiApiKey(val key: String) : ServerSetupIntent
 
+    data class UpdateFalAiApiKey(val key: String) : ServerSetupIntent
+
     data class UpdateHuggingFaceApiKey(val key: String) : ServerSetupIntent
 
     data class UpdateHuggingFaceModel(val model: String): ServerSetupIntent
+
+    data class UpdateFalAiEndpoint(val endpoint: ServerSetupState.FalAiEndpointUi) : ServerSetupIntent
 
     data class UpdateDemoMode(val value: Boolean) : ServerSetupIntent
 
@@ -90,6 +94,11 @@ sealed interface ServerSetupIntent : MviIntent {
         data object StabilityAiInfo : LaunchUrl() {
             override val url: String
                 get() = linksProvider.stabilityAiInfoUrl
+        }
+
+        data object FalAiInfo : LaunchUrl() {
+            override val url: String
+                get() = linksProvider.falAiInfoUrl
         }
     }
 

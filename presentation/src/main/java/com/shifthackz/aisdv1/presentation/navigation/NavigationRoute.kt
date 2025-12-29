@@ -48,6 +48,9 @@ sealed interface NavigationRoute {
         data object ImgToImg : HomeNavigation
 
         @Serializable
+        data object FalAi : HomeNavigation
+
+        @Serializable
         data object Gallery : HomeNavigation
 
         @Serializable

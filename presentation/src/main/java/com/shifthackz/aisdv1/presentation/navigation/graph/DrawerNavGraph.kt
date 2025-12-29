@@ -16,8 +16,12 @@ import com.shifthackz.aisdv1.presentation.widget.source.getNameUiText
 import com.shifthackz.aisdv1.core.localization.R as LocalizationR
 
 fun mainDrawerNavItems(settings: Settings? = null): List<NavItem> = buildList {
-    add(txt2ImgTab().copy(name = LocalizationR.string.title_text_to_image.asUiText()))
-    add(img2imgTab().copy(name = LocalizationR.string.title_image_to_image.asUiText()))
+    if (settings?.source == ServerSource.FAL_AI) {
+        add(falAiTab())
+    } else {
+        add(txt2ImgTab().copy(name = LocalizationR.string.title_text_to_image.asUiText()))
+        add(img2imgTab().copy(name = LocalizationR.string.title_image_to_image.asUiText()))
+    }
     add(galleryTab())
     settings?.source?.takeIf { it.featureTags.contains(FeatureTag.OwnServer) }?.let {
         add(webUi(it))

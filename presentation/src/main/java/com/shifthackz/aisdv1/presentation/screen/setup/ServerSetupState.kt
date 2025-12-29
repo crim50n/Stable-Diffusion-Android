@@ -29,6 +29,9 @@ data class ServerSetupState(
     val huggingFaceApiKey: String = "",
     val openAiApiKey: String = "",
     val stabilityAiApiKey: String = "",
+    val falAiApiKey: String = "",
+    val falAiEndpoints: List<FalAiEndpointUi> = emptyList(),
+    val falAiSelectedEndpoint: String = "",
     val hordeDefaultApiKey: Boolean = false,
     val demoMode: Boolean = false,
     val authType: AuthType = AuthType.ANONYMOUS,
@@ -51,6 +54,7 @@ data class ServerSetupState(
     val huggingFaceApiKeyValidationError: UiText? = null,
     val openAiApiKeyValidationError: UiText? = null,
     val stabilityAiApiKeyValidationError: UiText? = null,
+    val falAiApiKeyValidationError: UiText? = null,
     val localCustomOnnxPathValidationError: UiText? = null,
     val localCustomMediaPipePathValidationError: UiText? = null,
 ) : MviState, KoinComponent {
@@ -207,6 +211,14 @@ data class ServerSetupState(
         val downloaded: Boolean = false,
         val downloadState: DownloadState = DownloadState.Unknown,
         val selected: Boolean = false,
+    )
+
+    data class FalAiEndpointUi(
+        val id: String,
+        val endpointId: String,
+        val title: String,
+        val category: String,
+        val isCustom: Boolean,
     )
 }
 

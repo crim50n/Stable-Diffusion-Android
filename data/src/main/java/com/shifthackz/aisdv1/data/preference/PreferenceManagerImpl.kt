@@ -1,6 +1,8 @@
 package com.shifthackz.aisdv1.data.preference
 
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.shifthackz.aisdv1.core.common.extensions.fixUrlSlashes
 import com.shifthackz.aisdv1.core.common.extensions.shouldUseNewMediaStore
 import com.shifthackz.aisdv1.core.common.file.LOCAL_DIFFUSION_CUSTOM_PATH
@@ -10,6 +12,7 @@ import com.shifthackz.aisdv1.domain.entity.DarkThemeToken
 import com.shifthackz.aisdv1.domain.entity.FeatureTag
 import com.shifthackz.aisdv1.domain.entity.Grid
 import com.shifthackz.aisdv1.domain.entity.HuggingFaceModel
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.Settings
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -20,8 +23,10 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class PreferenceManagerImpl(
-    preferences: SharedPreferences,
+    private val preferences: SharedPreferences,
 ) : PreferenceManager {
+
+    private val gson = Gson()
 
     private val preferencesChangedSubject: BehaviorSubject<Any> =
         BehaviorSubject.createDefault(Unit)
@@ -124,6 +129,14 @@ class PreferenceManagerImpl(
         onChanged = ::onPreferencesChanged,
     )
 
+    override var modelType: ModelType by preferences.delegates.complexString(
+        key = KEY_MODEL_TYPE,
+        default = ModelType.SD_1_5,
+        serialize = { type -> type.name },
+        deserialize = { name -> ModelType.entries.find { it.name == name } ?: ModelType.SD_1_5 },
+        onChanged = ::onPreferencesChanged,
+    )
+
     override var hordeApiKey: String by preferences.delegates.string(
         key = KEY_HORDE_API_KEY,
         onChanged = ::onPreferencesChanged,
@@ -152,6 +165,16 @@ class PreferenceManagerImpl(
 
     override var stabilityAiEngineId: String by preferences.delegates.string(
         key = KEY_STABILITY_AI_ENGINE_ID_KEY,
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var falAiApiKey: String by preferences.delegates.string(
+        key = KEY_FAL_AI_API_KEY,
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var falAiSelectedEndpointId: String by preferences.delegates.string(
+        key = KEY_FAL_AI_SELECTED_ENDPOINT_ID,
         onChanged = ::onPreferencesChanged,
     )
 
@@ -232,6 +255,7 @@ class PreferenceManagerImpl(
             Settings(
                 serverUrl = automatic1111ServerUrl,
                 sdModel = sdModel,
+                modelType = modelType,
                 demoMode = demoMode,
                 developerMode = developerMode,
                 localDiffusionAllowCancel = localOnnxAllowCancel,
@@ -260,6 +284,23 @@ class PreferenceManagerImpl(
 
     private fun <T> onPreferencesChanged(value: T) = preferencesChangedSubject.onNext(value)
 
+    override fun saveFalAiEndpointParams(endpointId: String, params: Map<String, Any?>) {
+        val key = "${KEY_FAL_AI_ENDPOINT_PARAMS_PREFIX}$endpointId"
+        val json = gson.toJson(params)
+        preferences.edit().putString(key, json).apply()
+    }
+
+    override fun getFalAiEndpointParams(endpointId: String): Map<String, Any?> {
+        val key = "${KEY_FAL_AI_ENDPOINT_PARAMS_PREFIX}$endpointId"
+        val json = preferences.getString(key, null) ?: return emptyMap()
+        return try {
+            val type = object : TypeToken<Map<String, Any?>>() {}.type
+            gson.fromJson(json, type) ?: emptyMap()
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
+
     companion object {
         const val KEY_SERVER_URL = "key_server_url"
         const val KEY_SWARM_SERVER_URL = "key_swarm_server_url"
@@ -277,12 +318,16 @@ class PreferenceManagerImpl(
         const val KEY_FORM_PROMPT_TAGGED_INPUT = "key_prompt_tagged_input_kb"
         const val KEY_SERVER_SOURCE = "key_server_source"
         const val KEY_SD_MODEL = "key_sd_model"
+        const val KEY_MODEL_TYPE = "key_model_type"
         const val KEY_HORDE_API_KEY = "key_horde_api_key"
         const val KEY_OPEN_AI_API_KEY = "key_open_ai_api_key"
         const val KEY_HUGGING_FACE_API_KEY = "key_hugging_face_api_key"
         const val KEY_HUGGING_FACE_MODEL_KEY = "key_hugging_face_model_key"
         const val KEY_STABILITY_AI_API_KEY = "key_stability_ai_api_key"
         const val KEY_STABILITY_AI_ENGINE_ID_KEY = "key_stability_ai_engine_id_key"
+        const val KEY_FAL_AI_API_KEY = "key_fal_ai_api_key"
+        const val KEY_FAL_AI_SELECTED_ENDPOINT_ID = "key_fal_ai_selected_endpoint_id"
+        const val KEY_FAL_AI_ENDPOINT_PARAMS_PREFIX = "key_fal_ai_endpoint_params_"
         const val KEY_ON_BOARDING_COMPLETE = "key_on_boarding_complete"
         const val KEY_FORCE_SETUP_AFTER_UPDATE = "force_upd_setup_v0.x.x-v0.6.2"
         const val KEY_MEDIA_PIPE_MODEL_ID = "key_mediapipe_model_id"

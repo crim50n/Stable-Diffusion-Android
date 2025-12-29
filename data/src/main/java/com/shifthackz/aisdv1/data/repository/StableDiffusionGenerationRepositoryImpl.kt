@@ -9,6 +9,7 @@ import com.shifthackz.aisdv1.domain.demo.TextToImageDemo
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
 import com.shifthackz.aisdv1.domain.entity.TextToImagePayload
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -20,6 +21,7 @@ internal class StableDiffusionGenerationRepositoryImpl(
     backgroundWorkObserver: BackgroundWorkObserver,
     base64ToBitmapConverter: Base64ToBitmapConverter,
     localDataSource: GenerationResultDataSource.Local,
+    mediaFileManager: MediaFileManager,
     private val remoteDataSource: StableDiffusionGenerationDataSource.Remote,
     private val preferenceManager: PreferenceManager,
     private val textToImageDemo: TextToImageDemo,
@@ -30,6 +32,7 @@ internal class StableDiffusionGenerationRepositoryImpl(
     localDataSource = localDataSource,
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
+    mediaFileManager = mediaFileManager,
 ), StableDiffusionGenerationRepository {
 
     override fun checkApiAvailability() = remoteDataSource.checkAvailability()

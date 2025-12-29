@@ -6,6 +6,7 @@ interface LinksProvider {
     val huggingFaceUrl: String
     val openAiInfoUrl: String
     val stabilityAiInfoUrl: String
+    val falAiInfoUrl: String
     val privacyPolicyUrl: String
     val donateUrl: String
     val gitHubSourceUrl: String
