@@ -18,6 +18,7 @@ import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.interactor.wakelock.WakeLockInterActor
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.usecase.caching.SaveLastResultToCacheUseCase
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.InterruptGenerationUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveHordeProcessStatusUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveLocalDiffusionProcessStatusUseCase
@@ -38,6 +39,7 @@ class TextToImageViewModel(
     dispatchersProvider: DispatchersProvider,
     generationFormUpdateEvent: GenerationFormUpdateEvent,
     getStableDiffusionSamplersUseCase: GetStableDiffusionSamplersUseCase,
+    getForgeModulesUseCase: GetForgeModulesUseCase,
     observeHordeProcessStatusUseCase: ObserveHordeProcessStatusUseCase,
     observeLocalDiffusionProcessStatusUseCase: ObserveLocalDiffusionProcessStatusUseCase,
     saveLastResultToCacheUseCase: SaveLastResultToCacheUseCase,
@@ -57,6 +59,7 @@ class TextToImageViewModel(
 ) : GenerationMviViewModel<TextToImageState, GenerationMviIntent, EmptyEffect>(
     preferenceManager = preferenceManager,
     getStableDiffusionSamplersUseCase = getStableDiffusionSamplersUseCase,
+    getForgeModulesUseCase = getForgeModulesUseCase,
     observeHordeProcessStatusUseCase = observeHordeProcessStatusUseCase,
     observeLocalDiffusionProcessStatusUseCase = observeLocalDiffusionProcessStatusUseCase,
     saveLastResultToCacheUseCase = saveLastResultToCacheUseCase,

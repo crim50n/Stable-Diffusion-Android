@@ -1,7 +1,11 @@
 package com.shifthackz.aisdv1.presentation.core
 
 import android.graphics.Bitmap
+import com.shifthackz.aisdv1.domain.entity.ADetailerConfig
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
+import com.shifthackz.aisdv1.domain.entity.ForgeModule
+import com.shifthackz.aisdv1.domain.entity.HiresConfig
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.OpenAiModel
 import com.shifthackz.aisdv1.domain.entity.OpenAiQuality
 import com.shifthackz.aisdv1.domain.entity.OpenAiSize
@@ -32,11 +36,19 @@ sealed interface GenerationMviIntent : MviIntent {
             data class Width(val value: String) : Size
 
             data class Height(val value: String) : Size
+
+            data object Swap : Size
+
+            data class AspectRatio(val ratio: com.shifthackz.aisdv1.presentation.model.AspectRatio) : Size
         }
 
         data class SamplingSteps(val value: Int) : Update
 
         data class CfgScale(val value: Float) : Update
+
+        data class DistilledCfgScale(val value: Float) : Update
+
+        data class ModelTypeChange(val value: ModelType) : Update
 
         data class RestoreFaces(val value: Boolean) : Update
 
@@ -51,6 +63,14 @@ sealed interface GenerationMviIntent : MviIntent {
         data class Nsfw(val value: Boolean) : Update
 
         data class Batch(val value: Int) : Update
+
+        data class Scheduler(val value: com.shifthackz.aisdv1.domain.entity.Scheduler) : Update
+
+        data class ADetailer(val value: ADetailerConfig) : Update
+
+        data class Hires(val value: HiresConfig) : Update
+
+        data class ForgeModules(val value: List<ForgeModule>) : Update
 
         sealed interface OpenAi : Update {
 
@@ -67,6 +87,12 @@ sealed interface GenerationMviIntent : MviIntent {
             data class Style(val value: StabilityAiStylePreset) : StabilityAi
 
             data class ClipGuidance(val value: StabilityAiClipGuidance) : StabilityAi
+        }
+
+        sealed interface FalAi : Update {
+            data class SelectEndpoint(val endpointId: String) : FalAi
+            data class UpdateProperty(val name: String, val value: Any?) : FalAi
+            data class ToggleAdvanced(val visible: Boolean) : FalAi
         }
     }
 

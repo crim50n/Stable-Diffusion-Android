@@ -43,4 +43,8 @@ data class ImageToImageRequest(
     val subSeedStrength: Float?,
     @SerializedName("sampler_index")
     val samplerIndex: String,
+    @SerializedName("scheduler")
+    val scheduler: String? = null,
+    @SerializedName("alwayson_scripts")
+    val alwaysOnScripts: Map<String, Any>? = null,
 )

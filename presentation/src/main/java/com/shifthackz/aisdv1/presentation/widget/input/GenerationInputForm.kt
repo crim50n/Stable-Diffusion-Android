@@ -1,6 +1,8 @@
 package com.shifthackz.aisdv1.presentation.widget.input
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -10,7 +12,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.AspectRatio
 import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +28,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,16 +41,21 @@ import androidx.compose.ui.unit.dp
 import com.shifthackz.aisdv1.core.common.math.roundTo
 import com.shifthackz.aisdv1.core.model.asString
 import com.shifthackz.aisdv1.core.model.asUiText
+import com.shifthackz.aisdv1.domain.entity.ADetailerConfig
+import com.shifthackz.aisdv1.domain.entity.ForgeModule
+import com.shifthackz.aisdv1.domain.entity.ModelType
 import com.shifthackz.aisdv1.domain.entity.OpenAiModel
 import com.shifthackz.aisdv1.domain.entity.OpenAiQuality
 import com.shifthackz.aisdv1.domain.entity.OpenAiSize
 import com.shifthackz.aisdv1.domain.entity.OpenAiStyle
+import com.shifthackz.aisdv1.domain.entity.Scheduler
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.StabilityAiClipGuidance
 import com.shifthackz.aisdv1.domain.entity.StabilityAiSampler
 import com.shifthackz.aisdv1.domain.entity.StabilityAiStylePreset
 import com.shifthackz.aisdv1.presentation.core.GenerationMviIntent
 import com.shifthackz.aisdv1.presentation.core.GenerationMviState
+import com.shifthackz.aisdv1.presentation.model.AspectRatio
 import com.shifthackz.aisdv1.presentation.model.Modal
 import com.shifthackz.aisdv1.presentation.theme.sliderColors
 import com.shifthackz.aisdv1.presentation.theme.textFieldColors
@@ -145,6 +161,46 @@ fun GenerationInputForm(
         )
     }
 
+    @Composable
+    fun sizeButtonsComponent() {
+        var aspectRatioMenuExpanded by remember { mutableStateOf(false) }
+
+        IconButton(
+            onClick = { processIntent(GenerationMviIntent.Update.Size.Swap) },
+        ) {
+            Icon(
+                imageVector = Icons.Default.SwapHoriz,
+                contentDescription = stringResource(id = LocalizationR.string.swap_dimensions),
+            )
+        }
+
+        Box {
+            IconButton(
+                onClick = { aspectRatioMenuExpanded = true },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AspectRatio,
+                    contentDescription = stringResource(id = LocalizationR.string.aspect_ratio),
+                )
+            }
+            DropdownMenu(
+                expanded = aspectRatioMenuExpanded,
+                onDismissRequest = { aspectRatioMenuExpanded = false },
+                containerColor = MaterialTheme.colorScheme.surface,
+            ) {
+                AspectRatio.entries.forEach { ratio ->
+                    DropdownMenuItem(
+                        text = { Text(ratio.label) },
+                        onClick = {
+                            aspectRatioMenuExpanded = false
+                            processIntent(GenerationMviIntent.Update.Size.AspectRatio(ratio))
+                        },
+                    )
+                }
+            }
+        }
+    }
+
     Column(modifier = modifier) {
         if (!state.onBoardingDemo) {
             when (state.mode) {
@@ -167,6 +223,34 @@ fun GenerationInputForm(
                 )
 
                 else -> Unit
+            }
+            // Model type selection (SD/SDXL/Flux) for A1111
+            if (state.mode == ServerSource.AUTOMATIC1111) {
+                DropdownTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    label = LocalizationR.string.hint_model_type.asUiText(),
+                    value = state.modelType,
+                    items = ModelType.entries,
+                    onItemSelected = { processIntent(GenerationMviIntent.Update.ModelTypeChange(it)) },
+                    displayDelegate = { it.displayName.asUiText() },
+                )
+                // VAE / Text Encoder multi-select (Forge only)
+                if (state.availableForgeModules.isNotEmpty()) {
+                    MultiSelectDropdownField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        label = LocalizationR.string.hint_vae_text_encoder.asUiText(),
+                        selectedItems = state.selectedForgeModules,
+                        availableItems = state.availableForgeModules,
+                        onSelectionChanged = { modules ->
+                            processIntent(GenerationMviIntent.Update.ForgeModules(modules))
+                        },
+                        displayDelegate = { it.name.asUiText() },
+                    )
+                }
             }
         }
         if (state.formPromptTaggedInput) {
@@ -205,73 +289,73 @@ fun GenerationInputForm(
             )
         }
 
-        // Horde does not support "negative prompt"
-        when (state.mode) {
-            ServerSource.AUTOMATIC1111,
+        // Horde does not support "negative prompt", Flux models also don't support it
+        // Show negative prompt only for non-Flux model types
+        val showNegativePrompt = when (state.mode) {
+            ServerSource.AUTOMATIC1111 -> state.modelType != ModelType.FLUX
             ServerSource.SWARM_UI,
             ServerSource.HUGGING_FACE,
             ServerSource.STABILITY_AI,
-            ServerSource.LOCAL_MICROSOFT_ONNX -> {
-                if (state.formPromptTaggedInput) {
-                    ChipTextFieldWithItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        textFieldValueState = negativePromptChipTextFieldState,
-                        label = LocalizationR.string.hint_prompt_negative,
-                        list = state.negativePromptKeywords,
-                        onItemClick = { _, tag ->
-                            processIntent(
-                                GenerationMviIntent.SetModal(
-                                    Modal.EditTag(
-                                        prompt = state.prompt,
-                                        negativePrompt = state.negativePrompt,
-                                        tag = tag,
-                                        isNegative = true,
-                                    )
+            ServerSource.LOCAL_MICROSOFT_ONNX -> true
+            else -> false
+        }
+        if (showNegativePrompt) {
+            if (state.formPromptTaggedInput) {
+                ChipTextFieldWithItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    textFieldValueState = negativePromptChipTextFieldState,
+                    label = LocalizationR.string.hint_prompt_negative,
+                    list = state.negativePromptKeywords,
+                    onItemClick = { _, tag ->
+                        processIntent(
+                            GenerationMviIntent.SetModal(
+                                Modal.EditTag(
+                                    prompt = state.prompt,
+                                    negativePrompt = state.negativePrompt,
+                                    tag = tag,
+                                    isNegative = true,
                                 )
                             )
-                        },
-                    ) { event ->
-                        val prompt = processTaggedPrompt(state.negativePromptKeywords, event)
-                        processIntent(GenerationMviIntent.Update.NegativePrompt(prompt))
-                    }
-                } else {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        value = state.negativePrompt,
-                        onValueChange = { processIntent(GenerationMviIntent.Update.NegativePrompt(it)) },
-                        label = { Text(stringResource(id = LocalizationR.string.hint_prompt_negative)) },
-                        colors = textFieldColors,
-                    )
+                        )
+                    },
+                ) { event ->
+                    val prompt = processTaggedPrompt(state.negativePromptKeywords, event)
+                    processIntent(GenerationMviIntent.Update.NegativePrompt(prompt))
                 }
+            } else {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    value = state.negativePrompt,
+                    onValueChange = { processIntent(GenerationMviIntent.Update.NegativePrompt(it)) },
+                    label = { Text(stringResource(id = LocalizationR.string.hint_prompt_negative)) },
+                    colors = textFieldColors,
+                )
             }
-
-            else -> Unit
         }
 
-        // Size input fields
+        // Size input fields with control buttons
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            val localModifier = Modifier.weight(1f)
-
             when (state.mode) {
                 ServerSource.HORDE,
                 ServerSource.LOCAL_MICROSOFT_ONNX -> {
                     DropdownTextField(
-                        modifier = localModifier.padding(end = 4.dp),
+                        modifier = Modifier.weight(1f).padding(end = 4.dp),
                         label = LocalizationR.string.width.asUiText(),
                         value = state.width,
                         items = Constants.sizes,
                         onItemSelected = { processIntent(GenerationMviIntent.Update.Size.Width(it)) },
                     )
                     DropdownTextField(
-                        modifier = localModifier.padding(start = 4.dp),
+                        modifier = Modifier.weight(1f).padding(start = 4.dp),
                         label = LocalizationR.string.height.asUiText(),
                         value = state.height,
                         items = Constants.sizes,
@@ -282,12 +366,15 @@ fun GenerationInputForm(
                 ServerSource.AUTOMATIC1111,
                 ServerSource.SWARM_UI,
                 ServerSource.HUGGING_FACE -> {
-                    sizeTextFieldsComponent(localModifier)
+                    sizeTextFieldsComponent(Modifier.weight(1f))
+                    sizeButtonsComponent()
                 }
 
                 ServerSource.STABILITY_AI -> {
-                    if (isImg2Img) Unit
-                    else sizeTextFieldsComponent(localModifier)
+                    if (!isImg2Img) {
+                        sizeTextFieldsComponent(Modifier.weight(1f))
+                        sizeButtonsComponent()
+                    }
                 }
 
                 ServerSource.OPEN_AI -> {
@@ -351,7 +438,7 @@ fun GenerationInputForm(
         AnimatedVisibility(
             visible = state.advancedOptionsVisible && state.mode != ServerSource.OPEN_AI,
         ) {
-            Column {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 // Sampler selection only supported for A1111, STABILITY AI
                 when (state.mode) {
                     ServerSource.STABILITY_AI,
@@ -374,6 +461,20 @@ fun GenerationInputForm(
 
                     else -> Unit
                 }
+                // Scheduler selection only for A1111 (Flux models need specific schedulers)
+                if (state.mode == ServerSource.AUTOMATIC1111) {
+                    DropdownTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        label = LocalizationR.string.hint_scheduler.asUiText(),
+                        value = state.selectedScheduler,
+                        items = Scheduler.entries,
+                        onItemSelected = { processIntent(GenerationMviIntent.Update.Scheduler(it)) },
+                        displayDelegate = { value -> value.displayName.asUiText() },
+                    )
+                }
+
                 // Style-preset only for Stablity AI
                 if (state.mode == ServerSource.STABILITY_AI) {
                     DropdownTextField(
@@ -419,13 +520,25 @@ fun GenerationInputForm(
                         label = { Text(stringResource(id = LocalizationR.string.hint_seed)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         trailingIcon = {
-                            IconButton(onClick = {
-                                processIntent(GenerationMviIntent.Update.Seed("${Random.nextLong().absoluteValue}"))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Casino,
-                                    contentDescription = "Random",
-                                )
+                            Row {
+                                if (state.seed.isNotEmpty()) {
+                                    IconButton(onClick = {
+                                        processIntent(GenerationMviIntent.Update.Seed(""))
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear",
+                                        )
+                                    }
+                                }
+                                IconButton(onClick = {
+                                    processIntent(GenerationMviIntent.Update.Seed("${Random.nextLong().absoluteValue}"))
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Casino,
+                                        contentDescription = "Random",
+                                    )
+                                }
                             }
                         },
                         colors = textFieldColors,
@@ -466,13 +579,25 @@ fun GenerationInputForm(
                         label = { Text(stringResource(id = LocalizationR.string.hint_sub_seed)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         trailingIcon = {
-                            IconButton(onClick = {
-                                processIntent(GenerationMviIntent.Update.SubSeed("${Random.nextLong().absoluteValue}"))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Casino,
-                                    contentDescription = "Random",
-                                )
+                            Row {
+                                if (state.subSeed.isNotEmpty()) {
+                                    IconButton(onClick = {
+                                        processIntent(GenerationMviIntent.Update.SubSeed(""))
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear",
+                                        )
+                                    }
+                                }
+                                IconButton(onClick = {
+                                    processIntent(GenerationMviIntent.Update.SubSeed("${Random.nextLong().absoluteValue}"))
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Casino,
+                                        contentDescription = "Random",
+                                    )
+                                }
                             }
                         },
                         colors = textFieldColors,
@@ -533,9 +658,50 @@ fun GenerationInputForm(
                 }
 
                 // CFG scale not available on open ai and google media pipe
+                // For Flux models, show Distilled CFG Scale instead
                 when (state.mode) {
                     ServerSource.OPEN_AI,
                     ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> Unit
+                    ServerSource.AUTOMATIC1111 -> {
+                        // CFG Scale for all model types
+                        Text(
+                            modifier = Modifier.padding(top = 8.dp),
+                            text = stringResource(
+                                LocalizationR.string.hint_cfg_scale,
+                                "${state.cfgScale.roundTo(2)}",
+                            ),
+                        )
+                        SliderTextInputField(
+                            value = state.cfgScale,
+                            valueRange = (CFG_SCALE_RANGE_MIN * 1f)..(CFG_SCALE_RANGE_MAX * 1f),
+                            valueDiff = 0.5f,
+                            steps = abs(CFG_SCALE_RANGE_MAX - CFG_SCALE_RANGE_MIN) * 2 - 1,
+                            sliderColors = sliderColors,
+                            onValueChange = {
+                                processIntent(GenerationMviIntent.Update.CfgScale(it))
+                            },
+                        )
+                        // Flux also needs Distilled CFG Scale
+                        if (state.modelType == ModelType.FLUX) {
+                            Text(
+                                modifier = Modifier.padding(top = 8.dp),
+                                text = stringResource(
+                                    LocalizationR.string.hint_distilled_cfg_scale,
+                                    "${state.distilledCfgScale.roundTo(2)}",
+                                ),
+                            )
+                            SliderTextInputField(
+                                value = state.distilledCfgScale,
+                                valueRange = 1f..10f,
+                                valueDiff = 0.5f,
+                                steps = 17,
+                                sliderColors = sliderColors,
+                                onValueChange = {
+                                    processIntent(GenerationMviIntent.Update.DistilledCfgScale(it))
+                                },
+                            )
+                        }
+                    }
                     else -> {
                         Text(
                             modifier = Modifier.padding(top = 8.dp),
@@ -571,23 +737,38 @@ fun GenerationInputForm(
                     ServerSource.LOCAL_GOOGLE_MEDIA_PIPE, ServerSource.LOCAL_MICROSOFT_ONNX -> Unit
                     else -> batchComponent()
                 }
-                //Restore faces available only for A1111
+                // Hires, ADetailer, Restore faces - only for A1111
                 if (state.mode == ServerSource.AUTOMATIC1111) {
+                    HiresSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        config = state.hiresConfig,
+                        onConfigChange = { processIntent(GenerationMviIntent.Update.Hires(it)) },
+                    )
+                    ADetailerSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        config = state.aDetailerConfig,
+                        onConfigChange = { processIntent(GenerationMviIntent.Update.ADetailer(it)) },
+                    )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
+                        Text(
+                            text = stringResource(id = LocalizationR.string.hint_restore_faces),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
                         Switch(
                             checked = state.restoreFaces,
                             onCheckedChange = {
                                 processIntent(GenerationMviIntent.Update.RestoreFaces(it))
                             },
-                        )
-                        Text(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            text = stringResource(id = LocalizationR.string.hint_restore_faces),
                         )
                     }
                 }

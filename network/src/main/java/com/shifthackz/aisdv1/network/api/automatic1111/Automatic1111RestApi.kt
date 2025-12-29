@@ -1,5 +1,7 @@
 package com.shifthackz.aisdv1.network.api.automatic1111
 
+import com.shifthackz.aisdv1.network.model.ExtensionRaw
+import com.shifthackz.aisdv1.network.model.ForgeModuleRaw
 import com.shifthackz.aisdv1.network.model.ServerConfigurationRaw
 import com.shifthackz.aisdv1.network.model.StableDiffusionHyperNetworkRaw
 import com.shifthackz.aisdv1.network.model.StableDiffusionLoraRaw
@@ -65,6 +67,12 @@ interface Automatic1111RestApi {
     @POST
     fun interrupt(@Url url: String): Completable
 
+    @GET
+    fun fetchExtensions(@Url url: String): Single<List<ExtensionRaw>>
+
+    @GET
+    fun fetchForgeModules(@Url url: String): Single<List<ForgeModuleRaw>>
+
     companion object {
         const val PATH_SD_OPTIONS = "sdapi/v1/options"
         const val PATH_SD_MODELS = "sdapi/v1/sd-models"
@@ -75,5 +83,7 @@ interface Automatic1111RestApi {
         const val PATH_HYPER_NETWORKS = "sdapi/v1/hypernetworks"
         const val PATH_EMBEDDINGS = "sdapi/v1/embeddings"
         const val PATH_INTERRUPT = "sdapi/v1/interrupt"
+        const val PATH_EXTENSIONS = "sdapi/v1/extensions"
+        const val PATH_SD_MODULES = "sdapi/v1/sd-modules"
     }
 }

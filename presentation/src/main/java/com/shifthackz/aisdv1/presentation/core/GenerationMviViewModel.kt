@@ -10,6 +10,12 @@ import com.shifthackz.aisdv1.core.validation.dimension.DimensionValidator
 import com.shifthackz.aisdv1.core.viewmodel.MviRxViewModel
 import com.shifthackz.aisdv1.domain.entity.HordeProcessStatus
 import com.shifthackz.aisdv1.domain.entity.LocalDiffusionStatus
+import com.shifthackz.aisdv1.domain.entity.ModelType
+import com.shifthackz.aisdv1.domain.entity.ModelType.Companion.defaultCfgScale
+import com.shifthackz.aisdv1.domain.entity.ModelType.Companion.defaultHeight
+import com.shifthackz.aisdv1.domain.entity.ModelType.Companion.defaultSampler
+import com.shifthackz.aisdv1.domain.entity.ModelType.Companion.defaultScheduler
+import com.shifthackz.aisdv1.domain.entity.ModelType.Companion.defaultWidth
 import com.shifthackz.aisdv1.domain.entity.OpenAiSize
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.StabilityAiSampler
@@ -17,6 +23,7 @@ import com.shifthackz.aisdv1.domain.entity.StableDiffusionSampler
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.usecase.caching.SaveLastResultToCacheUseCase
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.InterruptGenerationUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveHordeProcessStatusUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveLocalDiffusionProcessStatusUseCase
@@ -37,6 +44,7 @@ import java.util.concurrent.TimeUnit
 abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviIntent, E : MviEffect>(
     private val preferenceManager: PreferenceManager,
     getStableDiffusionSamplersUseCase: GetStableDiffusionSamplersUseCase,
+    getForgeModulesUseCase: GetForgeModulesUseCase,
     observeHordeProcessStatusUseCase: ObserveHordeProcessStatusUseCase,
     observeLocalDiffusionProcessStatusUseCase: ObserveLocalDiffusionProcessStatusUseCase,
     private val saveLastResultToCacheUseCase: SaveLastResultToCacheUseCase,
@@ -61,12 +69,25 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                 onComplete = EmptyLambda,
                 onNext = { settings ->
                     updateGenerationState {
+                        val modelTypeChanged = it.modelType != settings.modelType
                         it
                             .copyState(
                                 mode = settings.source,
+                                modelType = settings.modelType,
                                 advancedToggleButtonVisible = !settings.formAdvancedOptionsAlwaysShow,
                                 formPromptTaggedInput = settings.formPromptTaggedInput,
                             )
+                            .let { state ->
+                                if (modelTypeChanged) {
+                                    state.copyState(
+                                        cfgScale = settings.modelType.defaultCfgScale(),
+                                        selectedSampler = settings.modelType.defaultSampler(),
+                                        selectedScheduler = settings.modelType.defaultScheduler(),
+                                        width = settings.modelType.defaultWidth().toString(),
+                                        height = settings.modelType.defaultHeight().toString(),
+                                    )
+                                } else state
+                            }
                             .let { state ->
                                 if (!settings.formAdvancedOptionsAlwaysShow) state
                                 else state.copyState(advancedOptionsVisible = true)
@@ -76,7 +97,6 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
             )
 
         !getStableDiffusionSamplersUseCase()
-            .delay(500L, TimeUnit.MILLISECONDS)
             .map { samplers -> samplers.map(StableDiffusionSampler::name) }
             .subscribeOnMainThread(schedulersProvider)
             .subscribeBy(
@@ -109,6 +129,17 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                 onError = ::errorLog,
                 onNext = ::onReceivedLocalDiffusionStatus,
                 onComplete = EmptyLambda,
+            )
+
+        !getForgeModulesUseCase()
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(
+                onError = ::errorLog,
+                onSuccess = { modules ->
+                    updateGenerationState { state ->
+                        state.copyState(availableForgeModules = modules)
+                    }
+                }
             )
     }
 
@@ -163,6 +194,31 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                 )
             }
 
+            is GenerationMviIntent.Update.Size.Swap -> updateGenerationState {
+                val newWidth = it.height
+                val newHeight = it.width
+                it.copyState(
+                    width = newWidth,
+                    height = newHeight,
+                    widthValidationError = dimensionValidator(newWidth).mapToUi(),
+                    heightValidationError = dimensionValidator(newHeight).mapToUi(),
+                )
+            }
+
+            is GenerationMviIntent.Update.Size.AspectRatio -> updateGenerationState {
+                val baseSize = maxOf(
+                    it.width.toIntOrNull() ?: 512,
+                    it.height.toIntOrNull() ?: 512
+                )
+                val (newWidth, newHeight) = intent.ratio.calculateDimensions(baseSize)
+                it.copyState(
+                    width = newWidth.toString(),
+                    height = newHeight.toString(),
+                    widthValidationError = dimensionValidator(newWidth.toString()).mapToUi(),
+                    heightValidationError = dimensionValidator(newHeight.toString()).mapToUi(),
+                )
+            }
+
             is GenerationMviIntent.Update.SamplingSteps -> updateGenerationState {
                 it.copyState(samplingSteps = intent.value)
             }
@@ -197,6 +253,40 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
 
             is GenerationMviIntent.Update.Batch -> updateGenerationState {
                 it.copyState(batchCount = intent.value)
+            }
+
+            is GenerationMviIntent.Update.Scheduler -> updateGenerationState {
+                it.copyState(selectedScheduler = intent.value)
+            }
+
+            is GenerationMviIntent.Update.ADetailer -> updateGenerationState {
+                it.copyState(aDetailerConfig = intent.value)
+            }
+
+            is GenerationMviIntent.Update.Hires -> updateGenerationState {
+                it.copyState(hiresConfig = intent.value)
+            }
+
+            is GenerationMviIntent.Update.ForgeModules -> updateGenerationState {
+                it.copyState(selectedForgeModules = intent.value)
+            }
+
+            is GenerationMviIntent.Update.DistilledCfgScale -> updateGenerationState {
+                it.copyState(distilledCfgScale = intent.value)
+            }
+
+            is GenerationMviIntent.Update.ModelTypeChange -> {
+                preferenceManager.modelType = intent.value
+                updateGenerationState {
+                    it.copyState(
+                        modelType = intent.value,
+                        cfgScale = intent.value.defaultCfgScale(),
+                        selectedSampler = intent.value.defaultSampler(),
+                        selectedScheduler = intent.value.defaultScheduler(),
+                        width = intent.value.defaultWidth().toString(),
+                        height = intent.value.defaultHeight().toString(),
+                    )
+                }
             }
 
             is GenerationMviIntent.Update.OpenAi.Model -> updateGenerationState { state ->

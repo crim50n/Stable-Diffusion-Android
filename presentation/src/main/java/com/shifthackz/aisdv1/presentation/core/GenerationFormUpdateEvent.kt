@@ -8,8 +8,10 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 class GenerationFormUpdateEvent {
 
     private val sRoute: PublishSubject<AiGenerationResult.Type> = PublishSubject.create()
+    private val sFalAiRoute: PublishSubject<Unit> = PublishSubject.create()
     private val sTxt2Img: BehaviorSubject<Payload> = BehaviorSubject.createDefault(Payload.None)
     private val sImg2Img: BehaviorSubject<Payload> = BehaviorSubject.createDefault(Payload.None)
+    private val sFalAi: BehaviorSubject<Payload> = BehaviorSubject.createDefault(Payload.None)
 
     fun update(
         generation: AiGenerationResult,
@@ -26,6 +28,7 @@ class GenerationFormUpdateEvent {
     fun clear() {
         sTxt2Img.onNext(Payload.None)
         sImg2Img.onNext(Payload.None)
+        sFalAi.onNext(Payload.None)
     }
 
     fun observeRoute() = sRoute.toFlowable(BackpressureStrategy.LATEST)
@@ -34,9 +37,19 @@ class GenerationFormUpdateEvent {
 
     fun observeImg2ImgForm() = sImg2Img.toFlowable(BackpressureStrategy.LATEST)
 
+    fun updateFalAi(generation: AiGenerationResult) {
+        sFalAiRoute.onNext(Unit)
+        sFalAi.onNext(Payload.FalAiForm(generation))
+    }
+
+    fun observeFalAiRoute() = sFalAiRoute.toFlowable(BackpressureStrategy.LATEST)
+
+    fun observeFalAiForm() = sFalAi.toFlowable(BackpressureStrategy.LATEST)
+
     sealed interface Payload {
         data object None : Payload
         data class T2IForm(val ai: AiGenerationResult): Payload
         data class I2IForm(val ai: AiGenerationResult, val inputImage: Boolean): Payload
+        data class FalAiForm(val ai: AiGenerationResult): Payload
     }
 }

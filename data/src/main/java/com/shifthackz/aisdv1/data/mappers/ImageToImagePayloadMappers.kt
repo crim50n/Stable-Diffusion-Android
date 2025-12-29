@@ -3,6 +3,7 @@ package com.shifthackz.aisdv1.data.mappers
 import com.shifthackz.aisdv1.core.common.math.roundTo
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
+import com.shifthackz.aisdv1.domain.entity.Scheduler
 import com.shifthackz.aisdv1.domain.entity.StabilityAiClipGuidance
 import com.shifthackz.aisdv1.domain.entity.StabilityAiStylePreset
 import com.shifthackz.aisdv1.network.request.HordeGenerationAsyncRequest
@@ -35,6 +36,8 @@ fun ImageToImagePayload.mapToRequest(): ImageToImageRequest = with(this) {
         subSeed = subSeed.trim().ifEmpty { null },
         subSeedStrength = subSeedStrength,
         samplerIndex = sampler,
+        scheduler = scheduler.takeIf { it != Scheduler.AUTOMATIC }?.alias,
+        alwaysOnScripts = aDetailer.toAlwaysOnScripts(),
     )
 }
 

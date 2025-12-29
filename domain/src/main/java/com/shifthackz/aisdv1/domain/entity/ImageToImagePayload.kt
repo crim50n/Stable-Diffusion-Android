@@ -17,6 +17,7 @@ data class ImageToImagePayload(
     val subSeed: String,
     val subSeedStrength: Float,
     val sampler: String,
+    val scheduler: Scheduler = Scheduler.AUTOMATIC,
     val nsfw: Boolean,
     val batchCount: Int,
     val inPaintingMaskInvert: Int,
@@ -26,4 +27,5 @@ data class ImageToImagePayload(
     val maskBlur: Int,
     val stabilityAiClipGuidance: StabilityAiClipGuidance?,
     val stabilityAiStylePreset: StabilityAiStylePreset?,
+    val aDetailer: ADetailerConfig = ADetailerConfig.DISABLED,
 ) : Serializable
