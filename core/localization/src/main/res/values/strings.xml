@@ -16,6 +16,8 @@
     <string name="download">Download</string>
     <string name="width">Width</string>
     <string name="height">Height</string>
+    <string name="swap_dimensions">Swap dimensions</string>
+    <string name="aspect_ratio">Aspect ratio</string>
     <string name="browse">Browse</string>
     <string name="apply">Apply</string>
     <string name="close">Close</string>
@@ -78,6 +80,7 @@
     <string name="srv_type_hugging_face_short" translatable="false">HuggingFace</string>
     <string name="srv_type_open_ai" translatable="false">Open AI</string>
     <string name="srv_type_stability_ai" translatable="false">Stability AI</string>
+    <string name="srv_type_fal_ai" translatable="false">Fal AI</string>
     <string name="srv_type_swarm_ui" translatable="false">Swarm UI</string>
 
     <string name="hint_prompt">Prompt</string>
@@ -89,7 +92,22 @@
     <string name="hint_offline_generation">Offline generation</string>
     <string name="hint_own_server">Own Server</string>
     <string name="hint_cfg_scale">CFG Scale: %1$s</string>
+    <string name="hint_distilled_cfg_scale">Distilled CFG Scale: %1$s</string>
+    <string name="hint_model_type">Model type</string>
+    <string name="hint_vae_text_encoder">VAE / Text Encoder</string>
     <string name="hint_sampler">Sampling method</string>
+    <string name="hint_scheduler">Scheduler</string>
+    <string name="hint_adetailer">ADetailer</string>
+    <string name="hint_adetailer_enabled">Enable ADetailer</string>
+    <string name="hint_adetailer_model">Detection model</string>
+    <string name="hint_adetailer_confidence">Confidence: %1$s</string>
+    <string name="hint_adetailer_denoising">Denoising: %1$s</string>
+    <string name="hint_hires">Hires. Fix</string>
+    <string name="hint_hires_enabled">Enable Hires. Fix</string>
+    <string name="hint_hires_upscaler">Upscaler</string>
+    <string name="hint_hires_scale">Scale: %1$s</string>
+    <string name="hint_hires_steps">Steps: %1$s (0 = same)</string>
+    <string name="hint_hires_denoising">Denoising: %1$s</string>
     <string name="hint_style_preset">Style preset</string>
     <string name="hint_clip_guidance_preset">Clip guidance preset</string>
     <string name="hint_restore_faces">Restore faces</string>
@@ -149,6 +167,12 @@
     <string name="hint_stability_ai_about">About Stability AI</string>
     <string name="hint_stability_ai_engine">Stability AI Engine</string>
 
+    <string name="hint_fal_ai_title">Connect to Fal AI</string>
+    <string name="hint_fal_ai_sub_title">Fal AI is a fast serverless inference platform for running FLUX and other models.</string>
+    <string name="hint_fal_ai_about">About Fal AI</string>
+    <string name="hint_fal_ai_model">Fal AI Model</string>
+    <string name="hint_fal_ai_endpoint">Fal AI Endpoint</string>
+
     <string name="hint_swarm_ui_title">Provide your Swarm UI URL</string>
     <string name="hint_swarm_ui_sub_title">A Modular Stable Diffusion Web-User-Interface, with an emphasis on making tools easily accessible, high performance, and extensibility.</string>
 
@@ -207,7 +231,10 @@
     <string name="gallery_menu_selected">Selected images: %1$s</string>
     <string name="gallery_menu_delete_all">Delete all</string>
     <string name="gallery_menu_export_all">Export all</string>
+    <string name="gallery_menu_save_all">Save all to device</string>
     <string name="gallery_menu_selection_mode">Selection mode</string>
+    <string name="gallery_save_success">Image saved to gallery</string>
+    <string name="gallery_save_all_success">All images saved to gallery</string>
 
     <string name="settings_header_server">AI settings</string>
     <string name="settings_header_app">App settings</string>
@@ -261,6 +288,8 @@
     <string name="interaction_export_title">Gallery Export</string>
     <string name="interaction_export_sub_title">This will export all the gallery images as *.zip archive. This process may be long if you have many images, would you like to proceed?</string>
     <string name="interaction_export_sub_title_selection">This will export selected gallery images as *.zip archive. Would you like to proceed?</string>
+    <string name="interaction_save_to_gallery_title">Save to Device Gallery</string>
+    <string name="interaction_save_to_gallery_sub_title">This will save all images to your device gallery. This process may take some time if you have many images. Would you like to proceed?</string>
     <string name="interaction_cache_sub_title">This will reset app settings and delete all the generated images. Do you want to proceed?</string>
 
     <string name="interaction_warning_title">Warning</string>

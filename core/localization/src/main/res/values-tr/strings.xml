@@ -7,14 +7,14 @@
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
     <string name="cancel">İptal</string>
-    <string name="retry">yeniden dene</string>
+    <string name="retry">Yeniden dene</string>
     <string name="delete">Silmek</string>
     <string name="download">İndirmek</string>
     <string name="width">Genişlik</string>
     <string name="height">Yükseklik</string>
     <string name="browse">Araştır</string>
     <string name="apply">Uygula</string>
-    <string name="close">Kapalı</string>
+    <string name="close">Kapat</string>
     <string name="next">Sonraki</string>
     <string name="success">✅ Başarılı</string>
     <string name="failure">❌ Başarısızlık</string>
@@ -68,10 +68,25 @@
     <string name="hint_batch">Grup: %1$s</string>
     <string name="hint_batch_tag">Toplu üretim</string>
     <string name="hint_multiple_models">Çoklu Modeller</string>
-    <string name="hint_offline_generation">Çevrimdışı nesil</string>
+    <string name="hint_offline_generation">Çevrimdışı oluşturma</string>
     <string name="hint_own_server">Kendi Sunucumuz</string>
     <string name="hint_cfg_scale">CFG Scale: %1$s</string>
+    <string name="hint_distilled_cfg_scale">Distilled CFG Scale: %1$s</string>
+    <string name="hint_model_type">Model türü</string>
+    <string name="hint_vae_text_encoder">VAE / Text Encoder</string>
     <string name="hint_sampler">Örneklerme Yöntemi</string>
+    <string name="hint_scheduler">Zamanlayıcı</string>
+    <string name="hint_adetailer">ADetailer</string>
+    <string name="hint_adetailer_enabled">ADetailer\'ı Etkinleştir</string>
+    <string name="hint_adetailer_model">Algılama modeli</string>
+    <string name="hint_adetailer_confidence">Güven eşiği: %1$s</string>
+    <string name="hint_adetailer_denoising">Gürültü giderme: %1$s</string>
+    <string name="hint_hires">Hires. Fix</string>
+    <string name="hint_hires_enabled">Hires. Fix\'i Etkinleştir</string>
+    <string name="hint_hires_upscaler">Yükseltici</string>
+    <string name="hint_hires_scale">Ölçek: %1$s</string>
+    <string name="hint_hires_steps">Adımlar: %1$s (0 = aynı)</string>
+    <string name="hint_hires_denoising">Gürültü giderme: %1$s</string>
     <string name="hint_style_preset">Stil ön ayarı</string>
     <string name="hint_clip_guidance_preset">Klip yönlendirme ön ayarı</string>
     <string name="hint_restore_faces">Yüzleri Düzelt</string>
@@ -129,6 +144,12 @@
     <string name="hint_stability_ai_sub_title">StabilityAI - DreamStudio tarafından sağlanan görüntü oluşturma hizmetidir.</string>
     <string name="hint_stability_ai_about">Hakkında Stability AI</string>
     <string name="hint_stability_ai_engine">Stability AI motoru</string>
+
+    <string name="hint_fal_ai_title">Fal AI\'ya bağlanın</string>
+    <string name="hint_fal_ai_sub_title">Fal AI, FLUX ve diğer modelleri çalıştırmak için hızlı bir serverless platformdur.</string>
+    <string name="hint_fal_ai_about">Hakkında Fal AI</string>
+    <string name="hint_fal_ai_model">Fal AI modeli</string>
+    <string name="hint_fal_ai_endpoint">Fal AI endpoint</string>
 
     <string name="hint_swarm_ui_title">Swarm UI URL\'nizi sağlayın</string>
     <string name="hint_swarm_ui_sub_title">Araçlara kolay erişim, yüksek performans ve genişletilebilirlik üzerine odaklanan Modüler, Kararlı Yaygın Web Kullanıcı Arayüzü.</string>

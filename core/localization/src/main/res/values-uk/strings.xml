@@ -10,7 +10,7 @@
     <string name="retry">Повторити</string>
     <string name="delete">Видалити</string>
     <string name="download">Завантажити</string>
-    <string name="width">Довжина</string>
+    <string name="width">Ширина</string>
     <string name="height">Висота</string>
     <string name="browse">Дивитися</string>
     <string name="apply">Застосувати</string>
@@ -71,7 +71,22 @@
     <string name="hint_offline_generation">Генерація без інтернету</string>
     <string name="hint_own_server">Власний сервер</string>
     <string name="hint_cfg_scale">CFG Шкала: %1$s</string>
+    <string name="hint_distilled_cfg_scale">Distilled CFG Scale: %1$s</string>
+    <string name="hint_model_type">Тип моделі</string>
+    <string name="hint_vae_text_encoder">VAE / Text Encoder</string>
     <string name="hint_sampler">Метод вибірки</string>
+    <string name="hint_scheduler">Планувальник</string>
+    <string name="hint_adetailer">ADetailer</string>
+    <string name="hint_adetailer_enabled">Увімкнути ADetailer</string>
+    <string name="hint_adetailer_model">Модель детекції</string>
+    <string name="hint_adetailer_confidence">Поріг впевненості: %1$s</string>
+    <string name="hint_adetailer_denoising">Шумозаглушення: %1$s</string>
+    <string name="hint_hires">Hires. Fix</string>
+    <string name="hint_hires_enabled">Увімкнути Hires. Fix</string>
+    <string name="hint_hires_upscaler">Апскейлер</string>
+    <string name="hint_hires_scale">Масштаб: %1$s</string>
+    <string name="hint_hires_steps">Кроки: %1$s (0 = як у першому проході)</string>
+    <string name="hint_hires_denoising">Шумозаглушення: %1$s</string>
     <string name="hint_style_preset">Стиль</string>
     <string name="hint_clip_guidance_preset">Кліпінг пресет</string>
     <string name="hint_restore_faces">Відновлення обличч</string>
@@ -91,7 +106,7 @@
     <string name="hint_tag">Тег</string>
     <string name="hint_value">Значення</string>
     <string name="hint_mask_blur">Блюр маски: %1$s</string>
-    <string name="hint_only_masked_padding">Відтупи (тільки маска): %1$s px</string>
+    <string name="hint_only_masked_padding">Відступи (тільки маска): %1$s px</string>
     <string name="hint_mask_mode">Режим маски</string>
     <string name="hint_mask_content">Контент маски</string>
     <string name="hint_in_paint_area">Область Inpaint</string>
@@ -116,7 +131,7 @@
     <string name="hint_server_horde_about">Про Horde AI</string>
     <string name="hint_server_horde_get_api_key">Отримати свій API Ключ</string>
 
-    <string name="hint_hugging_face_title">Підключитися доHugging Face</string>
+    <string name="hint_hugging_face_title">Підключитися до Hugging Face</string>
     <string name="hint_hugging_face_sub_title">Hugging Face дозволяє тестувати та оцінювати загальнодоступні моделі машинного навчання або ваші власні приватні моделі.</string>
     <string name="hint_hugging_face_about">Про Hugging Face</string>
     <string name="hint_hugging_face_model">Hugging Face модель</string>
@@ -130,7 +145,13 @@
     <string name="hint_stability_ai_about">Про Stability AI</string>
     <string name="hint_stability_ai_engine">Stability AI двигун</string>
 
-    <string name="hint_swarm_ui_title">Provide your Swarm UI URL</string>
+    <string name="hint_fal_ai_title">Підключитися до Fal AI</string>
+    <string name="hint_fal_ai_sub_title">Fal AI — швидка serverless платформа для запуску FLUX та інших моделей.</string>
+    <string name="hint_fal_ai_about">Про Fal AI</string>
+    <string name="hint_fal_ai_model">Fal AI модель</string>
+    <string name="hint_fal_ai_endpoint">Fal AI ендпоінт</string>
+
+    <string name="hint_swarm_ui_title">Вкажіть URL-адресу Swarm UI</string>
     <string name="hint_swarm_ui_sub_title">Модульний веб-інтерфейс Stable Diffusion з наголосом на полегшення доступу до інструментів, високу продуктивність і розширюваність.</string>
 
     <string name="hint_local_diffusion_sub_title">Ця конфігурація використовує Microsoft ONNX та дозволяє запускати генерації Stable Diffusion на вашому телефоні без необхідності підключатися до віддаленого сервера/хмари.</string>
@@ -229,7 +250,7 @@
     <string name="communicating_random_image_title">Завантажуємо випадкове зображення…</string>
     <string name="communicating_local_title">Генерація Local Diffusion</string>
     <string name="communicating_wait_time">Час очікування: %1$s</string>
-    <string name="communicating_status_queue">Поизиція в черзі: %1$s</string>
+    <string name="communicating_status_queue">Позиція в черзі: %1$s</string>
     <string name="communicating_status_steps">Крок: %1$s/%2$s</string>
 
     <string name="exporting_progress_title">Експортування вашої галереї…</string>
@@ -351,7 +372,7 @@
     <string name="permission_notifications">Push повідомлення</string>
 
     <string name="premission_rationale_title">Додаток не має дозволів.</string>
-    <string name="premission_rationale_sub_title">Довольте права на %1$s в налаштуваннях.</string>
+    <string name="premission_rationale_sub_title">Дозвольте права на %1$s в налаштуваннях.</string>
 
     <string name="scheduler_main">UI Потік</string>
     <string name="scheduler_io">I/O Потік</string>
