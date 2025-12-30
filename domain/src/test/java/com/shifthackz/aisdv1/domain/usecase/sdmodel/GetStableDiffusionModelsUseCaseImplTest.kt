@@ -3,23 +3,34 @@ package com.shifthackz.aisdv1.domain.usecase.sdmodel
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import com.shifthackz.aisdv1.domain.entity.ServerConfiguration
+import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.mocks.mockServerConfiguration
 import com.shifthackz.aisdv1.domain.mocks.mockStableDiffusionModels
+import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.ServerConfigurationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionModelsRepository
 import io.reactivex.rxjava3.core.Single
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 class GetStableDiffusionModelsUseCaseImplTest {
 
+    private val stubPreferenceManager = mock<PreferenceManager>()
     private val stubServerConfigurationRepository = mock<ServerConfigurationRepository>()
     private val stubSdModelsRepository = mock<StableDiffusionModelsRepository>()
 
     private val useCase = GetStableDiffusionModelsUseCaseImpl(
+        preferenceManager = stubPreferenceManager,
         serverConfigurationRepository = stubServerConfigurationRepository,
         sdModelsRepository = stubSdModelsRepository,
     )
+
+    @Before
+    fun initialize() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.AUTOMATIC1111)
+    }
 
     @Test
     fun `given repository returns list with value present in configuration, expected list with selected value`() {
@@ -104,5 +115,18 @@ class GetStableDiffusionModelsUseCaseImplTest {
             .assertError(stubException)
             .await()
             .assertNotComplete()
+    }
+
+    @Test
+    fun `given source is not AUTOMATIC1111, expected empty list without network requests`() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.FAL_AI)
+
+        useCase()
+            .test()
+            .assertNoErrors()
+            .assertValue(emptyList())
+            .await()
+            .assertComplete()
     }
 }

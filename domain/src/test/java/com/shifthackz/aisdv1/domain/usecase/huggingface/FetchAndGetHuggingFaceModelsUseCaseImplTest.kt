@@ -2,16 +2,29 @@ package com.shifthackz.aisdv1.domain.usecase.huggingface
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.mocks.mockHuggingFaceModels
+import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.HuggingFaceModelsRepository
 import io.reactivex.rxjava3.core.Single
+import org.junit.Before
 import org.junit.Test
 
 class FetchAndGetHuggingFaceModelsUseCaseImplTest {
 
+    private val stubPreferenceManager = mock<PreferenceManager>()
     private val stubRepository = mock<HuggingFaceModelsRepository>()
 
-    private val useCase = FetchAndGetHuggingFaceModelsUseCaseImpl(stubRepository)
+    private val useCase = FetchAndGetHuggingFaceModelsUseCaseImpl(
+        preferenceManager = stubPreferenceManager,
+        huggingFaceModelsRepository = stubRepository,
+    )
+
+    @Before
+    fun initialize() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.HUGGING_FACE)
+    }
 
     @Test
     fun `given repository provided models list, expected valid list value`() {

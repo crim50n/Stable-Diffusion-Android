@@ -2,10 +2,12 @@ package com.shifthackz.aisdv1.domain.usecase.stabilityai
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.mocks.mockStabilityAiEngines
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.StabilityAiEnginesRepository
 import io.reactivex.rxjava3.core.Single
+import org.junit.Before
 import org.junit.Test
 
 class FetchAndGetStabilityAiEnginesUseCaseImplTest {
@@ -18,6 +20,12 @@ class FetchAndGetStabilityAiEnginesUseCaseImplTest {
         repository = stubRepository,
         preferenceManager = stubPreferenceManager,
     )
+
+    @Before
+    fun initialize() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.STABILITY_AI)
+    }
 
     @Test
     fun `given repository returned engines list, id present in preference, expected the same engines list, id not changed`() {

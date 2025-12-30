@@ -1,17 +1,24 @@
 package com.shifthackz.aisdv1.domain.usecase.sdmodel
 
+import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.StableDiffusionModel
+import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.ServerConfigurationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionModelsRepository
 import io.reactivex.rxjava3.core.Single
 
 internal class GetStableDiffusionModelsUseCaseImpl(
+    private val preferenceManager: PreferenceManager,
     private val serverConfigurationRepository: ServerConfigurationRepository,
     private val sdModelsRepository: StableDiffusionModelsRepository,
 ) : GetStableDiffusionModelsUseCase {
 
-    override operator fun invoke(): Single<List<Pair<StableDiffusionModel, Boolean>>> =
-        serverConfigurationRepository
+    override operator fun invoke(): Single<List<Pair<StableDiffusionModel, Boolean>>> {
+        // Only fetch models if A1111/Forge is the active source
+        if (preferenceManager.source != ServerSource.AUTOMATIC1111) {
+            return Single.just(emptyList())
+        }
+        return serverConfigurationRepository
             .fetchAndGetConfiguration()
             .flatMap { config ->
                 sdModelsRepository
@@ -23,4 +30,5 @@ internal class GetStableDiffusionModelsUseCaseImpl(
                     model to (config.sdModelCheckpoint == model.title)
                 }
             }
+    }
 }
