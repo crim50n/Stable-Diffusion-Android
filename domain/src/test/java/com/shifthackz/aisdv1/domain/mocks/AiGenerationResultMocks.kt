@@ -1,6 +1,7 @@
 package com.shifthackz.aisdv1.domain.mocks
 
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
+import com.shifthackz.aisdv1.domain.entity.MediaType
 import java.util.Date
 
 val mockAiGenerationResult = AiGenerationResult(
@@ -22,6 +23,9 @@ val mockAiGenerationResult = AiGenerationResult(
     subSeedStrength = 5598f,
     denoisingStrength = 1504f,
     hidden = false,
+    mediaPath = "",
+    inputMediaPath = "",
+    mediaType = MediaType.IMAGE,
 )
 
 val mockAiGenerationResults = listOf(mockAiGenerationResult)

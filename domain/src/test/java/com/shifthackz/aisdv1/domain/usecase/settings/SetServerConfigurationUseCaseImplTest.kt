@@ -83,6 +83,10 @@ class SetServerConfigurationUseCaseImplTest {
             stubPreferenceManager::localMediaPipeCustomModelPath.set(any())
         } returns Unit
 
+        every {
+            stubPreferenceManager::falAiApiKey.set(any())
+        } returns Unit
+
         useCase
             .invoke(mockConfiguration)
             .test()

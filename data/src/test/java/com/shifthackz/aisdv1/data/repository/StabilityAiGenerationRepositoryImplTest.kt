@@ -8,6 +8,7 @@ import com.shifthackz.aisdv1.data.mocks.mockTextToImagePayload
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.StabilityAiCreditsDataSource
 import com.shifthackz.aisdv1.domain.datasource.StabilityAiGenerationDataSource
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -30,16 +31,18 @@ class StabilityAiGenerationRepositoryImplTest {
     private val stubCreditsRds = mockk<StabilityAiCreditsDataSource.Remote>()
     private val stubCreditsLds = mockk<StabilityAiCreditsDataSource.Local>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
+    private val stubMediaFileManager = mockk<MediaFileManager>()
 
     private val repository = StabilityAiGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
         preferenceManager = stubPreferenceManager,
+        backgroundWorkObserver = stubBackgroundWorkObserver,
+        mediaFileManager = stubMediaFileManager,
         generationRds = stubRemoteDataSource,
         creditsRds = stubCreditsRds,
         creditsLds = stubCreditsLds,
-        backgroundWorkObserver = stubBackgroundWorkObserver,
     )
 
     @Before

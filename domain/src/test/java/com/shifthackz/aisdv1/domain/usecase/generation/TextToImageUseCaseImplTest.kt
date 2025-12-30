@@ -7,6 +7,7 @@ import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.mocks.mockAiGenerationResult
 import com.shifthackz.aisdv1.domain.mocks.mockTextToImagePayload
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
+import com.shifthackz.aisdv1.domain.repository.FalAiGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.HordeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.HuggingFaceGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepository
@@ -26,6 +27,7 @@ class TextToImageUseCaseImplTest {
     private val stubHuggingFaceGenerationRepository = mock<HuggingFaceGenerationRepository>()
     private val stubOpenAiGenerationRepository = mock<OpenAiGenerationRepository>()
     private val stubStabilityAiGenerationRepository = mock<StabilityAiGenerationRepository>()
+    private val stubFalAiGenerationRepository = mock<FalAiGenerationRepository>()
     private val stubSwarmUiGenerationRepository = mock<SwarmUiGenerationRepository>()
     private val stubLocalDiffusionGenerationRepository = mock<LocalDiffusionGenerationRepository>()
     private val stubMediaPipeGenerationRepository = mock<MediaPipeGenerationRepository>()
@@ -37,8 +39,9 @@ class TextToImageUseCaseImplTest {
         huggingFaceGenerationRepository = stubHuggingFaceGenerationRepository,
         openAiGenerationRepository = stubOpenAiGenerationRepository,
         stabilityAiGenerationRepository = stubStabilityAiGenerationRepository,
-        localDiffusionGenerationRepository = stubLocalDiffusionGenerationRepository,
+        falAiGenerationRepository = stubFalAiGenerationRepository,
         swarmUiGenerationRepository = stubSwarmUiGenerationRepository,
+        localDiffusionGenerationRepository = stubLocalDiffusionGenerationRepository,
         mediaPipeGenerationRepository = stubMediaPipeGenerationRepository,
         preferenceManager = stubPreferenceManager,
     )
@@ -415,6 +418,70 @@ class TextToImageUseCaseImplTest {
             .thenReturn(ServerSource.LOCAL_MICROSOFT_ONNX)
 
         whenever(stubLocalDiffusionGenerationRepository.generateFromText(any()))
+            .thenReturn(Single.error(stubException))
+
+        val stubBatchCount = 1
+        val stubPayload = mockTextToImagePayload.copy(batchCount = stubBatchCount)
+
+        useCase(stubPayload)
+            .test()
+            .assertError(stubException)
+            .await()
+            .assertNotComplete()
+    }
+
+    @Test
+    fun `given source is FAL_AI, batch count is 1, generated successfully, expected generations list with size 1`() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.FAL_AI)
+
+        whenever(stubFalAiGenerationRepository.generateFromText(any()))
+            .thenReturn(Single.just(mockAiGenerationResult))
+
+        val stubBatchCount = 1
+        val stubPayload = mockTextToImagePayload.copy(batchCount = stubBatchCount)
+
+        val expectedResult = listOf(mockAiGenerationResult)
+
+        useCase(stubPayload)
+            .test()
+            .assertNoErrors()
+            .assertValue { generations ->
+                generations.size == stubBatchCount && expectedResult == generations
+            }
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given source is FAL_AI, batch count is 10, generated successfully, expected generations list with size 10`() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.FAL_AI)
+
+        whenever(stubFalAiGenerationRepository.generateFromText(any()))
+            .thenReturn(Single.just(mockAiGenerationResult))
+
+        val stubBatchCount = 10
+        val stubPayload = mockTextToImagePayload.copy(batchCount = stubBatchCount)
+
+        val expectedResult = (0 until 10).map { mockAiGenerationResult }
+
+        useCase(stubPayload)
+            .test()
+            .assertNoErrors()
+            .assertValue { generations ->
+                generations.size == stubBatchCount && expectedResult == generations
+            }
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given source is FAL_AI, batch count is 1, generate failed, expected error`() {
+        whenever(stubPreferenceManager.source)
+            .thenReturn(ServerSource.FAL_AI)
+
+        whenever(stubFalAiGenerationRepository.generateFromText(any()))
             .thenReturn(Single.error(stubException))
 
         val stubBatchCount = 1

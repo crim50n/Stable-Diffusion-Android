@@ -7,6 +7,7 @@ import com.shifthackz.aisdv1.data.mocks.mockTextToImagePayload
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.SwarmUiGenerationDataSource
 import com.shifthackz.aisdv1.domain.datasource.SwarmUiSessionDataSource
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -26,15 +27,17 @@ class SwarmUiGenerationRepositoryImplTest {
     private val stubSession = mockk<SwarmUiSessionDataSource>()
     private val stubPreferenceManager = mockk<PreferenceManager>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
-    
+    private val stubMediaFileManager = mockk<MediaFileManager>()
+
     private val repository = SwarmUiGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
-        remoteDataSource = stubRemoteDataSource,
-        session = stubSession,
         preferenceManager = stubPreferenceManager,
         backgroundWorkObserver = stubBackgroundWorkObserver,
+        mediaFileManager = stubMediaFileManager,
+        remoteDataSource = stubRemoteDataSource,
+        session = stubSession,
     )
 
     @Before

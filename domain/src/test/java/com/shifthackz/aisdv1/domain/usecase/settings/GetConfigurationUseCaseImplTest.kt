@@ -84,6 +84,10 @@ class GetConfigurationUseCaseImplTest {
             stubPreferenceManager::localMediaPipeCustomModelPath.get()
         } returns mockConfiguration.localMediaPipeModelPath
 
+        every {
+            stubPreferenceManager::falAiApiKey.get()
+        } returns mockConfiguration.falAiApiKey
+
         useCase
             .invoke()
             .test()

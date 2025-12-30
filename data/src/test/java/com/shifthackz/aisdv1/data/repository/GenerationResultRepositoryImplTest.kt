@@ -5,6 +5,7 @@ import com.shifthackz.aisdv1.data.mocks.mockAiGenerationResult
 import com.shifthackz.aisdv1.data.mocks.mockAiGenerationResults
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.entity.MediaStoreInfo
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import io.mockk.every
@@ -20,12 +21,14 @@ class GenerationResultRepositoryImplTest {
     private val stubMediaStoreGateway = mockk<MediaStoreGateway>()
     private val stubBase64ToBitmapConverter = mockk<Base64ToBitmapConverter>()
     private val stubLocalDataSource = mockk<GenerationResultDataSource.Local>()
+    private val stubMediaFileManager = mockk<MediaFileManager>()
 
     private val repository = GenerationResultRepositoryImpl(
         preferenceManager = stubPreferenceManager,
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
+        mediaFileManager = stubMediaFileManager,
     )
 
     @Test
@@ -181,6 +184,10 @@ class GenerationResultRepositoryImplTest {
     @Test
     fun `given attempt to delete by id list, local delete success, expected complete value`() {
         every {
+            stubLocalDataSource.queryByIdList(any())
+        } returns Single.just(mockAiGenerationResults)
+
+        every {
             stubLocalDataSource.deleteByIdList(any())
         } returns Completable.complete()
 
@@ -194,6 +201,10 @@ class GenerationResultRepositoryImplTest {
 
     @Test
     fun `given attempt to delete by id list, local delete fails, expected error value`() {
+        every {
+            stubLocalDataSource.queryByIdList(any())
+        } returns Single.just(mockAiGenerationResults)
+
         every {
             stubLocalDataSource.deleteByIdList(any())
         } returns Completable.error(stubException)
@@ -209,6 +220,10 @@ class GenerationResultRepositoryImplTest {
     @Test
     fun `given attempt to delete by id, local delete success, expected complete value`() {
         every {
+            stubLocalDataSource.queryById(any())
+        } returns Single.just(mockAiGenerationResult)
+
+        every {
             stubLocalDataSource.deleteById(any())
         } returns Completable.complete()
 
@@ -222,6 +237,10 @@ class GenerationResultRepositoryImplTest {
 
     @Test
     fun `given attempt to delete by id, local delete fails, expected error value`() {
+        every {
+            stubLocalDataSource.queryById(any())
+        } returns Single.just(mockAiGenerationResult)
+
         every {
             stubLocalDataSource.deleteById(any())
         } returns Completable.error(stubException)
@@ -237,6 +256,10 @@ class GenerationResultRepositoryImplTest {
     @Test
     fun `given attempt to delete all, local delete success, expected complete value`() {
         every {
+            stubLocalDataSource.queryAll()
+        } returns Single.just(mockAiGenerationResults)
+
+        every {
             stubLocalDataSource.deleteAll()
         } returns Completable.complete()
 
@@ -250,6 +273,10 @@ class GenerationResultRepositoryImplTest {
 
     @Test
     fun `given attempt to delete all, local delete fails, expected complete value`() {
+        every {
+            stubLocalDataSource.queryAll()
+        } returns Single.just(mockAiGenerationResults)
+
         every {
             stubLocalDataSource.deleteAll()
         } returns Completable.error(stubException)
@@ -269,6 +296,18 @@ class GenerationResultRepositoryImplTest {
         } returns false
 
         every {
+            stubMediaFileManager.isFilePath(any())
+        } returns false
+
+        every {
+            stubMediaFileManager.isVideoUrl(any())
+        } returns false
+
+        every {
+            stubMediaFileManager.migrateBase64ToFile(any(), any())
+        } returns "/path/to/file.png"
+
+        every {
             stubLocalDataSource.insert(any())
         } returns Single.just(mockAiGenerationResult.id)
 
@@ -286,6 +325,18 @@ class GenerationResultRepositoryImplTest {
         every {
             stubPreferenceManager.saveToMediaStore
         } returns false
+
+        every {
+            stubMediaFileManager.isFilePath(any())
+        } returns false
+
+        every {
+            stubMediaFileManager.isVideoUrl(any())
+        } returns false
+
+        every {
+            stubMediaFileManager.migrateBase64ToFile(any(), any())
+        } returns "/path/to/file.png"
 
         every {
             stubLocalDataSource.insert(any())

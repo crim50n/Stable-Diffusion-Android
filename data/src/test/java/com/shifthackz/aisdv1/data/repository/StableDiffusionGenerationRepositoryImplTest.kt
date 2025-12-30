@@ -8,6 +8,7 @@ import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.StableDiffusionGenerationDataSource
 import com.shifthackz.aisdv1.domain.demo.ImageToImageDemo
 import com.shifthackz.aisdv1.domain.demo.TextToImageDemo
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -29,16 +30,18 @@ class StableDiffusionGenerationRepositoryImplTest {
     private val stubTextToImageDemo = mockk<TextToImageDemo>()
     private val stubImageToImageDemo = mockk<ImageToImageDemo>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
+    private val stubMediaFileManager = mockk<MediaFileManager>()
 
     private val repository = StableDiffusionGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
-        remoteDataSource = stubRemoteDataSource,
         preferenceManager = stubPreferenceManager,
+        backgroundWorkObserver = stubBackgroundWorkObserver,
+        mediaFileManager = stubMediaFileManager,
+        remoteDataSource = stubRemoteDataSource,
         textToImageDemo = stubTextToImageDemo,
         imageToImageDemo = stubImageToImageDemo,
-        backgroundWorkObserver = stubBackgroundWorkObserver,
     )
 
     @Before

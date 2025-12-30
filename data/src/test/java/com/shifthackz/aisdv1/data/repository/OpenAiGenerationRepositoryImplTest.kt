@@ -5,6 +5,7 @@ import com.shifthackz.aisdv1.data.mocks.mockAiGenerationResult
 import com.shifthackz.aisdv1.data.mocks.mockTextToImagePayload
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.OpenAiGenerationDataSource
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -23,14 +24,16 @@ class OpenAiGenerationRepositoryImplTest {
     private val stubPreferenceManager = mockk<PreferenceManager>()
     private val stubRemoteDataSource = mockk<OpenAiGenerationDataSource.Remote>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
+    private val stubMediaFileManager = mockk<MediaFileManager>()
 
     private val repository = OpenAiGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
         preferenceManager = stubPreferenceManager,
-        remoteDataSource = stubRemoteDataSource,
         backgroundWorkObserver = stubBackgroundWorkObserver,
+        mediaFileManager = stubMediaFileManager,
+        remoteDataSource = stubRemoteDataSource,
     )
 
     @Before

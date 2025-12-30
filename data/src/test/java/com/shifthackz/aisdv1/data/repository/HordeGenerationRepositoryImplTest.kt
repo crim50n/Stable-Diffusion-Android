@@ -7,6 +7,7 @@ import com.shifthackz.aisdv1.data.mocks.mockTextToImagePayload
 import com.shifthackz.aisdv1.domain.datasource.GenerationResultDataSource
 import com.shifthackz.aisdv1.domain.datasource.HordeGenerationDataSource
 import com.shifthackz.aisdv1.domain.entity.HordeProcessStatus
+import com.shifthackz.aisdv1.domain.feature.MediaFileManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
@@ -31,15 +32,17 @@ class HordeGenerationRepositoryImplTest {
     private val stubRemoteDataSource = mockk<HordeGenerationDataSource.Remote>()
     private val stubStatusSource = mockk<HordeGenerationDataSource.StatusSource>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
+    private val stubMediaFileManager = mockk<MediaFileManager>()
 
     private val repository = HordeGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
         preferenceManager = stubPreferenceManager,
+        backgroundWorkObserver = stubBackgroundWorkObserver,
+        mediaFileManager = stubMediaFileManager,
         remoteDataSource = stubRemoteDataSource,
         statusSource = stubStatusSource,
-        backgroundWorkObserver = stubBackgroundWorkObserver,
     )
 
     @Before
