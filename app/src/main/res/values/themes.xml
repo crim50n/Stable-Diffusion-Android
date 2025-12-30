@@ -8,6 +8,7 @@
         <item name="colorSecondaryVariant">@color/catppuccin_latte_mauve</item>
         <item name="colorOnSecondary">@color/catppuccin_latte_base</item>
         <item name="android:statusBarColor">@color/catppuccin_latte_mantle</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.AiSdCompose.Splash" parent="Theme.Catppuccin.Latte.SplashScreen">
