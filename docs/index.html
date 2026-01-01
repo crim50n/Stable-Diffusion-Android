@@ -7,220 +7,94 @@
     <meta name="description" content="Generate AI images on your Android device with Pocket Diffusion. Connect to Automatic1111, ComfyUI, or use on-device generation.">
     <meta name="application-name" content="Pocket Diffusion">
     <meta name="author" content="crims0n">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            padding: 20px 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .hero-icon {
-            width: 180px;
-            height: 180px;
-            border-radius: 36px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            color: white;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero h1 span {
-            color: #ffd700;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 600px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 60px;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px;
-            text-align: center;
-            color: white;
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .feature h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .feature p {
-            font-size: 0.95rem;
-            opacity: 0.85;
-        }
-
-        .download-btn {
-            display: inline-block;
-            background: white;
-            color: #764ba2;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        footer a {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        .links {
-            margin-top: 20px;
-        }
-
-        .links a {
-            margin: 0 15px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .hero-icon {
-                width: 140px;
-                height: 140px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/pdai.png">
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="logo">Pocket Diffusion</div>
+            <nav>
+                <a href="#" class="logo">
+                    <img src="assets/pdai.png" alt="Pocket Diffusion Logo">
+                    Pocket Diffusion
+                </a>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="policy.html">Privacy</a>
+                    <a href="https://github.com/crims0n/Stable-Diffusion-Android" target="_blank" class="btn-primary">
+                        <i class="fab fa-github"></i> Download
+                    </a>
+                </div>
+            </nav>
         </div>
     </header>
 
-    <main class="hero">
-        <div class="container">
-            <img src="assets/pdai.png" alt="Pocket Diffusion" class="hero-icon">
+    <main>
+        <section class="hero">
+            <div class="container">
+                <img src="assets/pdai.png" alt="Pocket Diffusion Icon" class="hero-icon">
+                <h1>AI Image Generation<br><span>in your Pocket</span></h1>
+                <p>Generate stunning AI art directly on your Android device.<br>Connect to powerful backends or run locally with privacy in mind.</p>
 
-            <h1>Pocket Diffusion <span>AI</span></h1>
-
-            <p>Generate stunning AI images directly on your Android device. Connect to Automatic1111, ComfyUI, or generate locally with on-device models.</p>
-
-            <a href="https://github.com/crim50n/Pocket-Diffusion-Android/releases" class="download-btn">
-                Download APK
-            </a>
-
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🎨</div>
-                    <h3>Text to Image</h3>
-                    <p>Create images from text prompts using Stable Diffusion models</p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/crims0n/Stable-Diffusion-Android/releases" class="btn-primary">
+                        <i class="fab fa-android"></i> Get for Android
+                    </a>
+                    <a href="#features" class="btn-secondary">Learn More</a>
                 </div>
 
-                <div class="feature">
-                    <div class="feature-icon">🖼️</div>
-                    <h3>Image to Image</h3>
-                    <p>Transform existing images with AI-powered editing</p>
-                </div>
+                <img src="assets/scr_group_1.png" alt="App Screenshot" class="hero-image">
+            </div>
+        </section>
 
-                <div class="feature">
-                    <div class="feature-icon">📱</div>
-                    <h3>On-Device Generation</h3>
-                    <p>Run models locally on your phone with MediaPipe</p>
-                </div>
-
-                <div class="feature">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Multiple Backends</h3>
-                    <p>Connect to A1111, ComfyUI, SwarmUI, and more</p>
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Why Pocket Diffusion?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt feature-icon"></i>
+                        <h3>On-Device Generation</h3>
+                        <p>Run Stable Diffusion models locally on your device using MediaPipe. No internet connection required for generation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-server feature-icon"></i>
+                        <h3>Remote Backends</h3>
+                        <p>Connect to your own Automatic1111 or ComfyUI server for unlimited power and model flexibility.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h3>Privacy First</h3>
+                        <p>Your prompts and images stay yours. No data collection, no tracking, completely open source.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-palette feature-icon"></i>
+                        <h3>User Friendly</h3>
+                        <p>Clean, modern Material You interface designed for mobile. Easy to use for beginners and pros alike.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-code feature-icon"></i>
+                        <h3>Open Source</h3>
+                        <p>Fully open source code. Audit, contribute, or build your own version. Community driven development.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-bolt feature-icon"></i>
+                        <h3>Fast & Efficient</h3>
+                        <p>Optimized for Android devices. Uses hardware acceleration where available for best performance.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>Pocket Diffusion © 2024-2026 crims0n</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">
-                Fork of <a href="https://github.com/ShiftHackZ/Stable-Diffusion-Android">Stable-Diffusion-Android</a> by ShiftHackZ
-            </p>
-            <div class="links">
-                <a href="https://github.com/crim50n/Pocket-Diffusion-Android">GitHub</a>
+            <div class="footer-links">
+                <a href="#">Home</a>
                 <a href="policy.html">Privacy Policy</a>
+                <a href="https://github.com/crims0n/Stable-Diffusion-Android">GitHub</a>
             </div>
+            <p>&copy; 2026 Pocket Diffusion. Built by crims0n.</p>
         </div>
     </footer>
 </body>
