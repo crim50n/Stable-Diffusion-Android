@@ -18,7 +18,7 @@ val backgroundWorkModule = module {
         WorkManagerProvider { WorkManager.getInstance(androidApplication()) }
     }
 
-    factoryOf(::SdaiWorkerFactory) binds arrayOf(SdaiWorkerFactory::class, WorkerFactory::class)
+    factoryOf(::PdaiWorkerFactory) binds arrayOf(PdaiWorkerFactory::class, WorkerFactory::class)
     singleOf(::BackgroundWorkObserverImpl) bind BackgroundWorkObserver::class
     factoryOf(::BackgroundTaskManagerImpl) bind BackgroundTaskManager::class
 }

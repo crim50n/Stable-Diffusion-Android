@@ -20,6 +20,6 @@ class CryptoProviderImpl(private val context: Context) : CryptoProvider {
     private fun getMasterKeyAlias() = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
     companion object {
-        private const val KEY_PREFERENCE_AUTHORIZATION = "sdai_authorization_preference"
+        private const val KEY_PREFERENCE_AUTHORIZATION = "pdai_authorization_preference"
     }
 }

@@ -49,7 +49,7 @@ abstract class CoreGenerationMviViewModelTest<V : GenerationMviViewModel<*, *, *
     protected val stubMainRouter = mockk<MainRouter>()
     protected val stubDrawerRouter = mockk<DrawerRouter>()
     protected val stubDimensionValidator = mockk<DimensionValidator>()
-    protected val stubSdaiPushNotificationManager = mockk<PushNotificationManager>()
+    protected val stubPdaiPushNotificationManager = mockk<PushNotificationManager>()
 
     protected val stubAcquireWakelockUseCase = mockk<AcquireWakelockUseCase>()
     protected val stubReleaseWakelockUseCase = mockk<ReleaseWakeLockUseCase>()

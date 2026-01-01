@@ -19,7 +19,7 @@ import dev.minios.pdaiv1.work.task.FalAiTask
 import dev.minios.pdaiv1.work.task.ImageToImageTask
 import dev.minios.pdaiv1.work.task.TextToImageTask
 
-class SdaiWorkerFactory(
+class PdaiWorkerFactory(
     private val backgroundWorkObserver: BackgroundWorkObserver,
     private val pushNotificationManager: PushNotificationManager,
     private val preferenceManager: PreferenceManager,

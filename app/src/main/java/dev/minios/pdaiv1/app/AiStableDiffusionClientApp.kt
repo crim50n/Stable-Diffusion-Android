@@ -21,7 +21,7 @@ import dev.minios.pdaiv1.domain.di.domainModule
 import dev.minios.pdaiv1.network.di.networkModule
 import dev.minios.pdaiv1.presentation.di.presentationModule
 import dev.minios.pdaiv1.storage.di.databaseModule
-import dev.minios.pdaiv1.work.di.SdaiWorkerFactory
+import dev.minios.pdaiv1.work.di.PdaiWorkerFactory
 import dev.minios.pdaiv1.work.di.backgroundWorkModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -84,7 +84,7 @@ class AiStableDiffusionClientApp : Application() {
 
     private fun initializeWorkManager() {
         try {
-            val workerFactory: SdaiWorkerFactory by inject()
+            val workerFactory: PdaiWorkerFactory by inject()
             val configuration = Configuration.Builder()
                 .setWorkerFactory(workerFactory)
                 .build()

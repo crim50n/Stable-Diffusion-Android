@@ -70,7 +70,7 @@ class ImageToImageViewModelTest : CoreGenerationMviViewModelTest<ImageToImageVie
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         preferenceManager = stubPreferenceManager,
         schedulersProvider = stubCustomSchedulers,
-        notificationManager = stubSdaiPushNotificationManager,
+        notificationManager = stubPdaiPushNotificationManager,
         wakeLockInterActor = stubWakeLockInterActor,
         inPaintStateProducer = stubInPaintStateProducer,
         mainRouter = stubMainRouter,

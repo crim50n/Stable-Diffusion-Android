@@ -55,7 +55,7 @@ internal class PushNotificationManagerImpl(
         body: UiText?,
         block: NotificationCompat.Builder.() -> Unit
     ): Notification = with(
-        NotificationCompat.Builder(context, SDAI_NOTIFICATION_CHANNEL_ID)
+        NotificationCompat.Builder(context, PDAI_NOTIFICATION_CHANNEL_ID)
     ) {
         setSmallIcon(R.drawable.ic_notification)
         setContentTitle(title.asString(context))
@@ -76,13 +76,13 @@ internal class PushNotificationManagerImpl(
 
     override fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (manager.getNotificationChannel(SDAI_NOTIFICATION_CHANNEL_ID) == null) {
+            if (manager.getNotificationChannel(PDAI_NOTIFICATION_CHANNEL_ID) == null) {
                 debugLog("Creating notification channel")
 
                 manager.createNotificationChannel(
                     NotificationChannel(
-                        SDAI_NOTIFICATION_CHANNEL_ID,
-                        "SDAI Notifications",
+                        PDAI_NOTIFICATION_CHANNEL_ID,
+                        "PDAI Notifications",
                         NotificationManager.IMPORTANCE_HIGH,
                     ).also { channel ->
                         channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
@@ -101,6 +101,6 @@ internal class PushNotificationManagerImpl(
     }
 
     companion object {
-        private const val SDAI_NOTIFICATION_CHANNEL_ID = "SDAI_NOTIFICATION_CHANNEL"
+        private const val PDAI_NOTIFICATION_CHANNEL_ID = "PDAI_NOTIFICATION_CHANNEL"
     }
 }

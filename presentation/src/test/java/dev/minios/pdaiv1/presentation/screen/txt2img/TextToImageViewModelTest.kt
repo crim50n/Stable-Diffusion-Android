@@ -54,7 +54,7 @@ class TextToImageViewModelTest : CoreGenerationMviViewModelTest<TextToImageViewM
         textToImageUseCase = stubTextToImageUseCase,
         schedulersProvider = stubCustomSchedulers,
         preferenceManager = stubPreferenceManager,
-        notificationManager = stubSdaiPushNotificationManager,
+        notificationManager = stubPdaiPushNotificationManager,
         wakeLockInterActor = stubWakeLockInterActor,
         backgroundWorkObserver = stubBackgroundWorkObserver,
         backgroundTaskManager = stubBackgroundTaskManager,
@@ -436,7 +436,7 @@ class TextToImageViewModelTest : CoreGenerationMviViewModelTest<TextToImageViewM
         } returns true
 
         every {
-            stubSdaiPushNotificationManager.show(any(), any())
+            stubPdaiPushNotificationManager.show(any(), any())
         } returns Unit
 
         every {
