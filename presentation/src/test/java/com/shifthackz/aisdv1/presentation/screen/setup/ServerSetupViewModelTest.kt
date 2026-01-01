@@ -14,7 +14,10 @@ import com.shifthackz.aisdv1.domain.usecase.downloadable.DeleteModelUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.DownloadModelUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalMediaPipeModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.ScanCustomModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.huggingface.FetchAndGetHuggingFaceModelsUseCase
+import com.shifthackz.aisdv1.domain.repository.FalAiEndpointRepository
 import com.shifthackz.aisdv1.domain.usecase.settings.GetConfigurationUseCase
 import com.shifthackz.aisdv1.presentation.core.CoreViewModelTest
 import com.shifthackz.aisdv1.presentation.mocks.mockHuggingFaceModels
@@ -55,6 +58,9 @@ class ServerSetupViewModelTest : CoreViewModelTest<ServerSetupViewModel>() {
     private val stubPreferenceManager = mockk<PreferenceManager>()
     private val stubWakeLockInterActor = mockk<WakeLockInterActor>()
     private val stubMainRouter = mockk<MainRouter>()
+    private val stubGetLocalQnnModelsUseCase = mockk<GetLocalQnnModelsUseCase>()
+    private val stubFalAiEndpointRepository = mockk<FalAiEndpointRepository>()
+    private val stubScanCustomModelsUseCase = mockk<ScanCustomModelsUseCase>()
 
     override fun initializeViewModel() = ServerSetupViewModel(
         launchSource = LaunchSource.SETTINGS,
@@ -74,6 +80,9 @@ class ServerSetupViewModelTest : CoreViewModelTest<ServerSetupViewModel>() {
         wakeLockInterActor = stubWakeLockInterActor,
         mainRouter = stubMainRouter,
         buildInfoProvider = BuildInfoProvider.stub,
+        getLocalQnnModelsUseCase = stubGetLocalQnnModelsUseCase,
+        falAiEndpointRepository = stubFalAiEndpointRepository,
+        scanCustomModelsUseCase = stubScanCustomModelsUseCase,
     )
 
     @Before
@@ -95,6 +104,14 @@ class ServerSetupViewModelTest : CoreViewModelTest<ServerSetupViewModel>() {
         every {
             stubFetchAndGetHuggingFaceModelsUseCase()
         } returns Single.just(mockHuggingFaceModels)
+
+        every {
+            stubGetLocalQnnModelsUseCase()
+        } returns Single.just(emptyList())
+
+        every {
+            stubFalAiEndpointRepository.getAll()
+        } returns Single.just(emptyList())
     }
 
     @After

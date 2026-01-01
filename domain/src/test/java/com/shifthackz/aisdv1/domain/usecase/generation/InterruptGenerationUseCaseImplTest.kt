@@ -6,6 +6,7 @@ import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.HordeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepository
+import com.shifthackz.aisdv1.domain.repository.QnnGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionGenerationRepository
 import io.reactivex.rxjava3.core.Completable
 import org.junit.Test
@@ -16,12 +17,14 @@ class InterruptGenerationUseCaseImplTest {
     private val stubStableDiffusionGenerationRepository = mock<StableDiffusionGenerationRepository>()
     private val stubHordeGenerationRepository = mock<HordeGenerationRepository>()
     private val stubLocalDiffusionGenerationRepository = mock<LocalDiffusionGenerationRepository>()
+    private val stubQnnGenerationRepository = mock<QnnGenerationRepository>()
     private val stubPreferenceManager = mock<PreferenceManager>()
 
     private val useCase = InterruptGenerationUseCaseImpl(
         stableDiffusionGenerationRepository = stubStableDiffusionGenerationRepository,
         hordeGenerationRepository = stubHordeGenerationRepository,
         localDiffusionGenerationRepository = stubLocalDiffusionGenerationRepository,
+        qnnGenerationRepository = stubQnnGenerationRepository,
         preferenceManager = stubPreferenceManager,
     )
 

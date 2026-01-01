@@ -14,6 +14,7 @@ import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepositor
 import com.shifthackz.aisdv1.domain.repository.MediaPipeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.OpenAiGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StabilityAiGenerationRepository
+import com.shifthackz.aisdv1.domain.repository.QnnGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.SwarmUiGenerationRepository
 import io.reactivex.rxjava3.core.Single
@@ -31,6 +32,7 @@ class TextToImageUseCaseImplTest {
     private val stubSwarmUiGenerationRepository = mock<SwarmUiGenerationRepository>()
     private val stubLocalDiffusionGenerationRepository = mock<LocalDiffusionGenerationRepository>()
     private val stubMediaPipeGenerationRepository = mock<MediaPipeGenerationRepository>()
+    private val stubQnnGenerationRepository = mock<QnnGenerationRepository>()
     private val stubPreferenceManager = mock<PreferenceManager>()
 
     private val useCase = TextToImageUseCaseImpl(
@@ -43,6 +45,7 @@ class TextToImageUseCaseImplTest {
         swarmUiGenerationRepository = stubSwarmUiGenerationRepository,
         localDiffusionGenerationRepository = stubLocalDiffusionGenerationRepository,
         mediaPipeGenerationRepository = stubMediaPipeGenerationRepository,
+        qnnGenerationRepository = stubQnnGenerationRepository,
         preferenceManager = stubPreferenceManager,
     )
 

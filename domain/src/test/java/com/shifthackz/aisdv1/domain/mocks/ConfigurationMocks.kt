@@ -17,4 +17,6 @@ val mockConfiguration = Configuration(
     localOnnxModelPath = "/storage/emulated/0/5598",
     localMediaPipeModelId = "5598",
     localMediaPipeModelPath = "/storage/emulated/0/5598",
+    localQnnModelId = "5598",
+    localQnnModelPath = "/storage/emulated/0/5598",
 )

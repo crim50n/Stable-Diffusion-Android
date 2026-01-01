@@ -6,6 +6,8 @@ import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.entity.Settings
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.ScanCustomModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.huggingface.FetchAndGetHuggingFaceModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.sdmodel.GetStableDiffusionModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.sdmodel.SelectStableDiffusionModelUseCase
@@ -50,6 +52,8 @@ class EngineSelectionViewModelTest : CoreViewModelTest<EngineSelectionViewModel>
     private val stubFetchAndGetStabilityAiEnginesUseCase = mockk<FetchAndGetStabilityAiEnginesUseCase>()
     private val stubFetchAndGetHuggingFaceModelsUseCase = mockk<FetchAndGetHuggingFaceModelsUseCase>()
     private val stubFetchAndGetSwarmUiModelsUseCase = mockk<FetchAndGetSwarmUiModelsUseCase>()
+    private val stubGetLocalQnnModelsUseCase = mockk<GetLocalQnnModelsUseCase>()
+    private val stubScanCustomModelsUseCase = mockk<ScanCustomModelsUseCase>()
 
     override fun initializeViewModel() = EngineSelectionViewModel(
         dispatchersProvider = stubDispatchersProvider,
@@ -62,6 +66,8 @@ class EngineSelectionViewModelTest : CoreViewModelTest<EngineSelectionViewModel>
         fetchAndGetStabilityAiEnginesUseCase = stubFetchAndGetStabilityAiEnginesUseCase,
         getHuggingFaceModelsUseCase = stubFetchAndGetHuggingFaceModelsUseCase,
         fetchAndGetSwarmUiModelsUseCase = stubFetchAndGetSwarmUiModelsUseCase,
+        getLocalQnnModelsUseCase = stubGetLocalQnnModelsUseCase,
+        scanCustomModelsUseCase = stubScanCustomModelsUseCase,
     )
 
     @Before
@@ -89,6 +95,10 @@ class EngineSelectionViewModelTest : CoreViewModelTest<EngineSelectionViewModel>
                     onFailure = { t -> Flowable.error(t) },
                 )
             }
+
+        every {
+            stubGetLocalQnnModelsUseCase()
+        } returns Single.just(emptyList())
     }
 
     @After

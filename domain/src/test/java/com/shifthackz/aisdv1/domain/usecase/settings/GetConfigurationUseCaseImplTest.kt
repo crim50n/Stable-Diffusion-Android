@@ -88,6 +88,14 @@ class GetConfigurationUseCaseImplTest {
             stubPreferenceManager::falAiApiKey.get()
         } returns mockConfiguration.falAiApiKey
 
+        every {
+            stubPreferenceManager::localQnnModelId.get()
+        } returns mockConfiguration.localQnnModelId
+
+        every {
+            stubPreferenceManager::localQnnCustomModelPath.get()
+        } returns mockConfiguration.localQnnModelPath
+
         useCase
             .invoke()
             .test()

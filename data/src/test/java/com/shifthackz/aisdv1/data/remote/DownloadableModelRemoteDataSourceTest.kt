@@ -29,9 +29,13 @@ class DownloadableModelRemoteDataSourceTest {
         whenever(stubApi.fetchMediaPipeModels())
             .thenReturn(Single.just(mockDownloadableModelsResponse))
 
+        whenever(stubApi.fetchQnnModels())
+            .thenReturn(Single.just(mockDownloadableModelsResponse))
+
         val expected = listOf(
             mockDownloadableModelsResponse.mapRawToCheckpointDomain(LocalAiModel.Type.ONNX),
             mockDownloadableModelsResponse.mapRawToCheckpointDomain(LocalAiModel.Type.MediaPipe),
+            mockDownloadableModelsResponse.mapRawToCheckpointDomain(LocalAiModel.Type.QNN),
         ).flatten()
 
         remoteDataSource
@@ -51,6 +55,9 @@ class DownloadableModelRemoteDataSourceTest {
         whenever(stubApi.fetchMediaPipeModels())
             .thenReturn(Single.just(emptyList()))
 
+        whenever(stubApi.fetchQnnModels())
+            .thenReturn(Single.just(emptyList()))
+
         remoteDataSource
             .fetch()
             .test()
@@ -66,6 +73,9 @@ class DownloadableModelRemoteDataSourceTest {
             .thenReturn(Single.error(stubException))
 
         whenever(stubApi.fetchMediaPipeModels())
+            .thenReturn(Single.error(stubException))
+
+        whenever(stubApi.fetchQnnModels())
             .thenReturn(Single.error(stubException))
 
         remoteDataSource

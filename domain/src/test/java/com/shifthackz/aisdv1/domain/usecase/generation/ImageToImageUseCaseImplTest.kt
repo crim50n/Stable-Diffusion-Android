@@ -10,6 +10,7 @@ import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.HordeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.HuggingFaceGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StabilityAiGenerationRepository
+import com.shifthackz.aisdv1.domain.repository.QnnGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.SwarmUiGenerationRepository
 import io.reactivex.rxjava3.core.Single
@@ -23,6 +24,7 @@ class ImageToImageUseCaseImplTest {
     private val stubHordeGenerationRepository = mock<HordeGenerationRepository>()
     private val stubHuggingFaceGenerationRepository = mock<HuggingFaceGenerationRepository>()
     private val stubStabilityAiGenerationRepository = mock<StabilityAiGenerationRepository>()
+    private val stubQnnGenerationRepository = mock<QnnGenerationRepository>()
     private val stubPreferenceManager = mock<PreferenceManager>()
 
     private val useCase = ImageToImageUseCaseImpl(
@@ -31,6 +33,7 @@ class ImageToImageUseCaseImplTest {
         hordeGenerationRepository = stubHordeGenerationRepository,
         huggingFaceGenerationRepository = stubHuggingFaceGenerationRepository,
         stabilityAiGenerationRepository = stubStabilityAiGenerationRepository,
+        qnnGenerationRepository = stubQnnGenerationRepository,
         preferenceManager = stubPreferenceManager,
     )
 

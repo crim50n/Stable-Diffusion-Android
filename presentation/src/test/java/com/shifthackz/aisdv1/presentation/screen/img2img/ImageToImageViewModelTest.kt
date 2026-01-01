@@ -77,6 +77,7 @@ class ImageToImageViewModelTest : CoreGenerationMviViewModelTest<ImageToImageVie
         backgroundWorkObserver = stubBackgroundWorkObserver,
         backgroundTaskManager = stubBackgroundTaskManager,
         buildInfoProvider = BuildInfoProvider.stub,
+        getForgeModulesUseCase = stubGetForgeModulesUseCase,
     )
 
     @Before

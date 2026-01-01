@@ -59,6 +59,7 @@ class TextToImageViewModelTest : CoreGenerationMviViewModelTest<TextToImageViewM
         backgroundWorkObserver = stubBackgroundWorkObserver,
         backgroundTaskManager = stubBackgroundTaskManager,
         buildInfoProvider = BuildInfoProvider.stub,
+        getForgeModulesUseCase = stubGetForgeModulesUseCase,
     )
 
     @Before

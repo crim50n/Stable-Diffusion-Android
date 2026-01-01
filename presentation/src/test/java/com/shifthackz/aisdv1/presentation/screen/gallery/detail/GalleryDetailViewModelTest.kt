@@ -10,8 +10,11 @@ import com.shifthackz.aisdv1.core.model.asUiText
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
 import com.shifthackz.aisdv1.domain.usecase.caching.GetLastResultFromCacheUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteGalleryItemUseCase
+import com.shifthackz.aisdv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.ToggleImageVisibilityUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.GetGenerationResultUseCase
+import com.shifthackz.aisdv1.domain.preference.PreferenceManager
+import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.presentation.core.CoreViewModelTest
 import com.shifthackz.aisdv1.presentation.core.GenerationFormUpdateEvent
 import com.shifthackz.aisdv1.presentation.extensions.mapToUi
@@ -48,6 +51,9 @@ class GalleryDetailViewModelTest : CoreViewModelTest<GalleryDetailViewModel>() {
     private val stubBase64ToBitmapConverter = mockk<Base64ToBitmapConverter>()
     private val stubGenerationFormUpdateEvent = mockk<GenerationFormUpdateEvent>()
     private val stubMainRouter = mockk<MainRouter>()
+    private val stubPreferenceManager = mockk<PreferenceManager>()
+    private val stubGetGalleryPagedIdsUseCase = mockk<GetGalleryPagedIdsUseCase>()
+    private val stubMediaStoreGateway = mockk<MediaStoreGateway>()
 
     override fun initializeViewModel() = GalleryDetailViewModel(
         itemId = 5598L,
@@ -62,6 +68,9 @@ class GalleryDetailViewModelTest : CoreViewModelTest<GalleryDetailViewModel>() {
         schedulersProvider = stubSchedulersProvider,
         generationFormUpdateEvent = stubGenerationFormUpdateEvent,
         mainRouter = stubMainRouter,
+        preferenceManager = stubPreferenceManager,
+        getGalleryPagedIdsUseCase = stubGetGalleryPagedIdsUseCase,
+        mediaStoreGateway = stubMediaStoreGateway,
     )
 
     @Before

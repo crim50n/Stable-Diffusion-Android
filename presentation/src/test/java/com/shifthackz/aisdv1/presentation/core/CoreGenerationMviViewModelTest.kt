@@ -16,6 +16,7 @@ import com.shifthackz.aisdv1.domain.usecase.generation.ObserveHordeProcessStatus
 import com.shifthackz.aisdv1.domain.usecase.generation.ObserveLocalDiffusionProcessStatusUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.SaveGenerationResultUseCase
 import com.shifthackz.aisdv1.domain.usecase.sdsampler.GetStableDiffusionSamplersUseCase
+import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCase
 import com.shifthackz.aisdv1.domain.usecase.wakelock.AcquireWakelockUseCase
 import com.shifthackz.aisdv1.domain.usecase.wakelock.ReleaseWakeLockUseCase
 import com.shifthackz.aisdv1.presentation.navigation.router.drawer.DrawerRouter
@@ -55,6 +56,7 @@ abstract class CoreGenerationMviViewModelTest<V : GenerationMviViewModel<*, *, *
     protected val stubWakeLockInterActor = mockk<WakeLockInterActor>()
     protected val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     protected val stubBackgroundTaskManager = mockk<BackgroundTaskManager>()
+    protected val stubGetForgeModulesUseCase = mockk<GetForgeModulesUseCase>()
 
     private val stubHordeProcessStatus = BehaviorSubject.create<HordeProcessStatus>()
     private val stubLdStatus = BehaviorSubject.create<LocalDiffusionStatus>()

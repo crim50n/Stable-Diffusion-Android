@@ -11,8 +11,10 @@ import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteGalleryItemsUseCase
+import com.shifthackz.aisdv1.domain.usecase.gallery.GetAllGalleryUseCase
 import com.shifthackz.aisdv1.domain.usecase.gallery.GetMediaStoreInfoUseCase
 import com.shifthackz.aisdv1.domain.usecase.generation.GetGenerationResultPagedUseCase
+import com.shifthackz.aisdv1.domain.gateway.MediaStoreGateway
 import com.shifthackz.aisdv1.presentation.core.CoreViewModelTest
 import com.shifthackz.aisdv1.presentation.model.Modal
 import com.shifthackz.aisdv1.presentation.navigation.router.drawer.DrawerRouter
@@ -53,6 +55,8 @@ class GalleryViewModelTest : CoreViewModelTest<GalleryViewModel>() {
     private val stubDeleteGalleryItemsUseCase = mockk<DeleteGalleryItemsUseCase>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     private val stubPreferenceManager = mockk<PreferenceManager>()
+    private val stubMediaStoreGateway = mockk<MediaStoreGateway>()
+    private val stubGetAllGalleryUseCase = mockk<GetAllGalleryUseCase>()
 
     override fun initializeViewModel() = GalleryViewModel(
         dispatchersProvider = stubDispatchersProvider,
@@ -67,6 +71,8 @@ class GalleryViewModelTest : CoreViewModelTest<GalleryViewModel>() {
         drawerRouter = stubDrawerRouter,
         deleteAllGalleryUseCase = stubDeleteAllGalleryUseCase,
         deleteGalleryItemsUseCase = stubDeleteGalleryItemsUseCase,
+        mediaStoreGateway = stubMediaStoreGateway,
+        getAllGalleryUseCase = stubGetAllGalleryUseCase,
     )
 
     @Before
@@ -146,7 +152,7 @@ class GalleryViewModelTest : CoreViewModelTest<GalleryViewModel>() {
         } returns Unit
 
         val item = GalleryGridItemUi(5598L, stubBitmap, false)
-        viewModel.processIntent(GalleryIntent.OpenItem(item))
+        viewModel.processIntent(GalleryIntent.OpenItem(item, 0))
 
         verify {
             stubMainRouter.navigateToGalleryDetails(5598L)

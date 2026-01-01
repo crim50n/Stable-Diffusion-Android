@@ -87,6 +87,14 @@ class SetServerConfigurationUseCaseImplTest {
             stubPreferenceManager::falAiApiKey.set(any())
         } returns Unit
 
+        every {
+            stubPreferenceManager::localQnnModelId.set(any())
+        } returns Unit
+
+        every {
+            stubPreferenceManager::localQnnCustomModelPath.set(any())
+        } returns Unit
+
         useCase
             .invoke(mockConfiguration)
             .test()

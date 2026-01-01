@@ -217,15 +217,19 @@ class DownloadableModelLocalDataSourceTest {
     }
 
     @Test
-    fun `given attempt to get model by id, dao throws exception, expected error true`() {
+    fun `given attempt to get model by id, dao throws exception and no builtin model found, expected error`() {
         every {
             stubDao.queryById(any())
         } returns Single.error(stubException)
 
+        every {
+            stubQnnModelsBuiltInDataSource.getAll()
+        } returns Single.just(emptyList())
+
         localDataSource
             .getById("5598")
             .test()
-            .assertError(stubException)
+            .assertError { it is NoSuchElementException }
             .assertNoValues()
             .await()
             .assertNotComplete()
