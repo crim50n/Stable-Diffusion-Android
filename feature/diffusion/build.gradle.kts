@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.feature.diffusion"
+    namespace = "dev.minios.pdaiv1.feature.diffusion"
 }
 
 dependencies {

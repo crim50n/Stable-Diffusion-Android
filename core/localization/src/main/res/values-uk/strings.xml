@@ -188,7 +188,7 @@
     <string name="title_tag_edit">Редактор тегу</string>
     <string name="title_select_download_source">Виберіть джерело</string>
 
-    <string name="gallery_media_store_banner">%1$s файли збережено в Download/SDAI</string>
+    <string name="gallery_media_store_banner">%1$s файли збережено в Download/PDAI</string>
     <string name="gallery_info_field_date">Створене</string>
     <string name="gallery_info_field_type">Тип</string>
     <string name="gallery_info_field_prompt">Запит</string>
@@ -323,7 +323,7 @@
     <string name="notification_fail_sub_title">Натисніть щоб відкрити додаток.</string>
 
     <string name="model_local_custom_switch">Завантажити кастом модель</string>
-    <string name="model_local_permission_title">Щоб мати можливість завантажити спеціальну модель, вам потрібно дозволити додатку SDAI керувати дозволами на зберігання, оскільки, починаючи з Android 11, це потрібно для доступу до файлів зберігання без обмежень.</string>
+    <string name="model_local_permission_title">Щоб мати можливість завантажити спеціальну модель, вам потрібно дозволити додатку PDAI керувати дозволами на зберігання, оскільки, починаючи з Android 11, це потрібно для доступу до файлів зберігання без обмежень.</string>
     <string name="model_local_permission_button">Налаштувати доступ</string>
 
     <string name="model_local_custom_title">Щоб використовувати локальну спеціальну модель, помістіть її в локальну папку в пам’яті телефону.</string>
@@ -371,8 +371,8 @@
     <string name="in_paint_area_only_masked">Тільки маска</string>
 
     <string name="donate_title_thanks">Дякую цим чудовим людям за підтримку ❤</string>
-    <string name="donate_bs_title">SDAI – це програма для Android, яка:</string>
-    <string name="donate_bs_sub_title">• Надає Вам можливість створювати зображення за допомогою Stable Diffusion AI;\n• Дає Вам свободу вибору постачальника генерації;\n• Не містить реклами, телеметрії та не шпигує за вами;\n• ПО з відкритим кодом;\n• Ви можете використовувати його безкоштовно.</string>
+    <string name="donate_bs_title">PDAI – це програма для Android, яка:</string>
+    <string name="donate_bs_sub_title">• Надає Вам можливість створювати зображення за допомогою Pocket Diffusion;\n• Дає Вам свободу вибору постачальника генерації;\n• Не містить реклами, телеметрії та не шпигує за вами;\n• ПО з відкритим кодом;\n• Ви можете використовувати його безкоштовно.</string>
     <string name="donate_bs_ending">Якщо програма була Вам корисна, та Ви бажаєте подякувати та трохи підтримати розробника, натисніть кнопку нижче.</string>
 
     <string name="permission_storage">Сховище</string>

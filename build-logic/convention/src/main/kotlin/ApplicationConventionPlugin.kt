@@ -1,9 +1,9 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.BaseExtension
-import com.shifthackz.aisdv1.buildlogic.configureApplication
-import com.shifthackz.aisdv1.buildlogic.configureCompose
-import com.shifthackz.aisdv1.buildlogic.configureFlavors
-import com.shifthackz.aisdv1.buildlogic.libs
+import dev.minios.pdaiv1.buildlogic.configureApplication
+import dev.minios.pdaiv1.buildlogic.configureCompose
+import dev.minios.pdaiv1.buildlogic.configureFlavors
+import dev.minios.pdaiv1.buildlogic.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure

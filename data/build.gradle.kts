@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.data"
+    namespace = "dev.minios.pdaiv1.data"
     testOptions.unitTests.all { test ->
         test.jvmArgs(
             "--add-opens", "java.base/java.lang=ALL-UNNAMED",

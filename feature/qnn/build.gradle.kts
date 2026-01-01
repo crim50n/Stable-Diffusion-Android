@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.feature.qnn"
+    namespace = "dev.minios.pdaiv1.feature.qnn"
 
     defaultConfig {
         ndk {

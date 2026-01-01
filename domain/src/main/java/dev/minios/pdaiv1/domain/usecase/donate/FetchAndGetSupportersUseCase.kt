@@ -1,0 +1,8 @@
+package dev.minios.pdaiv1.domain.usecase.donate
+
+import dev.minios.pdaiv1.domain.entity.Supporter
+import io.reactivex.rxjava3.core.Single
+
+interface FetchAndGetSupportersUseCase {
+    operator fun invoke(): Single<List<Supporter>>
+}

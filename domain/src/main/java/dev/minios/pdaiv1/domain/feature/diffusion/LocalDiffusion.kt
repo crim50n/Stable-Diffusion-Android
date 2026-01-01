@@ -1,0 +1,14 @@
+package dev.minios.pdaiv1.domain.feature.diffusion
+
+import android.graphics.Bitmap
+import dev.minios.pdaiv1.domain.entity.LocalDiffusionStatus
+import dev.minios.pdaiv1.domain.entity.TextToImagePayload
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+
+interface LocalDiffusion {
+    fun process(payload: TextToImagePayload): Single<Bitmap>
+    fun interrupt(): Completable
+    fun observeStatus(): Observable<LocalDiffusionStatus>
+}

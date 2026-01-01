@@ -1,16 +1,10 @@
-![Header](docs/assets/github-header-image.png)
+![Header](docs/assets/tlogo_256.png)
 
-# Stable-Diffusion-Android (SDAI)
+# Pocket Diffusion Android (PDAI)
 
-![Google Play](https://img.shields.io/endpoint?color=blue&logo=google-play&logoColor=white&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.shifthackz.aisdv1.app%26l%3DGoogle%2520Play%26m%3D%24version)
-![F-Droid](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ff-droid.org%2Fapi%2Fv1%2Fpackages%2Fcom.shifthackz.aisdv1.app.foss&query=%24.packages%5B0%5D.versionName&label=F-Droid&link=https%3A%2F%2Ff-droid.org%2Fpackages%2Fcom.shifthackz.aisdv1.app.foss%2F)
+[![GitHub](https://img.shields.io/github/v/release/crim50n/Pocket-Diffusion-Android?label=GitHub)](https://github.com/crim50n/Pocket-Diffusion-Android/releases)
 
-
-[![Google Play](docs/assets/google_play.png)](https://play.google.com/store/apps/details?id=com.shifthackz.aisdv1.app)
-[![F-Droid](docs/assets/fdroid.png)](https://f-droid.org/packages/com.shifthackz.aisdv1.app.foss)
-[![4pda](docs/assets/4pda.png)](https://4pda.to/forum/index.php?showtopic=1082639)
-
-Stable Diffusion AI (SDAI) is an easy-to-use app that:
+Pocket Diffusion (PDAI) is an easy-to-use app that:
 
 - Brings you the power of digital art creativity with Stable Diffusion AI
 - Gives you freedom to choose your AI generation provider
@@ -71,7 +65,7 @@ Stable Diffusion AI (SDAI) is an easy-to-use app that:
   - Active SD Model selection
   - Server availability monitoring (http-ping method)
   - Enable/Disable auto-saving of generated images
-  - Enable/Disable saving generated images to `Download/SDAI` android MediaStore folder
+  - Enable/Disable saving generated images to `Download/PDAI` android MediaStore folder
   - Optimized file-based media storage (faster loading and reduced memory usage)
   - Clear gallery / app cache
 
@@ -190,14 +184,10 @@ Any contributions to the translations are welcome.
 
 ## Difference between build flavors (Google Play, F-Droid, GitHub releases)
 
-There are some reasons that some of the SDAI app features can not be distributed through different sources (Google Play, F-Droid) because of rules and compliance policies.
+There are some reasons that some of the PDAI app features can not be distributed through different sources (Google Play, F-Droid) because of rules and compliance policies.
 
-The difference between SDAI app flavors are described at the project wiki page [Build flavor difference](https://github.com/ShiftHackZ/Stable-Diffusion-Android/wiki/Build-flavor-difference).
+The difference between PDAI app flavors are described at the project wiki page [Build flavor difference](https://github.com/crim50n/Pocket-Diffusion-Android/wiki/Build-flavor-difference).
 
-## Donate
+## Credits
 
-This software is open source, provided with no warranty, and you are welcome to use it for free.
-
-In case you find this software valuable, and you'd like to say thanks and show a little support, here is the button:
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/shifthackz)
+This project is a fork of [Stable Diffusion Android](https://github.com/ShiftHackZ/Stable-Diffusion-Android) by [ShiftHackZ](https://github.com/ShiftHackZ), licensed under GNU AGPL v3.0.

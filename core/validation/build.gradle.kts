@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.core.validation"
+    namespace = "dev.minios.pdaiv1.core.validation"
 }
 
 dependencies {

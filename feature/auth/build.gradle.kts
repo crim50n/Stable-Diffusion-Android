@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.feature.auth"
+    namespace = "dev.minios.pdaiv1.feature.auth"
 }
 
 dependencies {

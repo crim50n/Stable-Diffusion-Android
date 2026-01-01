@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.app"
+    namespace = "dev.minios.pdaiv1.app"
 
     dependenciesInfo {
         includeInApk = false
@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.shifthackz.aisdv1.app"
+        applicationId = "dev.minios.pdaiv1.app"
         versionName = libs.versions.versionName.get()
         versionCode = libs.versions.versionCode.get().toInt()
 
@@ -40,12 +40,12 @@ android {
         buildConfigField("String", "OPEN_AI_INFO_URL", "\"https://platform.openai.com/api-keys\"")
         buildConfigField("String", "STABILITY_AI_INFO_URL", "\"https://platform.stability.ai/\"")
         buildConfigField("String", "FAL_AI_INFO_URL", "\"https://fal.ai/dashboard/keys\"")
-        buildConfigField("String", "UPDATE_API_URL", "\"https://sdai.moroz.cc\"")
-        buildConfigField("String", "REPORT_API_URL", "\"https://sdai-report.moroz.cc\"")
-        buildConfigField("String", "DEMO_MODE_API_URL", "\"https://sdai.moroz.cc\"")
-        buildConfigField("String", "POLICY_URL", "\"https://sdai.moroz.cc/policy.html\"")
-        buildConfigField("String", "DONATE_URL", "\"https://www.buymeacoffee.com/shifthackz\"")
-        buildConfigField("String", "GITHUB_SOURCE_URL", "\"https://github.com/ShiftHackZ/Stable-Diffusion-Android\"")
+        buildConfigField("String", "UPDATE_API_URL", "\"https://pdai.minios.dev\"")
+        buildConfigField("String", "REPORT_API_URL", "\"https://pdai.minios.dev\"")
+        buildConfigField("String", "DEMO_MODE_API_URL", "\"https://pdai.minios.dev\"")
+        buildConfigField("String", "POLICY_URL", "\"https://pdai.minios.dev/policy.html\"")
+        buildConfigField("String", "DONATE_URL", "\"\"")
+        buildConfigField("String", "GITHUB_SOURCE_URL", "\"https://github.com/crim50n/Pocket-Diffusion-Android\"")
         buildConfigField("String", "SETUP_INSTRUCTIONS_URL", "\"https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki\"")
         buildConfigField("String", "SWARM_UI_INFO_URL", "\"https://github.com/mcmonkeyprojects/SwarmUI/tree/master/docs\"")
 

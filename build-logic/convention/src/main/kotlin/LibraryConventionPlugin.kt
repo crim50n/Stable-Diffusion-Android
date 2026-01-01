@@ -1,6 +1,6 @@
 import com.android.build.gradle.LibraryExtension
-import com.shifthackz.aisdv1.buildlogic.configureKotlinAndroid
-import com.shifthackz.aisdv1.buildlogic.libs
+import dev.minios.pdaiv1.buildlogic.configureKotlinAndroid
+import dev.minios.pdaiv1.buildlogic.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure

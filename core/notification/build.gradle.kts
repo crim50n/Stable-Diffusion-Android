@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.core.notification"
+    namespace = "dev.minios.pdaiv1.core.notification"
 }
 
 dependencies {

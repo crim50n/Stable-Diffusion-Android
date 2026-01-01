@@ -178,10 +178,10 @@
     <string name="hint_swarm_ui_sub_title">模块化的 Stable Diffusion Web 用户界面，专注于易访问、高性能和可扩展性。</string>
 
     <!-- 本地扩散提示 -->
-    <string name="hint_local_diffusion_sub_title">此配置使用 Microsoft ONNX 运行时，您可以在手机端运行 Stable Diffusion AI 的生成功能，而无需连接至远程服务器/云。</string>
+    <string name="hint_local_diffusion_sub_title">此配置使用 Microsoft ONNX 运行时，您可以在手机端运行 Pocket Diffusion 的生成功能，而无需连接至远程服务器/云。</string>
     <string name="hint_local_diffusion_warning">警告！Local Diffusion 功能处于测试版。可能无法获得高质量图像。\n\n此功能在资源受限设备上可能不及预期。生成性能和速度取决于您的手机资源（CPU、RAM）和生成的图像大小（图像越小，生成越快）。</string>
 
-    <string name="hint_mediapipe_sub_title">此配置使用 Google AI MediaPipe 运行时，您可以在手机端运行 Stable Diffusion AI 的生成功能，而无需连接至远程服务器/云。</string>
+    <string name="hint_mediapipe_sub_title">此配置使用 Google AI MediaPipe 运行时，您可以在手机端运行 Pocket Diffusion 的生成功能，而无需连接至远程服务器/云。</string>
 
     <string name="hint_qnn_sub_title">此配置使用高通 QNN SDK，通过 NPU 加速（HTP）和 MNN 后端在设备上快速生成 Stable Diffusion 图像。需要骁龙 8 Gen 1 或更新版本。</string>
 
@@ -217,7 +217,7 @@
     <string name="title_select_download_source">选择来源</string>
 
     <!-- 画廊媒体存储横幅 -->
-    <string name="gallery_media_store_banner">您在 Download/SDAI 中保存了%1$s张照片。</string>
+    <string name="gallery_media_store_banner">您在 Download/PDAI 中保存了%1$s张照片。</string>
     <string name="gallery_info_field_date">创建日期</string>
     <string name="gallery_info_field_type">类型</string>
     <string name="gallery_info_field_prompt">提示文本</string>
@@ -369,7 +369,7 @@
 
     <!-- 本地自定义模型 -->
     <string name="model_local_custom_switch">加载自定义模型</string>
-    <string name="model_local_permission_title">为了能够加载自定义模型，您需要允许 SDAI 应用管理存储权限，因为从 Android 11 开始，它需要访问非范围存储文件。</string>
+    <string name="model_local_permission_title">为了能够加载自定义模型，您需要允许 PDAI 应用管理存储权限，因为从 Android 11 开始，它需要访问非范围存储文件。</string>
     <string name="model_local_permission_button">设置权限</string>
     <string name="model_local_path_header">模型路径</string>
     <string name="model_local_path_title">本地模型文件夹路径</string>
@@ -422,8 +422,8 @@
     <string name="in_paint_area_only_masked">仅掩码</string>
 
     <string name="donate_title_thanks">感谢这些了不起的人们提供的支持 ❤</string>
-    <string name="donate_bs_title">SDAI 是一款 Android 应用程序，它：</string>
-    <string name="donate_bs_sub_title">• 赋予您使用 Stable Diffusion AI 创建图像的能力；\n• 让您自由选择生成供应商；\n• 无广告、无遥测，无监控；\n• 是一款开源软件；\n• 欢迎您免费使用。</string>
+    <string name="donate_bs_title">PDAI 是一款 Android 应用程序，它：</string>
+    <string name="donate_bs_sub_title">• 赋予您使用 Pocket Diffusion 创建图像的能力；\n• 让您自由选择生成供应商；\n• 无广告、无遥测，无监控；\n• 是一款开源软件；\n• 欢迎您免费使用。</string>
     <string name="donate_bs_ending">如果您觉得这个软件有价值，想要表示感谢并给予一些支持，请点击下方的按钮。</string>
 
     <string name="permission_storage">存储</string>

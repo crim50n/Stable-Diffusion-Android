@@ -17,7 +17,7 @@
         <uses-native-library android:name="libOpenCL-pixel.so" android:required="false" />
 
         <activity
-            android:name="com.shifthackz.aisdv1.presentation.activity.AiStableDiffusionActivity"
+            android:name="dev.minios.pdaiv1.presentation.activity.AiStableDiffusionActivity"
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"

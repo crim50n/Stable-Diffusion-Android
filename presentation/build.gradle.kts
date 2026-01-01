@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.presentation"
+    namespace = "dev.minios.pdaiv1.presentation"
     testOptions.unitTests{
         all { test ->
             test.jvmArgs(

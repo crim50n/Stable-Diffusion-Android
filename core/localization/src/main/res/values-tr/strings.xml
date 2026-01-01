@@ -154,10 +154,10 @@
     <string name="hint_swarm_ui_title">Swarm UI URL\'nizi sağlayın</string>
     <string name="hint_swarm_ui_sub_title">Araçlara kolay erişim, yüksek performans ve genişletilebilirlik üzerine odaklanan Modüler, Kararlı Yaygın Web Kullanıcı Arayüzü.</string>
 
-    <string name="hint_local_diffusion_sub_title">Bu yapılandırma Microsoft ONNX çalışma zamanını kullanır ve uzak bir sunucuya/buluta bağlanmaya gerek kalmadan telefonunuzda Stable Diffusion AI nesillerini çalıştırmanıza olanak tanır.</string>
+    <string name="hint_local_diffusion_sub_title">Bu yapılandırma Microsoft ONNX çalışma zamanını kullanır ve uzak bir sunucuya/buluta bağlanmaya gerek kalmadan telefonunuzda Pocket Diffusion nesillerini çalıştırmanıza olanak tanır.</string>
     <string name="hint_local_diffusion_warning">Uyarı! Yerel Yayılma işlevi beta testindedir. Yerel modu kullanarak yüksek kaliteli görüntüler beklemeyin. \n\nBu uygulama, güçlü olmayan telefonlarda iyi çalışmayabilir. Oluşturma performansı ve hızı, telefonunuzun kaynaklarına (CPU, RAM) ve oluşturulan görüntünün boyutuna bağlıdır (görüntü boyutu ne kadar küçükse, oluşturma o kadar hızlı olur).</string>
 
-    <string name="hint_mediapipe_sub_title">Bu yapılandırma Google AI MediaPipe çalışma zamanını kullanır ve uzak bir sunucuya/buluta bağlanmaya gerek kalmadan telefonunuzda Stable Diffusion AI nesillerini çalıştırmanıza olanak tanır.</string>
+    <string name="hint_mediapipe_sub_title">Bu yapılandırma Google AI MediaPipe çalışma zamanını kullanır ve uzak bir sunucuya/buluta bağlanmaya gerek kalmadan telefonunuzda Pocket Diffusion nesillerini çalıştırmanıza olanak tanır.</string>
 
     <string name="hint_qnn_sub_title">Bu yapılandırma, cihaz üzerinde hızlı Stable Diffusion üretimi için NPU hızlandırması (HTP) ve MNN arka ucu ile Qualcomm QNN SDK kullanır. Snapdragon 8 Gen 1 veya daha yenisi gerektirir.</string>
 
@@ -188,7 +188,7 @@
     <string name="title_tag_edit">Etiketi düzenle</string>
     <string name="title_select_download_source">Kaynağı seçin</string>
 
-    <string name="gallery_media_store_banner">Kayıtlı %1$s fotoğrafınız var Download/SDAI</string>
+    <string name="gallery_media_store_banner">Kayıtlı %1$s fotoğrafınız var Download/PDAI</string>
     <string name="gallery_info_field_date">Oluşturulma</string>
     <string name="gallery_info_field_type">Tür</string>
     <string name="gallery_info_field_prompt">İstem</string>
@@ -323,7 +323,7 @@
     <string name="notification_fail_sub_title">Uygulamayı açmak için buraya tıklayın.</string>
 
     <string name="model_local_custom_switch">Özel modeli yükle</string>
-    <string name="model_local_permission_title">Özel modeli yükleyebilmek için SDAI uygulamasının depolama izinlerini yönetmesine izin vermeniz gerekir; çünkü Android 11\'den itibaren kapsamlı olmayan depolama dosyalarına erişmek gerekir.</string>
+    <string name="model_local_permission_title">Özel modeli yükleyebilmek için PDAI uygulamasının depolama izinlerini yönetmesine izin vermeniz gerekir; çünkü Android 11\'den itibaren kapsamlı olmayan depolama dosyalarına erişmek gerekir.</string>
     <string name="model_local_permission_button">Kurulum izni</string>
 
     <string name="model_local_custom_title">Yerel özel modeli kullanmak için telefonunuzun depolama alanındaki yerel klasöre yerleştirin.</string>
@@ -371,8 +371,8 @@
     <string name="in_paint_area_only_masked">Sadece maskeli</string>
 
     <string name="donate_title_thanks">Destekleri için bu harika insanlara teşekkürler ❤</string>
-    <string name="donate_bs_title">SDAI, şu özelliklere sahip bir Android uygulamasıdır:</string>
-    <string name="donate_bs_sub_title">• Stable Diffusion AI ile görüntü oluşturma gücü sunar;\n• Üretim sağlayıcınızı seçme özgürlüğü verir;\n• AD, telemetri içermez ve sizi gözetlemez;\n• Açık kaynaklı bir yazılımdır;\n• Ücretsiz olarak kullanabilirsiniz.</string>
+    <string name="donate_bs_title">PDAI, şu özelliklere sahip bir Android uygulamasıdır:</string>
+    <string name="donate_bs_sub_title">• Pocket Diffusion ile görüntü oluşturma gücü sunar;\n• Üretim sağlayıcınızı seçme özgürlüğü verir;\n• AD, telemetri içermez ve sizi gözetlemez;\n• Açık kaynaklı bir yazılımdır;\n• Ücretsiz olarak kullanabilirsiniz.</string>
     <string name="donate_bs_ending">Bu yazılımı değerli bulursanız ve teşekkür etmek ve biraz destek göstermek isterseniz, aşağıdaki düğmeyi kullanabilirsiniz.</string>
 
     <string name="permission_storage">Depolamak</string>

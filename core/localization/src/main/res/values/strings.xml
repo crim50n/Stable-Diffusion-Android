@@ -180,11 +180,11 @@
     <string name="hint_swarm_ui_sub_title">A Modular Stable Diffusion Web-User-Interface, with an emphasis on making tools easily accessible, high performance, and extensibility.</string>
 
     <string name="hint_local_diffusion_title" translatable="false">Local Diffusion Microsoft ONNX</string>
-    <string name="hint_local_diffusion_sub_title">This configuration uses Microsoft ONNX runtime and allows to run Stable Diffusion AI generations on your phone, with no need to connect to remote server/cloud.</string>
+    <string name="hint_local_diffusion_sub_title">This configuration uses Microsoft ONNX runtime and allows to run Pocket Diffusion generations on your phone, with no need to connect to remote server/cloud.</string>
     <string name="hint_local_diffusion_warning">Warning! Local Diffusion functionality is in beta-test. Don\'t expect for high quality images using local mode. \n\nThis implementation may not work well on non-powerful phones. Generation performance and speed depends on your phone resources (CPU, RAM) and the size of generated image (the smaller the image size, the faster the generation).</string>
 
     <string name="hint_mediapipe_title" translatable="false">Local Diffusion Google AI MediaPipe</string>
-    <string name="hint_mediapipe_sub_title">This configuration uses Google AI MediaPipe and allows to run Stable Diffusion AI generations on your phone, with no need to connect to remote server/cloud.</string>
+    <string name="hint_mediapipe_sub_title">This configuration uses Google AI MediaPipe and allows to run Pocket Diffusion generations on your phone, with no need to connect to remote server/cloud.</string>
 
     <string name="hint_qnn_title" translatable="false">Local Diffusion Qualcomm QNN</string>
     <string name="hint_qnn_sub_title">This configuration uses Qualcomm QNN SDK with NPU acceleration (HTP) and MNN backend for fast on-device Stable Diffusion generation. Requires Snapdragon 8 Gen 1 or newer.</string>
@@ -218,7 +218,7 @@
     <string name="title_tag_edit">Edit tag</string>
     <string name="title_select_download_source">Select source</string>
 
-    <string name="gallery_media_store_banner">You have %1$s photos saved in Download/SDAI</string>
+    <string name="gallery_media_store_banner">You have %1$s photos saved in Download/PDAI</string>
     <string name="gallery_info_field_date">Created</string>
     <string name="gallery_info_field_type">Type</string>
     <string name="gallery_info_field_model">Model</string>
@@ -365,7 +365,7 @@
 
     <string name="model_local_custom_switch">Load custom model</string>
     <string name="model_local_permission_header">Permissions</string>
-    <string name="model_local_permission_title">To be able to load custom model, you need to allow SDAI app manage storage permissions, because starting from Android 11 it is needed to access non-scoped storage files.</string>
+    <string name="model_local_permission_title">To be able to load custom model, you need to allow PDAI app manage storage permissions, because starting from Android 11 it is needed to access non-scoped storage files.</string>
     <string name="model_local_permission_button">Setup permission</string>
     <string name="model_local_path_header">Model path</string>
     <string name="model_local_path_title">Local model folder path</string>
@@ -414,8 +414,8 @@
     <string name="in_paint_area_only_masked">Only masked</string>
 
     <string name="donate_title_thanks">Thanks to this amazing people for the support ❤</string>
-    <string name="donate_bs_title">SDAI is an Android application that:</string>
-    <string name="donate_bs_sub_title">• Brings you power of creating images with Stable Diffusion AI;\n• Gives you freedom to choose your generation provider;\n• Has no ADs, telemetry and does not spy on you;\n• Is an open source software;\n• You are welcome to use it for free.</string>
+    <string name="donate_bs_title">PDAI is an Android application that:</string>
+    <string name="donate_bs_sub_title">• Brings you power of creating images with Pocket Diffusion;\n• Gives you freedom to choose your generation provider;\n• Has no ADs, telemetry and does not spy on you;\n• Is an open source software;\n• You are welcome to use it for free.</string>
     <string name="donate_bs_ending">In case you find this software valuable, and you\'d like to say thanks and show a little support, here is the button below.</string>
 
     <string name="permission_storage">Storage</string>

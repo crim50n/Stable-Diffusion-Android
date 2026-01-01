@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.storage"
+    namespace = "dev.minios.pdaiv1.storage"
     defaultConfig {
         ksp {
             arg("room.incremental", "true")

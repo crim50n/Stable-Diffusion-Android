@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.core.localization"
+    namespace = "dev.minios.pdaiv1.core.localization"
 }

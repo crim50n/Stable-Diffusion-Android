@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.core.ui"
+    namespace = "dev.minios.pdaiv1.core.ui"
 }

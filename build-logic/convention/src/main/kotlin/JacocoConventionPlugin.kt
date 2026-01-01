@@ -1,5 +1,5 @@
 import com.android.build.gradle.BaseExtension
-import com.shifthackz.aisdv1.buildlogic.jacocoCodeCoverageReporting
+import dev.minios.pdaiv1.buildlogic.jacocoCodeCoverageReporting
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test

@@ -192,7 +192,7 @@
     <string name="title_tag_edit">Редактор тега</string>
     <string name="title_select_download_source">Выберите источник</string>
 
-    <string name="gallery_media_store_banner">%1$s генераций находится в Download/SDAI</string>
+    <string name="gallery_media_store_banner">%1$s генераций находится в Download/PDAI</string>
     <string name="gallery_info_field_date">Создано</string>
     <string name="gallery_info_field_type">Тип</string>
     <string name="gallery_info_field_prompt">Запрос</string>
@@ -331,7 +331,7 @@
 
     <string name="model_local_custom_switch">Загрузка кастом модели</string>
     <string name="model_local_permission_header">Разрешения</string>
-    <string name="model_local_permission_title">Чтобы иметь возможность загружать пользовательскую модель, вам необходимо разрешить приложению SDAI управлять разрешениями на хранилище, поскольку, начиная с Android 11, оно необходимо для доступа к файлам хранилища без области действия.</string>
+    <string name="model_local_permission_title">Чтобы иметь возможность загружать пользовательскую модель, вам необходимо разрешить приложению PDAI управлять разрешениями на хранилище, поскольку, начиная с Android 11, оно необходимо для доступа к файлам хранилища без области действия.</string>
     <string name="model_local_permission_button">Настроить доступ</string>
     <string name="model_local_path_header">Путь к модели</string>
     <string name="model_local_path_title">Путь к папке локальной модели</string>
@@ -378,7 +378,7 @@
     <string name="in_paint_area_only_masked">Только маска</string>
 
     <string name="donate_title_thanks">Спасибо этим замечательным людям за поддержку ❤</string>
-    <string name="donate_bs_title">SDAI — это приложение для Android, которое:</string>
+    <string name="donate_bs_title">PDAI — это приложение для Android, которое:</string>
     <string name="donate_bs_sub_title">• Предоставляет Вам возможность создавать изображения с помощью Stable Diffusion;\n• Предоставляет Вам свободу выбора провайдера генерации;\n• Нет рекламы, телеметрии, не шпионит за Вами;\n• ПО с открытым исходным кодом;\n• Вы можете использовать его бесплатно.</string>
     <string name="donate_bs_ending">Если программа стала Вам полезной и Вы хотите выразить благодарность и оказать небольшую поддержку, вот кнопка ниже.</string>
 

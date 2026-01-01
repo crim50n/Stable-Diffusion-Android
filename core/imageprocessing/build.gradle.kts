@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.core.imageprocessing"
+    namespace = "dev.minios.pdaiv1.core.imageprocessing"
 }
 
 dependencies {

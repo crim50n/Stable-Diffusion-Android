@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shifthackz.aisdv1.core.common"
+    namespace = "dev.minios.pdaiv1.core.common"
 }
 
 dependencies {
