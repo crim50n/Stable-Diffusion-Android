@@ -67,6 +67,8 @@ data class ImageToImageState(
     override val falAiSelectedEndpoint: FalAiEndpointUi? = null,
     override val falAiPropertyValues: Map<String, Any?> = emptyMap(),
     override val falAiAdvancedVisible: Boolean = false,
+    override val qnnRunOnCpu: Boolean = false,
+    override val modelName: String = "",
 ) : GenerationMviState() {
 
     sealed interface ImageState {
@@ -119,6 +121,8 @@ data class ImageToImageState(
         falAiSelectedEndpoint: FalAiEndpointUi?,
         falAiPropertyValues: Map<String, Any?>,
         falAiAdvancedVisible: Boolean,
+        qnnRunOnCpu: Boolean,
+        modelName: String,
     ): GenerationMviState = copy(
         onBoardingDemo = onBoardingDemo,
         screenModal = screenModal,
@@ -160,6 +164,8 @@ data class ImageToImageState(
         falAiSelectedEndpoint = falAiSelectedEndpoint,
         falAiPropertyValues = falAiPropertyValues,
         falAiAdvancedVisible = falAiAdvancedVisible,
+        qnnRunOnCpu = qnnRunOnCpu,
+        modelName = modelName,
     )
 
     fun preProcessed(pair: Pair<String, String>): ImageToImageState = copy(
@@ -199,5 +205,6 @@ fun ImageToImageState.mapToPayload(): ImageToImagePayload = with(this) {
         stabilityAiClipGuidance = selectedClipGuidancePreset.takeIf { mode == ServerSource.STABILITY_AI },
         stabilityAiStylePreset = selectedStylePreset.takeIf { mode == ServerSource.STABILITY_AI },
         aDetailer = aDetailerConfig.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: ADetailerConfig.DISABLED,
+        modelName = modelName,
     )
 }

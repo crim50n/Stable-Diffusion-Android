@@ -1,0 +1,9 @@
+# This directory should contain MNN base models:
+# - clip_skip_1.mnn
+# - clip_skip_2.mnn
+# - tokenizer.json
+# - unet.mnn
+# - vae_decoder.mnn
+# - vae_encoder.mnn
+#
+# Run scripts/prepare_qnn_libs.sh to download them from LocalDream APK.

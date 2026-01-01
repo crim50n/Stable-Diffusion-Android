@@ -14,6 +14,8 @@ import com.shifthackz.aisdv1.core.notification.PushNotificationManager
 import com.shifthackz.aisdv1.core.validation.dimension.DimensionValidator
 import com.shifthackz.aisdv1.domain.entity.HordeProcessStatus
 import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
+import com.shifthackz.aisdv1.domain.entity.LocalDiffusionStatus
+import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundTaskManager
 import com.shifthackz.aisdv1.domain.feature.work.BackgroundWorkObserver
 import com.shifthackz.aisdv1.domain.interactor.wakelock.WakeLockInterActor
@@ -84,6 +86,18 @@ class ImageToImageViewModel(
     override val initialState = ImageToImageState()
 
     override val effectDispatcher = dispatchersProvider.immediate
+
+    private val progressModal: Modal
+        get() = when (currentState.mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX,
+            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> {
+                Modal.Generating(canCancel = preferenceManager.localOnnxAllowCancel)
+            }
+            ServerSource.LOCAL_QUALCOMM_QNN -> {
+                Modal.Generating(canCancel = true)
+            }
+            else -> Modal.Communicating()
+        }
 
     init {
         !generationFormUpdateEvent
@@ -170,7 +184,7 @@ class ImageToImageViewModel(
         is ImageToImageState.ImageState.Image -> generateImageToImagePayload()
             .doOnSubscribe {
                 wakeLockInterActor.acquireWakelockUseCase()
-                setActiveModal(Modal.Communicating())
+                setActiveModal(progressModal)
             }
             .flatMap(imageToImageUseCase::invoke)
             .doFinally { wakeLockInterActor.releaseWakeLockUseCase() }
@@ -218,9 +232,15 @@ class ImageToImageViewModel(
     }
 
     override fun onReceivedHordeStatus(status: HordeProcessStatus) {
-        if (currentState.screenModal is Modal.Communicating) {
-            setActiveModal(Modal.Communicating(hordeProcessStatus = status))
-        }
+        (currentState.screenModal as? Modal.Communicating)
+            ?.copy(hordeProcessStatus = status)
+            ?.let(::setActiveModal)
+    }
+
+    override fun onReceivedLocalDiffusionStatus(status: LocalDiffusionStatus) {
+        (currentState.screenModal as? Modal.Generating)
+            ?.copy(status = status)
+            ?.let(::setActiveModal)
     }
 
     override fun updateFormPreviousAiGeneration(payload: GenerationFormUpdateEvent.Payload) {

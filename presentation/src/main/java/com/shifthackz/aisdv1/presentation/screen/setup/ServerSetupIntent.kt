@@ -42,9 +42,15 @@ sealed interface ServerSetupIntent : MviIntent {
 
     data class SelectLocalModelPath(val value: String) : ServerSetupIntent
 
+    data class SelectLocalQnnModelPath(val value: String) : ServerSetupIntent
+
     data class SelectLocalModel(val model: ServerSetupState.LocalModel) : ServerSetupIntent
 
     data class AllowLocalCustomModel(val allow: Boolean) : ServerSetupIntent
+
+    data class AllowLocalQnnCustomModel(val allow: Boolean) : ServerSetupIntent
+
+    data object ScanCustomModels : ServerSetupIntent
 
     data object MainButtonClick : ServerSetupIntent
 

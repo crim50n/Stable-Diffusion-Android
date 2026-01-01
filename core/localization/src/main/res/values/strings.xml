@@ -76,6 +76,8 @@
     <string name="srv_type_local_short" translatable="false">ONNX</string>
     <string name="srv_type_media_pipe" translatable="false">Local Diffusion Google AI MediaPipe (Beta)</string>
     <string name="srv_type_media_pipe_short" translatable="false">MediaPipe</string>
+    <string name="srv_type_qnn" translatable="false">Local Diffusion Qualcomm QNN (Beta)</string>
+    <string name="srv_type_qnn_short" translatable="false">QNN</string>
     <string name="srv_type_hugging_face" translatable="false">Hugging Face Inference</string>
     <string name="srv_type_hugging_face_short" translatable="false">HuggingFace</string>
     <string name="srv_type_open_ai" translatable="false">Open AI</string>
@@ -95,6 +97,7 @@
     <string name="hint_distilled_cfg_scale">Distilled CFG Scale: %1$s</string>
     <string name="hint_model_type">Model type</string>
     <string name="hint_vae_text_encoder">VAE / Text Encoder</string>
+    <string name="hint_runtime">Runtime</string>
     <string name="hint_sampler">Sampling method</string>
     <string name="hint_scheduler">Scheduler</string>
     <string name="hint_adetailer">ADetailer</string>
@@ -183,6 +186,9 @@
     <string name="hint_mediapipe_title" translatable="false">Local Diffusion Google AI MediaPipe</string>
     <string name="hint_mediapipe_sub_title">This configuration uses Google AI MediaPipe and allows to run Stable Diffusion AI generations on your phone, with no need to connect to remote server/cloud.</string>
 
+    <string name="hint_qnn_title" translatable="false">Local Diffusion Qualcomm QNN</string>
+    <string name="hint_qnn_sub_title">This configuration uses Qualcomm QNN SDK with NPU acceleration (HTP) and MNN backend for fast on-device Stable Diffusion generation. Requires Snapdragon 8 Gen 1 or newer.</string>
+
     <string name="drawer_web_ui">Web UI</string>
 
     <string name="home_tab_txt_to_img">Txt2Img</string>
@@ -215,6 +221,7 @@
     <string name="gallery_media_store_banner">You have %1$s photos saved in Download/SDAI</string>
     <string name="gallery_info_field_date">Created</string>
     <string name="gallery_info_field_type">Type</string>
+    <string name="gallery_info_field_model">Model</string>
     <string name="gallery_info_field_prompt">Prompt</string>
     <string name="gallery_info_field_negative_prompt">Negative prompt</string>
     <string name="gallery_info_field_size">Size</string>
@@ -295,6 +302,9 @@
     <string name="interaction_warning_title">Warning</string>
     <string name="interaction_warning_localhost_sub_title">You are trying to connect to localhost (127.0.0.1) server.\n\nIt may not work unless you have ssh tunneling or another port forwarding mechanism set up on your Android device.</string>
 
+    <string name="warning_gpu_runtime_title">GPU Runtime Warning</string>
+    <string name="warning_gpu_runtime_message">GPU runtime warning: The first run at each resolution will be slow as it generates cache files. Subsequent runs will be much faster.</string>
+
     <string name="interaction_delete_generation_title">Delete image</string>
     <string name="interaction_delete_generation_sub_title">Are you sure you want to permanently delete this image?</string>
 
@@ -334,6 +344,7 @@
     <string name="error_localhost_url">You can not use localhost (127.0.0.1) URL to connect to server.</string>
     <string name="error_min_size">Minimum size is %1$s</string>
     <string name="error_max_size">Maximum size is %1$s</string>
+    <string name="error_qnn_unsupported_resolution">Unsupported resolution for QNN. Use dropdown to select valid resolution.</string>
     <string name="error_download_fail">Download failed</string>
     <string name="error_generic">Something wrong happened while processing your request, please try again later.</string>
 
@@ -362,6 +373,10 @@
 
     <string name="model_local_custom_title">To use local custom model, place it to local folder in your phone storage.</string>
     <string name="model_local_custom_sub_title">The final folder structure should be:</string>
+    <string name="model_qnn_custom_sub_title">Required QNN folder structure:</string>
+    <string name="action_scan_models">Scan for models</string>
+    <string name="model_scan_empty">No models found in the specified folder.\n\nMake sure each model is in its own subfolder with required files.</string>
+    <string name="model_scan_found">Found %1$d model(s):</string>
 
     <string name="debug_section_main">Debugging</string>
     <string name="debug_section_ld" translatable="false">Local Diffusion</string>

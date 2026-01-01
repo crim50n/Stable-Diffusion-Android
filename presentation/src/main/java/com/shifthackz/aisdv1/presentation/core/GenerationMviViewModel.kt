@@ -70,6 +70,7 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                 onNext = { settings ->
                     updateGenerationState {
                         val modelTypeChanged = it.modelType != settings.modelType
+                        val sourceChanged = it.mode != settings.source
                         it
                             .copyState(
                                 mode = settings.source,
@@ -78,7 +79,34 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                                 formPromptTaggedInput = settings.formPromptTaggedInput,
                             )
                             .let { state ->
-                                if (modelTypeChanged) {
+                                // When switching to QNN, set default resolution and samplers
+                                if (sourceChanged && settings.source == ServerSource.LOCAL_QUALCOMM_QNN) {
+                                    val qnnSamplers = listOf("DPM++ 2M", "Euler a")
+                                    val runOnCpu = preferenceManager.localQnnRunOnCpu
+                                    val defaultRes = if (runOnCpu) "256" else "512"
+                                    state.copyState(
+                                        width = defaultRes,
+                                        height = defaultRes,
+                                        widthValidationError = null,
+                                        heightValidationError = null,
+                                        availableSamplers = qnnSamplers,
+                                        selectedSampler = qnnSamplers.first(),
+                                        prompt = preferenceManager.localQnnLastPrompt,
+                                        negativePrompt = preferenceManager.localQnnLastNegativePrompt,
+                                        qnnRunOnCpu = runOnCpu,
+                                    )
+                                } else if (settings.source == ServerSource.LOCAL_QUALCOMM_QNN) {
+                                    // Already in QNN mode, just update runOnCpu if changed
+                                    val runOnCpu = preferenceManager.localQnnRunOnCpu
+                                    if (state.qnnRunOnCpu != runOnCpu) {
+                                        val defaultRes = if (runOnCpu) "256" else "512"
+                                        state.copyState(
+                                            qnnRunOnCpu = runOnCpu,
+                                            width = defaultRes,
+                                            height = defaultRes,
+                                        )
+                                    } else state
+                                } else if (modelTypeChanged) {
                                     state.copyState(
                                         cfgScale = settings.modelType.defaultCfgScale(),
                                         selectedSampler = settings.modelType.defaultSampler(),
@@ -91,6 +119,9 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                             .let { state ->
                                 if (!settings.formAdvancedOptionsAlwaysShow) state
                                 else state.copyState(advancedOptionsVisible = true)
+                            }
+                            .let { state ->
+                                state.copyState(modelName = getModelName(settings.source))
                             }
                     }
                 }
@@ -105,6 +136,7 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                     updateGenerationState { state ->
                         val allSamplers = when (state.mode) {
                             ServerSource.STABILITY_AI -> StabilityAiSampler.entries.map { "$it" }
+                            ServerSource.LOCAL_QUALCOMM_QNN -> listOf("DPM++ 2M", "Euler a")
                             else -> samplers
                         }
                         state.copyState(
@@ -310,6 +342,15 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                 it.copyState(openAiStyle = intent.value)
             }
 
+            is GenerationMviIntent.Update.Qnn.Resolution -> updateGenerationState {
+                it.copyState(
+                    width = intent.value.width.toString(),
+                    height = intent.value.height.toString(),
+                    widthValidationError = null,
+                    heightValidationError = null,
+                )
+            }
+
             is GenerationMviIntent.Result.Save -> !Observable
                 .fromIterable(intent.ai)
                 .flatMapCompletable(saveGenerationResultUseCase::invoke)
@@ -340,6 +381,15 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
             }
 
             GenerationMviIntent.Generate -> {
+                // Auto-save prompts for QNN backend
+                if (preferenceManager.source == ServerSource.LOCAL_QUALCOMM_QNN) {
+                    val state = currentState as? GenerationMviState
+                    state?.let {
+                        preferenceManager.localQnnLastPrompt = it.prompt.trim()
+                        preferenceManager.localQnnLastNegativePrompt = it.negativePrompt.trim()
+                    }
+                }
+
                 if (backgroundWorkObserver.hasActiveTasks()) {
                     setActiveModal(Modal.Background.Running)
                 } else {
@@ -422,4 +472,17 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
         runCatching {
             updateState(mutation as (S) -> S)
         }
+
+    private fun getModelName(source: ServerSource): String = when (source) {
+        ServerSource.AUTOMATIC1111 -> preferenceManager.sdModel
+        ServerSource.SWARM_UI -> preferenceManager.swarmUiModel
+        ServerSource.LOCAL_MICROSOFT_ONNX -> preferenceManager.localOnnxModelId
+        ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> preferenceManager.localMediaPipeModelId
+        ServerSource.LOCAL_QUALCOMM_QNN -> preferenceManager.localQnnModelId
+        ServerSource.HORDE -> "Horde"
+        ServerSource.HUGGING_FACE -> preferenceManager.huggingFaceModel
+        ServerSource.OPEN_AI -> "OpenAI"
+        ServerSource.STABILITY_AI -> preferenceManager.stabilityAiEngineId
+        ServerSource.FAL_AI -> preferenceManager.falAiSelectedEndpointId
+    }
 }

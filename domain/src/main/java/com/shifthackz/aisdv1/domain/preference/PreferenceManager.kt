@@ -15,6 +15,7 @@ interface PreferenceManager {
     var demoMode: Boolean
     var developerMode: Boolean
     var localMediaPipeCustomModelPath: String
+    var localQnnCustomModelPath: String
     var localOnnxCustomModelPath: String
     var localOnnxAllowCancel: Boolean
     var localOnnxSchedulerThread: SchedulersToken
@@ -39,6 +40,13 @@ interface PreferenceManager {
     var localOnnxModelId: String
     var localOnnxUseNNAPI: Boolean
     var localMediaPipeModelId: String
+    var localQnnModelId: String
+    var localQnnRunOnCpu: Boolean
+    var localQnnUseOpenCL: Boolean
+    var localQnnScheduler: String
+    var localQnnShowDiffusionProcess: Boolean
+    var localQnnLastPrompt: String
+    var localQnnLastNegativePrompt: String
     var designUseSystemColorPalette: Boolean
     var designUseSystemDarkTheme: Boolean
     var designDarkTheme: Boolean

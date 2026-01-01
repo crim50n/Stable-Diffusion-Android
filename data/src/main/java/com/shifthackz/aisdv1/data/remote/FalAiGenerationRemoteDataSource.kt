@@ -186,6 +186,7 @@ internal class FalAiGenerationRemoteDataSource(
             subSeedStrength = 0f,
             denoisingStrength = 0f,
             hidden = false,
+            modelName = payload.modelName,
         )
     }
 
@@ -392,6 +393,7 @@ internal class FalAiGenerationRemoteDataSource(
             subSeedStrength = 0f,
             denoisingStrength = 0f,
             hidden = false,
+            modelName = endpoint.endpointId,
         )
     }
 
@@ -447,6 +449,7 @@ internal class FalAiGenerationRemoteDataSource(
             mediaPath = mediaPath,
             inputMediaPath = "",
             mediaType = mediaType,
+            modelName = endpoint.endpointId,
         )
     }
 

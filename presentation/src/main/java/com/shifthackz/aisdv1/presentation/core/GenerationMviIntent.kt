@@ -13,6 +13,7 @@ import com.shifthackz.aisdv1.domain.entity.OpenAiStyle
 import com.shifthackz.aisdv1.domain.entity.StabilityAiClipGuidance
 import com.shifthackz.aisdv1.domain.entity.StabilityAiStylePreset
 import com.shifthackz.aisdv1.presentation.model.Modal
+import com.shifthackz.aisdv1.presentation.model.QnnResolution
 import com.shifthackz.aisdv1.presentation.screen.drawer.DrawerIntent
 import com.shifthackz.android.core.mvi.MviIntent
 
@@ -93,6 +94,10 @@ sealed interface GenerationMviIntent : MviIntent {
             data class SelectEndpoint(val endpointId: String) : FalAi
             data class UpdateProperty(val name: String, val value: Any?) : FalAi
             data class ToggleAdvanced(val visible: Boolean) : FalAi
+        }
+
+        sealed interface Qnn : Update {
+            data class Resolution(val value: QnnResolution) : Qnn
         }
     }
 

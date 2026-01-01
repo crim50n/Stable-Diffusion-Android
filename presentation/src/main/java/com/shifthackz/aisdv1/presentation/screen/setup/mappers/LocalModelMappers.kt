@@ -11,6 +11,9 @@ fun List<LocalAiModel>.mapLocalCustomOnnxSwitchState(): Boolean =
 fun List<LocalAiModel>.mapLocalCustomMediaPipeSwitchState(): Boolean =
     find { it.selected && it.id == LocalAiModel.CustomMediaPipe.id } != null
 
+fun List<LocalAiModel>.mapLocalCustomQnnSwitchState(): Boolean =
+    find { it.selected && it.id == LocalAiModel.CustomQnn.id } != null
+
 fun LocalAiModel.mapToUi(): ServerSetupState.LocalModel = with(this) {
     ServerSetupState.LocalModel(
         id = id,
@@ -18,6 +21,7 @@ fun LocalAiModel.mapToUi(): ServerSetupState.LocalModel = with(this) {
         size = size,
         downloaded = downloaded,
         selected = selected,
+        runOnCpu = runOnCpu,
     )
 }
 

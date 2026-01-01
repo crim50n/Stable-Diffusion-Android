@@ -1,6 +1,7 @@
 package com.shifthackz.aisdv1.data.mappers
 
 import com.shifthackz.aisdv1.domain.entity.AiGenerationResult
+import com.shifthackz.aisdv1.domain.entity.ImageToImagePayload
 import com.shifthackz.aisdv1.domain.entity.OpenAiModel
 import com.shifthackz.aisdv1.domain.entity.Scheduler
 import com.shifthackz.aisdv1.domain.entity.StabilityAiClipGuidance
@@ -160,6 +161,7 @@ fun Pair<TextToImagePayload, SdGenerationResponse>.mapToAiGenResult(): AiGenerat
             else mapSubSeedFromRemote(response.info),
             subSeedStrength = payload.subSeedStrength,
             hidden = false,
+            modelName = payload.modelName,
         )
     }
 
@@ -184,6 +186,7 @@ fun Pair<TextToImagePayload, String>.mapCloudToAiGenResult(): AiGenerationResult
             subSeed = payload.subSeed,
             subSeedStrength = payload.subSeedStrength,
             hidden = false,
+            modelName = payload.modelName,
         )
     }
 
@@ -208,6 +211,91 @@ fun Pair<TextToImagePayload, String>.mapLocalDiffusionToAiGenResult(): AiGenerat
             subSeed = payload.subSeed,
             subSeedStrength = payload.subSeedStrength,
             hidden = false,
+            modelName = payload.modelName,
         )
     }
+//endregion
+
+//region QNN Mappers
+sealed interface QnnGenerationPayload {
+    val seed: Long
+}
+
+data class QnnGenerationData private constructor(
+    private val textPayload: TextToImagePayload?,
+    private val imagePayload: ImageToImagePayload?,
+    val base64: String,
+    override val seed: Long,
+    val width: Int,
+    val height: Int,
+) : QnnGenerationPayload {
+
+    constructor(
+        payload: TextToImagePayload,
+        base64: String,
+        seed: Long,
+        width: Int,
+        height: Int,
+    ) : this(payload, null, base64, seed, width, height)
+
+    constructor(
+        payload: ImageToImagePayload,
+        base64: String,
+        seed: Long,
+        width: Int,
+        height: Int,
+    ) : this(null, payload, base64, seed, width, height)
+
+    val isTextToImage: Boolean get() = textPayload != null
+
+    val txt2ImgPayload: TextToImagePayload get() = textPayload!!
+
+    val img2ImgPayload: ImageToImagePayload get() = imagePayload!!
+}
+
+fun QnnGenerationData.mapQnnResultToAiGenResult(): AiGenerationResult = if (isTextToImage) {
+    AiGenerationResult(
+        id = 0L,
+        image = base64,
+        inputImage = "",
+        createdAt = Date(),
+        type = AiGenerationResult.Type.TEXT_TO_IMAGE,
+        denoisingStrength = 0f,
+        prompt = txt2ImgPayload.prompt,
+        negativePrompt = txt2ImgPayload.negativePrompt,
+        width = width,
+        height = height,
+        samplingSteps = txt2ImgPayload.samplingSteps,
+        cfgScale = txt2ImgPayload.cfgScale,
+        restoreFaces = txt2ImgPayload.restoreFaces,
+        sampler = txt2ImgPayload.sampler,
+        seed = seed.toString(),
+        subSeed = txt2ImgPayload.subSeed,
+        subSeedStrength = txt2ImgPayload.subSeedStrength,
+        hidden = false,
+        modelName = txt2ImgPayload.modelName,
+    )
+} else {
+    AiGenerationResult(
+        id = 0L,
+        image = base64,
+        inputImage = img2ImgPayload.base64Image,
+        createdAt = Date(),
+        type = AiGenerationResult.Type.IMAGE_TO_IMAGE,
+        denoisingStrength = img2ImgPayload.denoisingStrength,
+        prompt = img2ImgPayload.prompt,
+        negativePrompt = img2ImgPayload.negativePrompt,
+        width = width,
+        height = height,
+        samplingSteps = img2ImgPayload.samplingSteps,
+        cfgScale = img2ImgPayload.cfgScale,
+        restoreFaces = img2ImgPayload.restoreFaces,
+        sampler = img2ImgPayload.sampler,
+        seed = seed.toString(),
+        subSeed = img2ImgPayload.subSeed,
+        subSeedStrength = img2ImgPayload.subSeedStrength,
+        hidden = false,
+        modelName = img2ImgPayload.modelName,
+    )
+}
 //endregion

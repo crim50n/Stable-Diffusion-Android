@@ -64,6 +64,17 @@ fun EngineSelectionComponent(
             )
 
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> Unit
+
+            ServerSource.LOCAL_QUALCOMM_QNN -> DropdownTextField(
+                label = LocalizationR.string.hint_sd_model.asUiText(),
+                loading = state.loading,
+                modifier = modifier,
+                value = state.qnnModels.firstOrNull { it.id == state.selectedQnnModelId },
+                items = state.qnnModels,
+                onItemSelected = { intentHandler(EngineSelectionIntent(it.id)) },
+                displayDelegate = { it.name.asUiText() },
+            )
+
             ServerSource.HORDE -> Unit
             ServerSource.OPEN_AI -> Unit
             ServerSource.FAL_AI -> Unit

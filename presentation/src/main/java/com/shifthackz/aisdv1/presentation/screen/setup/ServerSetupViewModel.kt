@@ -5,6 +5,7 @@ import com.shifthackz.aisdv1.core.common.appbuild.BuildType
 import com.shifthackz.aisdv1.core.common.log.errorLog
 import com.shifthackz.aisdv1.core.common.schedulers.DispatchersProvider
 import com.shifthackz.aisdv1.core.common.model.Quadruple
+import com.shifthackz.aisdv1.core.common.model.Quintuple
 import com.shifthackz.aisdv1.core.common.schedulers.SchedulersProvider
 import com.shifthackz.aisdv1.core.common.schedulers.subscribeOnMainThread
 import com.shifthackz.aisdv1.core.model.asUiText
@@ -14,6 +15,7 @@ import com.shifthackz.aisdv1.core.validation.url.UrlValidator
 import com.shifthackz.aisdv1.core.viewmodel.MviRxViewModel
 import com.shifthackz.aisdv1.domain.entity.DownloadState
 import com.shifthackz.aisdv1.domain.entity.HuggingFaceModel
+import com.shifthackz.aisdv1.domain.entity.LocalAiModel
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.feature.auth.AuthorizationCredentials
 import com.shifthackz.aisdv1.domain.interactor.settings.SetupConnectionInterActor
@@ -23,6 +25,8 @@ import com.shifthackz.aisdv1.domain.usecase.downloadable.DeleteModelUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.DownloadModelUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalMediaPipeModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.ScanCustomModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.huggingface.FetchAndGetHuggingFaceModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.GetConfigurationUseCase
 import com.shifthackz.aisdv1.domain.repository.FalAiEndpointRepository
@@ -32,6 +36,7 @@ import com.shifthackz.aisdv1.presentation.navigation.router.main.MainRouter
 import com.shifthackz.aisdv1.presentation.screen.setup.mappers.allowedModes
 import com.shifthackz.aisdv1.presentation.screen.setup.mappers.mapLocalCustomMediaPipeSwitchState
 import com.shifthackz.aisdv1.presentation.screen.setup.mappers.mapLocalCustomOnnxSwitchState
+import com.shifthackz.aisdv1.presentation.screen.setup.mappers.mapLocalCustomQnnSwitchState
 import com.shifthackz.aisdv1.presentation.screen.setup.mappers.mapToUi
 import com.shifthackz.aisdv1.presentation.utils.Constants
 import io.reactivex.rxjava3.core.Single
@@ -44,6 +49,7 @@ class ServerSetupViewModel(
     getConfigurationUseCase: GetConfigurationUseCase,
     getLocalOnnxModelsUseCase: GetLocalOnnxModelsUseCase,
     getLocalMediaPipeModelsUseCase: GetLocalMediaPipeModelsUseCase,
+    getLocalQnnModelsUseCase: GetLocalQnnModelsUseCase,
     fetchAndGetHuggingFaceModelsUseCase: FetchAndGetHuggingFaceModelsUseCase,
     falAiEndpointRepository: FalAiEndpointRepository,
     private val urlValidator: UrlValidator,
@@ -52,6 +58,7 @@ class ServerSetupViewModel(
     private val setupConnectionInterActor: SetupConnectionInterActor,
     private val downloadModelUseCase: DownloadModelUseCase,
     private val deleteModelUseCase: DeleteModelUseCase,
+    private val scanCustomModelsUseCase: ScanCustomModelsUseCase,
     private val schedulersProvider: SchedulersProvider,
     private val preferenceManager: PreferenceManager,
     private val wakeLockInterActor: WakeLockInterActor,
@@ -84,11 +91,12 @@ class ServerSetupViewModel(
             getConfigurationUseCase(),
             getLocalOnnxModelsUseCase(),
             getLocalMediaPipeModelsUseCase(),
+            getLocalQnnModelsUseCase(),
             fetchAndGetHuggingFaceModelsUseCase(),
-            ::Quadruple,
+            ::Quintuple,
         )
             .subscribeOnMainThread(schedulersProvider)
-            .subscribeBy(::errorLog) { (configuration, onnxModels, mpModels, hfModels) ->
+            .subscribeBy(::errorLog) { (configuration, onnxModels, mpModels, qnnModels, hfModels) ->
                 updateState { state ->
                     state.copy(
                         huggingFaceModels = hfModels.map(HuggingFaceModel::alias),
@@ -103,6 +111,9 @@ class ServerSetupViewModel(
                         localMediaPipeModels = mpModels.mapToUi(),
                         localMediaPipeCustomModel = mpModels.mapLocalCustomMediaPipeSwitchState(),
                         localMediaPipeCustomModelPath = configuration.localMediaPipeModelPath,
+                        localQnnModels = qnnModels.mapToUi(),
+                        localQnnCustomModel = qnnModels.mapLocalCustomQnnSwitchState(),
+                        localQnnCustomModelPath = configuration.localQnnModelPath,
                         mode = configuration.source,
                         allowedModes = buildInfoProvider.allowedModes,
                         demoMode = configuration.demoMode,
@@ -261,6 +272,27 @@ class ServerSetupViewModel(
             state.withLocalCustomModelPath(intent.value)
         }
 
+        is ServerSetupIntent.SelectLocalQnnModelPath -> {
+            updateState { state ->
+                state.copy(localQnnCustomModelPath = intent.value)
+            }
+            // Trigger scan after path update
+            preferenceManager.localQnnCustomModelPath = intent.value
+            scanQnnCustomModels()
+        }
+
+        is ServerSetupIntent.AllowLocalQnnCustomModel -> {
+            updateState { state ->
+                state.withAllowQnnCustomModel(intent.allow)
+            }
+            if (intent.allow) scanQnnCustomModels() else Unit
+        }
+
+        is ServerSetupIntent.ScanCustomModels -> when (currentState.mode) {
+            ServerSource.LOCAL_QUALCOMM_QNN -> scanQnnCustomModels()
+            else -> Unit
+        }
+
         is ServerSetupIntent.LocalModel.DownloadConfirm -> with(intent) {
             download(modelId, url)
         }
@@ -283,6 +315,7 @@ class ServerSetupViewModel(
             ServerSource.FAL_AI -> connectToFalAi()
             ServerSource.SWARM_UI -> connectToSwarmUi()
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> connectToMediaPipe()
+            ServerSource.LOCAL_QUALCOMM_QNN -> connectToQnn()
         }
             .doOnSubscribe { setScreenModal(Modal.Communicating(canCancel = false)) }
             .subscribeOnMainThread(schedulersProvider)
@@ -371,6 +404,18 @@ class ServerSetupViewModel(
                 it.copy(falAiApiKeyValidationError = validation.mapToUi())
             }
             validation.isValid
+        }
+
+        ServerSource.LOCAL_QUALCOMM_QNN -> if (currentState.localQnnCustomModel) {
+            val validation = filePathValidator(currentState.localQnnCustomModelPath)
+            updateState {
+                it.copy(localCustomQnnPathValidationError = validation.mapToUi())
+            }
+            // Valid if path is valid AND at least one scanned model is selected
+            val hasSelectedScannedModel = currentState.scannedQnnCustomModels.any { it.selected }
+            validation.isValid && hasSelectedScannedModel
+        } else {
+            currentState.localQnnModels.find { it.selected && it.downloaded } != null
         }
     }
 
@@ -466,6 +511,16 @@ class ServerSetupViewModel(
         return setupConnectionInterActor.connectToMediaPipe(localModelId)
     }
 
+    private fun connectToQnn(): Single<Result<Unit>> {
+        preferenceManager.localQnnCustomModelPath = currentState.localQnnCustomModelPath
+        // Check both regular models and scanned custom models
+        val selectedModel = currentState.localQnnModels.find { it.selected }
+            ?: currentState.scannedQnnCustomModels.find { it.selected }
+        val localModelId = selectedModel?.id ?: ""
+        val runOnCpu = selectedModel?.runOnCpu ?: false
+        return setupConnectionInterActor.connectToQnn(localModelId, runOnCpu)
+    }
+
     private fun localModelDownloadClickReducer(value: ServerSetupState.LocalModel) {
         fun localModel(): ServerSetupState.LocalModel =
             currentState.localModels.firstOrNull { it.id == value.id }
@@ -547,5 +602,26 @@ class ServerSetupViewModel(
         preferenceManager.forceSetupAfterUpdate = false
         processIntent(ServerSetupIntent.DismissDialog)
         mainRouter.navigateToHomeScreen()
+    }
+
+    private fun scanQnnCustomModels() {
+        !scanCustomModelsUseCase(LocalAiModel.Type.QNN)
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(::errorLog) { models ->
+                updateState { state ->
+                    state.copy(
+                        scannedQnnCustomModels = models.map { model ->
+                            ServerSetupState.LocalModel(
+                                id = model.id,
+                                name = model.name,
+                                size = model.size,
+                                downloaded = true,
+                                selected = false,
+                                downloadState = DownloadState.Unknown,
+                            )
+                        }
+                    )
+                }
+            }
     }
 }

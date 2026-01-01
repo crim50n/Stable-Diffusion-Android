@@ -29,6 +29,8 @@ internal class GetConfigurationUseCaseImpl(
             localOnnxModelPath = preferenceManager.localOnnxCustomModelPath,
             localMediaPipeModelId = preferenceManager.localMediaPipeModelId,
             localMediaPipeModelPath = preferenceManager.localMediaPipeCustomModelPath,
+            localQnnModelId = preferenceManager.localQnnModelId,
+            localQnnModelPath = preferenceManager.localQnnCustomModelPath,
         )
     )
 }

@@ -13,6 +13,7 @@ import com.shifthackz.aisdv1.presentation.screen.setup.forms.HuggingFaceForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.LocalDiffusionForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.MediaPipeForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.OpenAiForm
+import com.shifthackz.aisdv1.presentation.screen.setup.forms.QnnForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.StabilityAiForm
 import com.shifthackz.aisdv1.presentation.screen.setup.forms.SwarmUiForm
 
@@ -67,6 +68,12 @@ fun ConfigurationStep(
             )
 
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> MediaPipeForm(
+                state = state,
+                buildInfoProvider = buildInfoProvider,
+                processIntent = processIntent,
+            )
+
+            ServerSource.LOCAL_QUALCOMM_QNN -> QnnForm(
                 state = state,
                 buildInfoProvider = buildInfoProvider,
                 processIntent = processIntent,

@@ -28,4 +28,5 @@ data class ImageToImagePayload(
     val stabilityAiClipGuidance: StabilityAiClipGuidance?,
     val stabilityAiStylePreset: StabilityAiStylePreset?,
     val aDetailer: ADetailerConfig = ADetailerConfig.DISABLED,
+    val modelName: String = "",
 ) : Serializable

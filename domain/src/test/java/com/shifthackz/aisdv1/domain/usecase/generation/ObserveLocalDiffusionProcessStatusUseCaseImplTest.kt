@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import com.shifthackz.aisdv1.domain.entity.LocalDiffusionStatus
 import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepository
+import com.shifthackz.aisdv1.domain.repository.QnnGenerationRepository
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import org.junit.Before
@@ -13,14 +14,21 @@ class ObserveLocalDiffusionProcessStatusUseCaseImplTest {
 
     private val stubException = Throwable("Error loading Local Diffusion.")
     private val stubLocalStatus = BehaviorSubject.create<LocalDiffusionStatus>()
+    private val stubQnnStatus = BehaviorSubject.create<LocalDiffusionStatus>()
     private val stubRepository = mock<LocalDiffusionGenerationRepository>()
+    private val stubQnnRepository = mock<QnnGenerationRepository>()
 
-    private val useCase = ObserveLocalDiffusionProcessStatusUseCaseImpl(stubRepository)
+    private val useCase = ObserveLocalDiffusionProcessStatusUseCaseImpl(
+        stubRepository,
+        stubQnnRepository
+    )
 
     @Before
     fun initialize() {
         whenever(stubRepository.observeStatus())
             .thenReturn(stubLocalStatus)
+        whenever(stubQnnRepository.observeStatus())
+            .thenReturn(stubQnnStatus)
     }
 
     @Test

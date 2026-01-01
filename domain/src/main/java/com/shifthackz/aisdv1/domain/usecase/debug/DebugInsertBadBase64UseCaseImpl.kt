@@ -33,6 +33,7 @@ class DebugInsertBadBase64UseCaseImpl(
             subSeedStrength = 0f,
             denoisingStrength = 0f,
             hidden = false,
+            modelName = "Debug",
         )
     }
 }

@@ -183,6 +183,8 @@
 
     <string name="hint_mediapipe_sub_title">此配置使用 Google AI MediaPipe 运行时，您可以在手机端运行 Stable Diffusion AI 的生成功能，而无需连接至远程服务器/云。</string>
 
+    <string name="hint_qnn_sub_title">此配置使用高通 QNN SDK，通过 NPU 加速（HTP）和 MNN 后端在设备上快速生成 Stable Diffusion 图像。需要骁龙 8 Gen 1 或更新版本。</string>
+
     <!-- 抽屉 -->
     <string name="drawer_web_ui">网络界面</string>
 
@@ -347,6 +349,7 @@
     <string name="error_localhost_url">您不能使用本地主机 (127.0.0.1)URL 来连接到服务器。</string>
     <string name="error_min_size">最小尺寸为 %1$s</string>
     <string name="error_max_size">最大尺寸为 %1$s</string>
+    <string name="error_qnn_unsupported_resolution">QNN 不支持此分辨率。请使用下拉列表选择有效的分辨率。</string>
     <string name="error_download_fail">下载失败</string>
     <string name="error_generic">处理您的请求时发生错误，请稍后再试。</string>
 
@@ -375,6 +378,10 @@
     <string name="model_local_custom_title">要使用本地自定义模型，请将其放置在手机存储中的本地文件夹。</string>
     <string name="model_local_permission_header">权限</string>
     <string name="model_local_custom_sub_title">最终的文件夹结构应该是：</string>
+    <string name="model_qnn_custom_sub_title">QNN所需的文件夹结构：</string>
+    <string name="action_scan_models">扫描模型</string>
+    <string name="model_scan_empty">在指定的文件夹中未找到模型。\n\n请确保每个模型都在其自己的子文件夹中，并包含所需的文件。</string>
+    <string name="model_scan_found">找到 %1$d 个模型：</string>
 
     <!-- 调试菜单 -->
     <string name="debug_section_main">调试</string>

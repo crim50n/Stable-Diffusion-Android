@@ -175,7 +175,8 @@ fun ServerSetupScreenContent(
                                 ServerSetupState.Step.SOURCE -> LocalizationR.string.next
                                 else -> when (state.mode) {
                                     ServerSource.LOCAL_MICROSOFT_ONNX,
-                                    ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> LocalizationR.string
+                                    ServerSource.LOCAL_GOOGLE_MEDIA_PIPE,
+                                    ServerSource.LOCAL_QUALCOMM_QNN -> LocalizationR.string
                                         .action_setup
                                     else -> LocalizationR.string.action_connect
                                 }

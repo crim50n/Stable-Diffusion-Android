@@ -29,5 +29,7 @@ internal class SetServerConfigurationUseCaseImpl(
             preferenceManager.localOnnxCustomModelPath = configuration.localOnnxModelPath
             preferenceManager.localMediaPipeModelId = configuration.localMediaPipeModelId
             preferenceManager.localMediaPipeCustomModelPath = configuration.localMediaPipeModelPath
+            preferenceManager.localQnnModelId = configuration.localQnnModelId
+            preferenceManager.localQnnCustomModelPath = configuration.localQnnModelPath
         }
 }

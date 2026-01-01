@@ -67,6 +67,11 @@ class PreferenceManagerImpl(
         default = LOCAL_DIFFUSION_CUSTOM_PATH,
     )
 
+    override var localQnnCustomModelPath: String by preferences.delegates.string(
+        key = KEY_QNN_CUSTOM_MODEL_PATH,
+        default = LOCAL_DIFFUSION_CUSTOM_PATH,
+    )
+
     override var localOnnxCustomModelPath: String by preferences.delegates.string(
         key = KEY_LOCAL_DIFFUSION_CUSTOM_MODEL_PATH,
         default = LOCAL_DIFFUSION_CUSTOM_PATH,
@@ -203,6 +208,45 @@ class PreferenceManagerImpl(
         onChanged = ::onPreferencesChanged,
     )
 
+    override var localQnnModelId: String by preferences.delegates.string(
+        key = KEY_QNN_MODEL_ID,
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var localQnnRunOnCpu: Boolean by preferences.delegates.boolean(
+        key = KEY_QNN_RUN_ON_CPU,
+        default = false,
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var localQnnUseOpenCL: Boolean by preferences.delegates.boolean(
+        key = KEY_QNN_USE_OPENCL,
+        default = false,
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var localQnnScheduler: String by preferences.delegates.string(
+        key = KEY_QNN_SCHEDULER,
+        default = "dpm",
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var localQnnShowDiffusionProcess: Boolean by preferences.delegates.boolean(
+        key = KEY_QNN_SHOW_DIFFUSION_PROCESS,
+        default = false,
+        onChanged = ::onPreferencesChanged,
+    )
+
+    override var localQnnLastPrompt: String by preferences.delegates.string(
+        key = KEY_QNN_LAST_PROMPT,
+        default = "",
+    )
+
+    override var localQnnLastNegativePrompt: String by preferences.delegates.string(
+        key = KEY_QNN_LAST_NEGATIVE_PROMPT,
+        default = "",
+    )
+
     override var designUseSystemColorPalette: Boolean by preferences.delegates.boolean(
         key = KEY_DESIGN_DYNAMIC_COLORS,
         onChanged = ::onPreferencesChanged,
@@ -309,6 +353,7 @@ class PreferenceManagerImpl(
         const val KEY_DEVELOPER_MODE = "key_developer_mode"
         const val KEY_LOCAL_DIFFUSION_CUSTOM_MODEL_PATH = "key_local_diffusion_custom_model_path"
         const val KEY_MEDIA_PIPE_CUSTOM_MODEL_PATH = "key_mediapipe_custom_model_path"
+        const val KEY_QNN_CUSTOM_MODEL_PATH = "key_qnn_custom_model_path"
         const val KEY_ALLOW_LOCAL_DIFFUSION_CANCEL = "key_allow_local_diffusion_cancel"
         const val KEY_LOCAL_DIFFUSION_SCHEDULER_THREAD = "key_local_diffusion_scheduler_thread"
         const val KEY_MONITOR_CONNECTIVITY = "key_monitor_connection"
@@ -331,6 +376,13 @@ class PreferenceManagerImpl(
         const val KEY_ON_BOARDING_COMPLETE = "key_on_boarding_complete"
         const val KEY_FORCE_SETUP_AFTER_UPDATE = "force_upd_setup_v0.x.x-v0.6.2"
         const val KEY_MEDIA_PIPE_MODEL_ID = "key_mediapipe_model_id"
+        const val KEY_QNN_MODEL_ID = "key_qnn_model_id"
+        const val KEY_QNN_RUN_ON_CPU = "key_qnn_run_on_cpu"
+        const val KEY_QNN_USE_OPENCL = "key_qnn_use_opencl"
+        const val KEY_QNN_SCHEDULER = "key_qnn_scheduler"
+        const val KEY_QNN_SHOW_DIFFUSION_PROCESS = "key_qnn_show_diffusion_process"
+        const val KEY_QNN_LAST_PROMPT = "key_qnn_last_prompt"
+        const val KEY_QNN_LAST_NEGATIVE_PROMPT = "key_qnn_last_negative_prompt"
         const val KEY_LOCAL_MODEL_ID = "key_local_model_id"
         const val KEY_LOCAL_NN_API = "key_local_nn_api"
         const val KEY_DESIGN_DYNAMIC_COLORS = "key_design_dynamic_colors"

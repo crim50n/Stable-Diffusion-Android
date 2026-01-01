@@ -161,6 +161,8 @@
 
     <string name="hint_mediapipe_sub_title">Эта конфигурация использует Google AI MediaPipe и позволяет запускать генерации Stable Diffusion на вашем телефоне без необходимости подключаться к удаленному серверу/облаку.</string>
 
+    <string name="hint_qnn_sub_title">Эта конфигурация использует Qualcomm QNN SDK с ускорением NPU (HTP) и MNN backend для быстрой генерации Stable Diffusion на устройстве. Требуется Snapdragon 8 Gen 1 или новее.</string>
+
     <string name="drawer_web_ui">Веб</string>
 
     <string name="home_tab_txt_to_img">Txt2Img</string>
@@ -310,6 +312,7 @@
     <string name="error_localhost_url">Вы не можете использовать localhost (127.0.0.1) URL-адрес для подключения к серверу.</string>
     <string name="error_min_size">Минимальный размер %1$s</string>
     <string name="error_max_size">Максимальный размер %1$s</string>
+    <string name="error_qnn_unsupported_resolution">Неподдерживаемое разрешение для QNN. Используйте выпадающий список для выбора корректного разрешения.</string>
     <string name="error_download_fail">Ошибка при загрузке</string>
     <string name="error_generic">При обработке вашего запроса произошла ошибка. Повторите попытку позже.</string>
 
@@ -336,6 +339,10 @@
 
     <string name="model_local_custom_title">Чтобы использовать локальную пользовательскую модель, поместите ее в локальную папку в памяти телефона.</string>
     <string name="model_local_custom_sub_title">Окончательная структура папок должна быть такой:</string>
+    <string name="model_qnn_custom_sub_title">Требуемая структура папки QNN:</string>
+    <string name="action_scan_models">Сканировать модели</string>
+    <string name="model_scan_empty">Модели не найдены в указанной папке.\n\nУбедитесь, что каждая модель находится в отдельной подпапке с необходимыми файлами.</string>
+    <string name="model_scan_found">Найдено %1$d моделей:</string>
 
     <string name="debug_section_main">Отладка</string>
     <string name="debug_section_qa">QA тест-кейсы</string>

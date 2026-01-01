@@ -12,5 +12,6 @@ interface DownloadableModelRepository {
     fun delete(id: String): Completable
     fun getAllOnnx(): Single<List<LocalAiModel>>
     fun getAllMediaPipe(): Single<List<LocalAiModel>>
+    fun getAllQnn(): Single<List<LocalAiModel>>
     fun observeAllOnnx(): Flowable<List<LocalAiModel>>
 }

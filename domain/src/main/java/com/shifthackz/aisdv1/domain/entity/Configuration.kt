@@ -20,4 +20,6 @@ data class Configuration(
     val localOnnxModelPath: String = "",
     val localMediaPipeModelId: String = "",
     val localMediaPipeModelPath: String = "",
+    val localQnnModelId: String = "",
+    val localQnnModelPath: String = "",
 )

@@ -21,6 +21,7 @@ internal class DownloadableModelLocalDataSource(
     private val dao: LocalModelDao,
     private val preferenceManager: PreferenceManager,
     private val buildInfoProvider: BuildInfoProvider,
+    private val qnnModelsBuiltInDataSource: QnnModelsBuiltInDataSource,
 ) : DownloadableModelDataSource.Local {
 
     override fun getAllOnnx() = dao
@@ -49,13 +50,49 @@ internal class DownloadableModelLocalDataSource(
         }
         .flatMap { models -> models.withLocalData() }
 
+    override fun getAllQnn(): Single<List<LocalAiModel>> = Single.zip(
+        dao.queryByType(LocalAiModel.Type.QNN.key)
+            .map(List<LocalModelEntity>::mapEntityToDomain)
+            .onErrorReturn { emptyList() },
+        qnnModelsBuiltInDataSource.getAll(),
+        { dbModels, builtInModels ->
+            // Merge: use built-in models, but override with DB models if they exist
+            val dbModelsMap = dbModels.associateBy { it.id }
+            builtInModels.map { builtIn ->
+                dbModelsMap[builtIn.id] ?: builtIn
+            }
+        }
+    )
+        .map { models ->
+            buildList {
+                addAll(models)
+                if (buildInfoProvider.type != BuildType.PLAY) {
+                    add(LocalAiModel.CustomQnn)
+                }
+            }
+        }
+        .flatMap { models -> models.withLocalData() }
+
     override fun getById(id: String): Single<LocalAiModel> {
         val chain = when (id) {
             LocalAiModel.CustomOnnx.id -> Single.just(LocalAiModel.CustomOnnx)
             LocalAiModel.CustomMediaPipe.id -> Single.just(LocalAiModel.CustomMediaPipe)
+            LocalAiModel.CustomQnn.id -> Single.just(LocalAiModel.CustomQnn)
             else -> dao
                 .queryById(id)
                 .map(LocalModelEntity::mapEntityToDomain)
+                .onErrorResumeNext { _ ->
+                    // Fallback to built-in QNN models if not found in DB
+                    qnnModelsBuiltInDataSource.getAll()
+                        .flatMap { builtInModels ->
+                            val model = builtInModels.find { it.id == id }
+                            if (model != null) {
+                                Single.just(model)
+                            } else {
+                                Single.error(NoSuchElementException("Model not found: $id"))
+                            }
+                        }
+                }
         }
         return chain.flatMap { model -> model.withLocalData() }
     }
@@ -89,7 +126,8 @@ internal class DownloadableModelLocalDataSource(
         try {
             when (model.id) {
                 LocalAiModel.CustomOnnx.id,
-                LocalAiModel.CustomMediaPipe.id -> emitter.onSuccess(true)
+                LocalAiModel.CustomMediaPipe.id,
+                LocalAiModel.CustomQnn.id -> emitter.onSuccess(true)
 
                 else -> {
 
@@ -100,6 +138,11 @@ internal class DownloadableModelLocalDataSource(
                         }
 
                         LocalAiModel.Type.MediaPipe -> {
+                            val files = getLocalModelFiles(model.id)
+                            emitter.onSuccess(files.isNotEmpty())
+                        }
+
+                        LocalAiModel.Type.QNN -> {
                             val files = getLocalModelFiles(model.id)
                             emitter.onSuccess(files.isNotEmpty())
                         }
@@ -133,6 +176,7 @@ internal class DownloadableModelLocalDataSource(
                 selected = when (this.type) {
                     LocalAiModel.Type.ONNX -> preferenceManager.localOnnxModelId == id
                     LocalAiModel.Type.MediaPipe -> preferenceManager.localMediaPipeModelId == id
+                    LocalAiModel.Type.QNN -> preferenceManager.localQnnModelId == id
                 },
             )
         }

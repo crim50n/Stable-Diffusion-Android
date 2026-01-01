@@ -2,7 +2,7 @@ package com.shifthackz.aisdv1.presentation.widget.engine
 
 import com.shifthackz.aisdv1.core.common.extensions.EmptyLambda
 import com.shifthackz.aisdv1.core.common.log.errorLog
-import com.shifthackz.aisdv1.core.common.model.Hexagonal
+import com.shifthackz.aisdv1.core.common.model.Heptagonal
 import com.shifthackz.aisdv1.core.common.schedulers.DispatchersProvider
 import com.shifthackz.aisdv1.core.common.schedulers.SchedulersProvider
 import com.shifthackz.aisdv1.core.common.schedulers.subscribeOnMainThread
@@ -11,7 +11,9 @@ import com.shifthackz.aisdv1.domain.entity.Configuration
 import com.shifthackz.aisdv1.domain.entity.LocalAiModel
 import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
+import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.ScanCustomModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.huggingface.FetchAndGetHuggingFaceModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.sdmodel.GetStableDiffusionModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.sdmodel.SelectStableDiffusionModelUseCase
@@ -28,6 +30,8 @@ class EngineSelectionViewModel(
     observeLocalOnnxModelsUseCase: ObserveLocalOnnxModelsUseCase,
     fetchAndGetStabilityAiEnginesUseCase: FetchAndGetStabilityAiEnginesUseCase,
     getHuggingFaceModelsUseCase: FetchAndGetHuggingFaceModelsUseCase,
+    getLocalQnnModelsUseCase: GetLocalQnnModelsUseCase,
+    scanCustomModelsUseCase: ScanCustomModelsUseCase,
     private val preferenceManager: PreferenceManager,
     private val schedulersProvider: SchedulersProvider,
     private val getConfigurationUseCase: GetConfigurationUseCase,
@@ -65,6 +69,20 @@ class EngineSelectionViewModel(
             .map { models -> models.filter { it.downloaded || it.id == LocalAiModel.CustomOnnx.id } }
             .onErrorReturn { emptyList() }
 
+        // Combine downloaded QNN models with scanned custom models
+        val qnnModels = getLocalQnnModelsUseCase()
+            .flatMap { downloadedModels ->
+                scanCustomModelsUseCase(LocalAiModel.Type.QNN)
+                    .map { scannedModels ->
+                        val downloaded = downloadedModels.filter { it.downloaded }
+                        // Merge: downloaded models + scanned custom models (exclude old Custom entry)
+                        downloaded.filter { it.id != LocalAiModel.CustomQnn.id } + scannedModels
+                    }
+                    .onErrorReturn { downloadedModels.filter { it.downloaded } }
+            }
+            .onErrorReturn { emptyList() }
+            .toFlowable()
+
         !Flowable.combineLatest(
             configuration,
             a1111Models,
@@ -72,13 +90,14 @@ class EngineSelectionViewModel(
             huggingFaceModels,
             stabilityAiEngines,
             localAiModels,
-            ::Hexagonal,
+            qnnModels,
+            ::Heptagonal,
         )
             .subscribeOnMainThread(schedulersProvider)
             .subscribeBy(
                 onError = ::errorLog,
                 onComplete = EmptyLambda,
-                onNext = { (config, sdModels, swarmModels, hfModels, stEngines, localModels) ->
+                onNext = { (config, sdModels, swarmModels, hfModels, stEngines, localModels, qnnModels) ->
                     updateState { state ->
                         state.copy(
                             loading = false,
@@ -95,7 +114,9 @@ class EngineSelectionViewModel(
                             selectedStEngine = config.stabilityAiEngineId,
                             localAiModels = localModels,
                             selectedLocalAiModelId = localModels.firstOrNull { it.id == config.localOnnxModelId }?.id
-                                ?: state.selectedLocalAiModelId
+                                ?: state.selectedLocalAiModelId,
+                            qnnModels = qnnModels,
+                            selectedQnnModelId = config.localQnnModelId,
                         )
                     }
                 },
@@ -132,6 +153,16 @@ class EngineSelectionViewModel(
             ServerSource.STABILITY_AI -> preferenceManager.stabilityAiEngineId = intent.value
 
             ServerSource.LOCAL_MICROSOFT_ONNX -> preferenceManager.localOnnxModelId = intent.value
+
+            ServerSource.LOCAL_QUALCOMM_QNN -> {
+                preferenceManager.localQnnModelId = intent.value
+                // Update runOnCpu based on selected model
+                val selectedModel = currentState.qnnModels.find { it.id == intent.value }
+                if (selectedModel != null) {
+                    preferenceManager.localQnnRunOnCpu = selectedModel.runOnCpu
+                }
+                updateState { it.copy(selectedQnnModelId = intent.value) }
+            }
 
             else -> Unit
         }

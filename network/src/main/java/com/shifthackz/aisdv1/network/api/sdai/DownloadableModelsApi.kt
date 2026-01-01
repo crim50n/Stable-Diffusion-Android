@@ -15,6 +15,8 @@ interface DownloadableModelsApi {
 
     fun fetchMediaPipeModels(): Single<List<DownloadableModelResponse>>
 
+    fun fetchQnnModels(): Single<List<DownloadableModelResponse>>
+
     fun <T : Any> downloadModel(
         remoteUrl: String,
         localPath: String,
@@ -29,6 +31,9 @@ interface DownloadableModelsApi {
 
         @GET("/mediapipe.json")
         fun fetchMediaPipeModels(): Single<List<DownloadableModelResponse>>
+
+        @GET("/qnn.json")
+        fun fetchQnnModels(): Single<List<DownloadableModelResponse>>
 
         @Streaming
         @GET

@@ -89,6 +89,16 @@ enum class ServerSource(
             FeatureTag.MultipleModels,
         ),
         allowedInBuilds = setOf(BuildType.PLAY, BuildType.FULL),
+    ),
+    LOCAL_QUALCOMM_QNN(
+        key = "local_qualcomm_qnn",
+        featureTags = setOf(
+            FeatureTag.Offline,
+            FeatureTag.Txt2Img,
+            FeatureTag.Img2Img,
+            FeatureTag.MultipleModels,
+        ),
+        allowedInBuilds = setOf(BuildType.PLAY, BuildType.FULL),
     );
 
     companion object {

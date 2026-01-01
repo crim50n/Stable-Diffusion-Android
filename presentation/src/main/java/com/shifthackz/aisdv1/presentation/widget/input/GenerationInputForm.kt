@@ -57,6 +57,7 @@ import com.shifthackz.aisdv1.presentation.core.GenerationMviIntent
 import com.shifthackz.aisdv1.presentation.core.GenerationMviState
 import com.shifthackz.aisdv1.presentation.model.AspectRatio
 import com.shifthackz.aisdv1.presentation.model.Modal
+import com.shifthackz.aisdv1.presentation.model.QnnResolution
 import com.shifthackz.aisdv1.presentation.theme.sliderColors
 import com.shifthackz.aisdv1.presentation.theme.textFieldColors
 import com.shifthackz.aisdv1.presentation.utils.Constants
@@ -71,6 +72,7 @@ import com.shifthackz.aisdv1.presentation.utils.Constants.SAMPLING_STEPS_RANGE_S
 import com.shifthackz.aisdv1.presentation.utils.Constants.SUB_SEED_STRENGTH_MAX
 import com.shifthackz.aisdv1.presentation.utils.Constants.SUB_SEED_STRENGTH_MIN
 import com.shifthackz.aisdv1.presentation.widget.engine.EngineSelectionComponent
+import com.shifthackz.aisdv1.presentation.widget.engine.QnnRuntimeSelectionComponent
 import com.shifthackz.aisdv1.presentation.widget.input.chip.ChipTextFieldEvent
 import com.shifthackz.aisdv1.presentation.widget.input.chip.ChipTextFieldWithItem
 import kotlin.math.abs
@@ -208,7 +210,8 @@ fun GenerationInputForm(
                 ServerSource.SWARM_UI,
                 ServerSource.STABILITY_AI,
                 ServerSource.HUGGING_FACE,
-                ServerSource.LOCAL_MICROSOFT_ONNX -> EngineSelectionComponent(
+                ServerSource.LOCAL_MICROSOFT_ONNX,
+                ServerSource.LOCAL_QUALCOMM_QNN -> EngineSelectionComponent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
@@ -296,7 +299,8 @@ fun GenerationInputForm(
             ServerSource.SWARM_UI,
             ServerSource.HUGGING_FACE,
             ServerSource.STABILITY_AI,
-            ServerSource.LOCAL_MICROSOFT_ONNX -> true
+            ServerSource.LOCAL_MICROSOFT_ONNX,
+            ServerSource.LOCAL_QUALCOMM_QNN -> true
             else -> false
         }
         if (showNegativePrompt) {
@@ -388,7 +392,26 @@ fun GenerationInputForm(
                         displayDelegate = { it.key.asUiText() },
                     )
                 }
-                else -> Unit
+
+                ServerSource.LOCAL_QUALCOMM_QNN -> {
+                    val availableResolutions = QnnResolution.forModelType(state.qnnRunOnCpu)
+                    val defaultResolution = QnnResolution.defaultForModelType(state.qnnRunOnCpu)
+                    val currentResolution = QnnResolution.fromDimensions(
+                        state.width.toIntOrNull() ?: defaultResolution.width,
+                        state.height.toIntOrNull() ?: defaultResolution.height
+                    ) ?: defaultResolution
+                    DropdownTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        label = LocalizationR.string.hint_image_size.asUiText(),
+                        value = currentResolution,
+                        items = availableResolutions,
+                        onItemSelected = { processIntent(GenerationMviIntent.Update.Qnn.Resolution(it)) },
+                        displayDelegate = { it.displayName.asUiText() },
+                    )
+                }
+
+                ServerSource.LOCAL_GOOGLE_MEDIA_PIPE,
+                ServerSource.FAL_AI -> Unit
             }
         }
 
@@ -439,10 +462,11 @@ fun GenerationInputForm(
             visible = state.advancedOptionsVisible && state.mode != ServerSource.OPEN_AI,
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                // Sampler selection only supported for A1111, STABILITY AI
+                // Sampler selection only supported for A1111, STABILITY AI, QNN
                 when (state.mode) {
                     ServerSource.STABILITY_AI,
-                    ServerSource.AUTOMATIC1111 -> DropdownTextField(
+                    ServerSource.AUTOMATIC1111,
+                    ServerSource.LOCAL_QUALCOMM_QNN -> DropdownTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 8.dp),
@@ -461,6 +485,14 @@ fun GenerationInputForm(
 
                     else -> Unit
                 }
+
+                // Runtime selection for QNN CPU models (CPU/GPU via OpenCL)
+                if (state.mode == ServerSource.LOCAL_QUALCOMM_QNN && state.qnnRunOnCpu) {
+                    QnnRuntimeSelectionComponent(
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+
                 // Scheduler selection only for A1111 (Flux models need specific schedulers)
                 if (state.mode == ServerSource.AUTOMATIC1111) {
                     DropdownTextField(
@@ -727,7 +759,8 @@ fun GenerationInputForm(
                     ServerSource.AUTOMATIC1111,
                     ServerSource.SWARM_UI,
                     ServerSource.STABILITY_AI,
-                    ServerSource.HORDE -> afterSlidersSection()
+                    ServerSource.HORDE,
+                    ServerSource.LOCAL_QUALCOMM_QNN -> afterSlidersSection()
 
                     else -> Unit
                 }

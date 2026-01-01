@@ -65,6 +65,8 @@ data class TextToImageState(
     override val falAiSelectedEndpoint: FalAiEndpointUi? = null,
     override val falAiPropertyValues: Map<String, Any?> = emptyMap(),
     override val falAiAdvancedVisible: Boolean = false,
+    override val qnnRunOnCpu: Boolean = false,
+    override val modelName: String = "",
 ) : GenerationMviState() {
 
     override fun copyState(
@@ -108,6 +110,8 @@ data class TextToImageState(
         falAiSelectedEndpoint: FalAiEndpointUi?,
         falAiPropertyValues: Map<String, Any?>,
         falAiAdvancedVisible: Boolean,
+        qnnRunOnCpu: Boolean,
+        modelName: String,
     ): GenerationMviState = copy(
         onBoardingDemo = onBoardingDemo,
         screenModal = screenModal,
@@ -149,6 +153,8 @@ data class TextToImageState(
         falAiSelectedEndpoint = falAiSelectedEndpoint,
         falAiPropertyValues = falAiPropertyValues,
         falAiAdvancedVisible = falAiAdvancedVisible,
+        qnnRunOnCpu = qnnRunOnCpu,
+        modelName = modelName,
     )
 }
 
@@ -187,6 +193,7 @@ fun TextToImageState.mapToPayload(): TextToImagePayload = with(this) {
         aDetailer = aDetailerConfig.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: ADetailerConfig.DISABLED,
         hires = hiresConfig.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: HiresConfig.DISABLED,
         forgeModules = selectedForgeModules.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: emptyList(),
+        modelName = modelName,
     )
 }
 

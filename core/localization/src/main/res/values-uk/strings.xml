@@ -159,6 +159,8 @@
 
     <string name="hint_mediapipe_sub_title">Ця конфігурація використовує Google AI MediaPipe та дозволяє запускати генерації Stable Diffusion на вашому телефоні без необхідності підключатися до віддаленого сервера/хмари.</string>
 
+    <string name="hint_qnn_sub_title">Ця конфігурація використовує Qualcomm QNN SDK з прискоренням NPU (HTP) та MNN backend для швидкої генерації Stable Diffusion на пристрої. Потрібен Snapdragon 8 Gen 1 або новіший.</string>
+
     <string name="drawer_web_ui">Веб</string>
 
     <string name="home_tab_txt_to_img">Txt2Img</string>
@@ -303,6 +305,7 @@
     <string name="error_localhost_url">Ви не можете використовувати localhost (127.0.0.1) URL-адресу для підключення до сервера.</string>
     <string name="error_min_size">Мінімальний розмір %1$s</string>
     <string name="error_max_size">Максимальний розмір %1$s</string>
+    <string name="error_qnn_unsupported_resolution">Непідтримувана роздільна здатність для QNN. Використовуйте випадаючий список для вибору коректної роздільної здатності.</string>
     <string name="error_download_fail">Помилка під час завантаження</string>
     <string name="error_generic">Під час обробки вашого запиту сталася помилка. Повторіть спробу пізніше.</string>
 
@@ -326,6 +329,10 @@
     <string name="model_local_custom_title">Щоб використовувати локальну спеціальну модель, помістіть її в локальну папку в пам’яті телефону.</string>
     <string name="model_local_permission_header">Дозволи</string>
     <string name="model_local_custom_sub_title">Остаточна структура папок має бути такою:</string>
+    <string name="model_qnn_custom_sub_title">Потрібна структура папки QNN:</string>
+    <string name="action_scan_models">Сканувати моделі</string>
+    <string name="model_scan_empty">Моделі не знайдено у вказаній папці.\n\nПереконайтеся, що кожна модель знаходиться у власній підпапці з необхідними файлами.</string>
+    <string name="model_scan_found">Знайдено %1$d моделей:</string>
     <string name="model_local_path_header">Шлях моделі</string>
     <string name="model_local_path_title">Шлях папки локальної моделі</string>
     <string name="model_local_path_button">Виберіть папку</string>

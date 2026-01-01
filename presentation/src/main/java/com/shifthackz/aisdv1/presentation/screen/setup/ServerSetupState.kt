@@ -45,6 +45,10 @@ data class ServerSetupState(
     val localMediaPipeModels: List<LocalModel> = emptyList(),
     val localMediaPipeCustomModel: Boolean = false,
     val localMediaPipeCustomModelPath: String = "",
+    val localQnnModels: List<LocalModel> = emptyList(),
+    val localQnnCustomModel: Boolean = false,
+    val localQnnCustomModelPath: String = "",
+    val scannedQnnCustomModels: List<LocalModel> = emptyList(),
     val passwordVisible: Boolean = false,
     val serverUrlValidationError: UiText? = null,
     val swarmUiUrlValidationError: UiText? = null,
@@ -57,34 +61,35 @@ data class ServerSetupState(
     val falAiApiKeyValidationError: UiText? = null,
     val localCustomOnnxPathValidationError: UiText? = null,
     val localCustomMediaPipePathValidationError: UiText? = null,
+    val localCustomQnnPathValidationError: UiText? = null,
 ) : MviState, KoinComponent {
 
     val localCustomModel: Boolean
-        get() = if (mode == ServerSource.LOCAL_MICROSOFT_ONNX) {
-            localOnnxCustomModel
-        } else {
-            localMediaPipeCustomModel
+        get() = when (mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX -> localOnnxCustomModel
+            ServerSource.LOCAL_QUALCOMM_QNN -> localQnnCustomModel
+            else -> localMediaPipeCustomModel
         }
 
     val localCustomModelPath: String
-        get() = if (mode == ServerSource.LOCAL_MICROSOFT_ONNX) {
-            localOnnxCustomModelPath
-        } else {
-            localMediaPipeCustomModelPath
+        get() = when (mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX -> localOnnxCustomModelPath
+            ServerSource.LOCAL_QUALCOMM_QNN -> localQnnCustomModelPath
+            else -> localMediaPipeCustomModelPath
         }
 
     val localModels: List<LocalModel>
-        get() = if (mode == ServerSource.LOCAL_MICROSOFT_ONNX) {
-            localOnnxModels
-        } else {
-            localMediaPipeModels
+        get() = when (mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX -> localOnnxModels
+            ServerSource.LOCAL_QUALCOMM_QNN -> localQnnModels
+            else -> localMediaPipeModels
         }
 
     val localCustomModelPathValidationError: UiText?
-        get() = if (mode == ServerSource.LOCAL_MICROSOFT_ONNX) {
-            localCustomOnnxPathValidationError
-        } else {
-            localCustomMediaPipePathValidationError
+        get() = when (mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX -> localCustomOnnxPathValidationError
+            ServerSource.LOCAL_QUALCOMM_QNN -> localCustomQnnPathValidationError
+            else -> localCustomMediaPipePathValidationError
         }
 
     val demoModeUrl: String
@@ -118,6 +123,11 @@ data class ServerSetupState(
             localCustomMediaPipePathValidationError = null,
         )
 
+        ServerSource.LOCAL_QUALCOMM_QNN -> copy(
+            localQnnCustomModelPath = value,
+            localCustomQnnPathValidationError = null,
+        )
+
         else -> this
     }
 
@@ -127,6 +137,9 @@ data class ServerSetupState(
         )
         ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> copy(
             localMediaPipeModels = localMediaPipeModels.withNewState(value)
+        )
+        ServerSource.LOCAL_QUALCOMM_QNN -> copy(
+            localQnnModels = localQnnModels.withNewState(value)
         )
         else -> this
     }
@@ -152,23 +165,60 @@ data class ServerSetupState(
             )
         )
 
+        ServerSource.LOCAL_QUALCOMM_QNN -> copy(
+            screenModal = Modal.None,
+            localQnnModels = localQnnModels.withNewState(
+                value.copy(
+                    downloadState = DownloadState.Unknown,
+                    downloaded = false,
+                ),
+            )
+        )
+
         else -> copy(screenModal = Modal.None)
     }
 
-    fun withSelectedLocalModel(value: LocalModel): ServerSetupState = when (mode) {
-        ServerSource.LOCAL_MICROSOFT_ONNX -> copy(
-            localOnnxModels = localOnnxModels.withNewState(
-                value.copy(selected = true),
-            ),
-        )
+    fun withSelectedLocalModel(value: LocalModel): ServerSetupState {
+        fun List<LocalModel>.selectModel(): List<LocalModel> {
+            // Find existing model to preserve its downloaded/downloadState
+            val existing = find { it.id == value.id }
+            val updatedModel = value.copy(
+                selected = true,
+                downloaded = existing?.downloaded ?: value.downloaded,
+                downloadState = existing?.downloadState ?: value.downloadState,
+            )
+            return withNewState(updatedModel)
+        }
 
-        ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> copy(
-            localMediaPipeModels = localMediaPipeModels.withNewState(
-                value.copy(selected = true),
-            ),
-        )
+        // Check if this is a scanned custom model (ID starts with CUSTOM_)
+        val isScannedCustomModel = value.id.startsWith("CUSTOM_QNN:") ||
+            value.id.startsWith("CUSTOM_ONNX:") ||
+            value.id.startsWith("CUSTOM_MP:")
 
-        else -> this
+        return when (mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX -> copy(
+                localOnnxModels = localOnnxModels.selectModel(),
+            )
+
+            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> copy(
+                localMediaPipeModels = localMediaPipeModels.selectModel(),
+            )
+
+            ServerSource.LOCAL_QUALCOMM_QNN -> if (isScannedCustomModel) {
+                // For scanned custom models, update scannedQnnCustomModels
+                copy(
+                    scannedQnnCustomModels = scannedQnnCustomModels.selectModel(),
+                    localQnnModels = localQnnModels.map { it.copy(selected = false) },
+                )
+            } else {
+                copy(
+                    localQnnModels = localQnnModels.selectModel(),
+                    scannedQnnCustomModels = scannedQnnCustomModels.map { it.copy(selected = false) },
+                )
+            }
+
+            else -> this
+        }
     }
 
     fun withAllowCustomModel(value: Boolean): ServerSetupState {
@@ -190,8 +240,27 @@ data class ServerSetupState(
                 ),
             )
 
+            ServerSource.LOCAL_QUALCOMM_QNN -> this.copy(
+                localQnnCustomModel = value,
+                localQnnModels = localQnnModels.updateCustomModelSelection(
+                    id = LocalAiModel.CustomQnn.id,
+                ),
+            )
+
             else -> this
         }
+    }
+
+    fun withAllowQnnCustomModel(value: Boolean): ServerSetupState {
+        fun List<LocalModel>.updateCustomModelSelection(id: String) = withNewState(
+            find { m -> m.id == id }?.copy(selected = value)
+        )
+        return this.copy(
+            localQnnCustomModel = value,
+            localQnnModels = localQnnModels.updateCustomModelSelection(
+                id = LocalAiModel.CustomQnn.id,
+            ),
+        )
     }
 
     enum class Step {
@@ -211,6 +280,7 @@ data class ServerSetupState(
         val downloaded: Boolean = false,
         val downloadState: DownloadState = DownloadState.Unknown,
         val selected: Boolean = false,
+        val runOnCpu: Boolean = false,
     )
 
     data class FalAiEndpointUi(

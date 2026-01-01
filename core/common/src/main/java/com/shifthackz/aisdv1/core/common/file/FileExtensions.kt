@@ -47,6 +47,9 @@ fun File.unzip() {
     val destinationDir = parentFile ?: return
 
     fun extractFile(inputStream: InputStream, destFilePath: String) {
+        val destFile = File(destFilePath)
+        // Create parent directories if they don't exist
+        destFile.parentFile?.mkdirs()
         val bos = BufferedOutputStream(FileOutputStream(destFilePath))
         val bytesIn = ByteArray(DEFAULT_BUFFER_SIZE)
         var read: Int
@@ -64,7 +67,7 @@ fun File.unzip() {
                     extractFile(inputStream, filePath)
                 } else {
                     val dir = File(filePath)
-                    dir.mkdir()
+                    dir.mkdirs()
                 }
             }
         }

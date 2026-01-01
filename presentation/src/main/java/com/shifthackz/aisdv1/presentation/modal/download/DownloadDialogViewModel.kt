@@ -23,8 +23,14 @@ class DownloadDialogViewModel(
             is DownloadDialogIntent.LoadModelData -> !getLocalModelUseCase(intent.id)
                 .subscribeOnMainThread(schedulersProvider)
                 .subscribeBy(::errorLog) { model ->
-                    updateState {
-                        it.copy(sources = model.sources.mapIndexed { i, url -> url to (i == 0) })
+                    // For QNN models with single source, auto-start download
+                    if (model.sources.size == 1) {
+                        emitEffect(DownloadDialogEffect.StartDownload(model.sources.first()))
+                        emitEffect(DownloadDialogEffect.Close)
+                    } else {
+                        updateState {
+                            it.copy(sources = model.sources.mapIndexed { i, url -> url to (i == 0) })
+                        }
                     }
                 }
 

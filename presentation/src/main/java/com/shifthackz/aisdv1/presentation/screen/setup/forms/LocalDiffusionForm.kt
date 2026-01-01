@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +23,7 @@ import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileDownloadDone
 import androidx.compose.material.icons.outlined.FileDownloadOff
 import androidx.compose.material.icons.outlined.Landslide
+import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -68,6 +68,7 @@ fun LocalDiffusionForm(
     buildInfoProvider: BuildInfoProvider = BuildInfoProvider.stub,
     processIntent: (ServerSetupIntent) -> Unit = {},
 ) {
+    val isQnn = state.mode == ServerSource.LOCAL_QUALCOMM_QNN
     val modelItemUi: @Composable (ServerSetupState.LocalModel) -> Unit = { model ->
         Column(
             modifier = Modifier
@@ -79,187 +80,211 @@ fun LocalDiffusionForm(
                 .border(
                     width = 2.dp,
                     shape = RoundedCornerShape(16.dp),
-                    color = if (model.selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+                    color = if (!isQnn && model.selected) MaterialTheme.colorScheme.primary else Color.Transparent,
                 )
-                .clickable { processIntent(ServerSetupIntent.SelectLocalModel(model)) },
+                .let { mod ->
+                    if (isQnn) mod else mod.clickable { processIntent(ServerSetupIntent.SelectLocalModel(model)) }
+                }
+                .padding(horizontal = 12.dp, vertical = 8.dp),
         ) {
             Row(
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val icon = when (model.downloadState) {
-                    is DownloadState.Downloading -> Icons.Outlined.FileDownload
-                    else -> when {
-                        model.id == LocalAiModel.CustomOnnx.id -> Icons.Outlined.Landslide
-                        model.id == LocalAiModel.CustomMediaPipe.id -> Icons.Outlined.Landslide
-                        model.downloaded -> Icons.Outlined.FileDownloadDone
-                        else -> Icons.Outlined.FileDownloadOff
-                    }
+                val icon = when {
+                    model.id == LocalAiModel.CustomOnnx.id -> Icons.Outlined.Landslide
+                    model.id == LocalAiModel.CustomMediaPipe.id -> Icons.Outlined.Landslide
+                    else -> Icons.Outlined.Memory
                 }
                 Icon(
-                    modifier = modifier
-                        .padding(start = 8.dp)
-                        .size(48.dp),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .size(42.dp),
                     imageVector = icon,
-                    contentDescription = "Download state",
+                    contentDescription = null,
                 )
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = model.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 2
                     )
-                    when (model.id) {
-                        LocalAiModel.CustomOnnx.id,
-                        LocalAiModel.CustomMediaPipe.id -> Unit
-
-                        else -> Text(
+                    if (model.id != LocalAiModel.CustomOnnx.id
+                        && model.id != LocalAiModel.CustomMediaPipe.id
+                    ) {
+                        Text(
                             text = model.size,
-                            maxLines = 1
+                            style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                // Do not display action button for custom model
+                // Status icon on right side (for non-custom models)
                 if (model.id != LocalAiModel.CustomOnnx.id
                     && model.id != LocalAiModel.CustomMediaPipe.id
                 ) {
-                    Button(
-                        modifier = Modifier.padding(end = 8.dp),
-                        onClick = { processIntent(ServerSetupIntent.LocalModel.ClickReduce(model)) },
-                    ) {
-                        Text(
-                            text = stringResource(
-                                id = when (model.downloadState) {
-                                    is DownloadState.Downloading -> LocalizationR.string.cancel
-                                    is DownloadState.Error -> LocalizationR.string.retry
-                                    else -> {
-                                        if (model.downloaded) LocalizationR.string.delete
-                                        else LocalizationR.string.download
-                                    }
-                                }
-                            ),
-                            color = LocalContentColor.current,
-                            maxLines = 1
-                        )
-                    }
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .size(24.dp),
+                        imageVector = when {
+                            model.downloaded -> Icons.Outlined.FileDownloadDone
+                            model.downloadState is DownloadState.Downloading -> Icons.Outlined.FileDownload
+                            else -> Icons.Outlined.FileDownloadOff
+                        },
+                        contentDescription = null,
+                        tint = when {
+                            model.downloaded -> MaterialTheme.colorScheme.primary
+                            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        },
+                    )
                 }
             }
+
+            // Custom model path info
             if (model.id == LocalAiModel.CustomOnnx.id
                 || model.id == LocalAiModel.CustomMediaPipe.id
             ) {
-                Column(
-                    modifier = Modifier.padding(8.dp),
-                ) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(id = LocalizationR.string.model_local_custom_title),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                if (model.id == LocalAiModel.CustomOnnx.id) {
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = stringResource(id = LocalizationR.string.model_local_custom_title),
+                        text = stringResource(id = LocalizationR.string.model_local_custom_sub_title),
                         style = MaterialTheme.typography.bodyMedium,
                     )
-                    if (model.id == LocalAiModel.CustomOnnx.id) {
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(id = LocalizationR.string.model_local_custom_sub_title),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                        fun folderModifier(treeNum: Int) =
-                            Modifier.padding(start = (treeNum - 1) * 12.dp)
+                    fun folderModifier(treeNum: Int) =
+                        Modifier.padding(start = (treeNum - 1) * 12.dp)
 
-                        val folderStyle = MaterialTheme.typography.bodySmall
-                        Text(
-                            modifier = Modifier.padding(start = 12.dp),
-                            text = state.localOnnxCustomModelPath,
-                            style = folderStyle,
-                        )
+                    val folderStyle = MaterialTheme.typography.bodySmall
+                    Text(
+                        modifier = Modifier.padding(start = 12.dp),
+                        text = state.localOnnxCustomModelPath,
+                        style = folderStyle,
+                    )
 
-                        Text(
-                            modifier = folderModifier(3),
-                            text = "text_encoder",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(4),
-                            text = "model.ort",
-                            style = folderStyle,
-                        )
+                    Text(modifier = folderModifier(3), text = "text_encoder", style = folderStyle)
+                    Text(modifier = folderModifier(4), text = "model.ort", style = folderStyle)
+                    Text(modifier = folderModifier(3), text = "tokenizer", style = folderStyle)
+                    Text(modifier = folderModifier(4), text = "merges.txt", style = folderStyle)
+                    Text(modifier = folderModifier(3), text = "special_tokens_map.json", style = folderStyle)
+                    Text(modifier = folderModifier(4), text = "tokenizer_config.json", style = folderStyle)
+                    Text(modifier = folderModifier(4), text = "vocab.json", style = folderStyle)
+                    Text(modifier = folderModifier(3), text = "unet", style = folderStyle)
+                    Text(modifier = folderModifier(4), text = "model.ort", style = folderStyle)
+                    Text(modifier = folderModifier(3), text = "vae_decoder", style = folderStyle)
+                    Text(modifier = folderModifier(4), text = "model.ort", style = folderStyle)
+                }
+            }
 
-                        Text(
-                            modifier = folderModifier(3),
-                            text = "tokenizer",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(4),
-                            text = "merges.txt",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(3),
-                            text = "special_tokens_map.json",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(4),
-                            text = "tokenizer_config.json",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(4),
-                            text = "vocab.json",
-                            style = folderStyle,
-                        )
+            // Progress indicator for downloading
+            when (val downloadState = model.downloadState) {
+                is DownloadState.Downloading -> {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        progress = { downloadState.percent / 100f },
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 4.dp),
+                        text = "${downloadState.percent}%",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+                is DownloadState.Error -> {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(id = LocalizationR.string.error_download_fail),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+                else -> Unit
+            }
 
-                        Text(
-                            modifier = folderModifier(3),
-                            text = "unet",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(4),
-                            text = "model.ort",
-                            style = folderStyle,
-                        )
+            // Action buttons (for non-custom models)
+            if (model.id != LocalAiModel.CustomOnnx.id
+                && model.id != LocalAiModel.CustomMediaPipe.id
+            ) {
+                // Cancel button during download
+                if (model.downloadState is DownloadState.Downloading) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        OutlinedButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                processIntent(ServerSetupIntent.LocalModel.ClickReduce(model))
+                            },
+                        ) {
+                            Text(
+                                text = stringResource(id = LocalizationR.string.cancel),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
+                }
 
+                // Retry button on error
+                if (model.downloadState is DownloadState.Error) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Button(
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                processIntent(ServerSetupIntent.LocalModel.ClickReduce(model))
+                            },
+                        ) {
+                            Text(
+                                text = stringResource(id = LocalizationR.string.retry),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+                        }
+                    }
+                }
+
+                // Download button for not downloaded models
+                if (!model.downloaded
+                    && model.downloadState !is DownloadState.Downloading
+                    && model.downloadState !is DownloadState.Error
+                ) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row {
+                        Button(
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                processIntent(ServerSetupIntent.LocalModel.ClickReduce(model))
+                            },
+                        ) {
+                            Text(
+                                text = stringResource(id = LocalizationR.string.download),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+                        }
+                    }
+                }
+
+                // Delete button for downloaded and selected models
+                if (model.downloaded && model.selected) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            processIntent(ServerSetupIntent.LocalModel.ClickReduce(model))
+                        },
+                    ) {
                         Text(
-                            modifier = folderModifier(3),
-                            text = "vae_decoder",
-                            style = folderStyle,
-                        )
-                        Text(
-                            modifier = folderModifier(4),
-                            text = "model.ort",
-                            style = folderStyle,
+                            text = stringResource(id = LocalizationR.string.delete),
+                            color = MaterialTheme.colorScheme.error,
                         )
                     }
                 }
-            }
-            when (model.downloadState) {
-                is DownloadState.Downloading -> {
-                    LinearProgressIndicator(
-                        progress = { model.downloadState.percent / 100f },
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                    )
-                }
-
-                is DownloadState.Error -> {
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .padding(bottom = 8.dp),
-                        text = stringResource(id = LocalizationR.string.error_download_fail),
-                    )
-                }
-
-                else -> Unit
             }
         }
     }
@@ -272,10 +297,10 @@ fun LocalDiffusionForm(
                 .fillMaxWidth()
                 .padding(top = 32.dp, bottom = 8.dp),
             text = stringResource(
-                id = if (state.mode == ServerSource.LOCAL_MICROSOFT_ONNX) {
-                    LocalizationR.string.hint_local_diffusion_title
-                } else {
-                    LocalizationR.string.hint_mediapipe_title
+                id = when (state.mode) {
+                    ServerSource.LOCAL_MICROSOFT_ONNX,
+                    ServerSource.LOCAL_QUALCOMM_QNN -> LocalizationR.string.hint_local_diffusion_title
+                    else -> LocalizationR.string.hint_mediapipe_title
                 },
             ),
             style = MaterialTheme.typography.bodyLarge,
@@ -285,10 +310,10 @@ fun LocalDiffusionForm(
         Text(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
             text = stringResource(
-                id = if (state.mode == ServerSource.LOCAL_MICROSOFT_ONNX) {
-                    LocalizationR.string.hint_local_diffusion_sub_title
-                } else {
-                    LocalizationR.string.hint_mediapipe_sub_title
+                id = when (state.mode) {
+                    ServerSource.LOCAL_MICROSOFT_ONNX -> LocalizationR.string.hint_local_diffusion_sub_title
+                    ServerSource.LOCAL_QUALCOMM_QNN -> LocalizationR.string.hint_qnn_sub_title
+                    else -> LocalizationR.string.hint_mediapipe_sub_title
                 },
             ),
             style = MaterialTheme.typography.bodyMedium,

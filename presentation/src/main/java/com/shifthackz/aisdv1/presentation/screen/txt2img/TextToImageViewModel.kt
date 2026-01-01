@@ -78,6 +78,9 @@ class TextToImageViewModel(
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> {
                 Modal.Generating(canCancel = preferenceManager.localOnnxAllowCancel)
             }
+            ServerSource.LOCAL_QUALCOMM_QNN -> {
+                Modal.Generating(canCancel = true)
+            }
 
             else -> Modal.Communicating()
         }

@@ -7,6 +7,7 @@ import com.shifthackz.aisdv1.data.mappers.mapEntityToDomain
 import com.shifthackz.aisdv1.data.mocks.mockLocalAiModels
 import com.shifthackz.aisdv1.data.mocks.mockLocalModelEntities
 import com.shifthackz.aisdv1.data.mocks.mockLocalModelEntity
+import com.shifthackz.aisdv1.data.local.QnnModelsBuiltInDataSource
 import com.shifthackz.aisdv1.domain.entity.LocalAiModel
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.storage.db.persistent.dao.LocalModelDao
@@ -29,12 +30,14 @@ class DownloadableModelLocalDataSourceTest {
     private val stubDao = mockk<LocalModelDao>()
     private val stubPreferenceManager = mockk<PreferenceManager>()
     private val stubBuildInfoProvider = mockk<BuildInfoProvider>()
+    private val stubQnnModelsBuiltInDataSource = mockk<QnnModelsBuiltInDataSource>()
 
     private val localDataSource = DownloadableModelLocalDataSource(
         fileProviderDescriptor = stubFileProviderDescriptor,
         dao = stubDao,
         preferenceManager = stubPreferenceManager,
         buildInfoProvider = stubBuildInfoProvider,
+        qnnModelsBuiltInDataSource = stubQnnModelsBuiltInDataSource,
     )
 
     @Test

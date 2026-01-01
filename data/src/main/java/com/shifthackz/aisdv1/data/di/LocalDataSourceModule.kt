@@ -10,6 +10,7 @@ import com.shifthackz.aisdv1.data.local.FalAiEndpointLocalDataSource
 import com.shifthackz.aisdv1.data.local.GenerationResultLocalDataSource
 import com.shifthackz.aisdv1.data.local.HuggingFaceModelsLocalDataSource
 import com.shifthackz.aisdv1.data.local.LorasLocalDataSource
+import com.shifthackz.aisdv1.data.local.QnnModelsBuiltInDataSource
 import com.shifthackz.aisdv1.data.local.ServerConfigurationLocalDataSource
 import com.shifthackz.aisdv1.data.local.StabilityAiCreditsLocalDataSource
 import com.shifthackz.aisdv1.data.local.StableDiffusionHyperNetworksLocalDataSource
@@ -56,5 +57,6 @@ val localDataSourceModule = module {
     factoryOf(::SupportersLocalDataSource) bind SupportersDataSource.Local::class
     factoryOf(::FalAiEndpointLocalDataSource) bind FalAiEndpointDataSource.Local::class
     factoryOf(::FalAiEndpointBuiltInDataSource) bind FalAiEndpointDataSource.BuiltIn::class
+    factoryOf(::QnnModelsBuiltInDataSource)
     factory { MediaStoreGatewayFactory(androidContext(), get()).invoke() }
 }

@@ -14,6 +14,8 @@ internal class DownloadableModelsApiImpl(
 
     override fun fetchMediaPipeModels() = rawApi.fetchMediaPipeModels()
 
+    override fun fetchQnnModels() = rawApi.fetchQnnModels()
+
     override fun <T : Any> downloadModel(
         remoteUrl: String,
         localPath: String,

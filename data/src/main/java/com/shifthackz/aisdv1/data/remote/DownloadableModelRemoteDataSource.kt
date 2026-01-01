@@ -25,9 +25,13 @@ internal class DownloadableModelRemoteDataSource(
         api
             .fetchMediaPipeModels()
             .map { it.mapRawToCheckpointDomain(LocalAiModel.Type.MediaPipe) },
-        ::Pair,
+        api
+            .fetchQnnModels()
+            .onErrorReturn { emptyList() }
+            .map { it.mapRawToCheckpointDomain(LocalAiModel.Type.QNN) },
+        ::Triple,
     )
-        .map { (onnx, mediapipe) -> listOf(onnx, mediapipe).flatten() }
+        .map { (onnx, mediapipe, qnn) -> listOf(onnx, mediapipe, qnn).flatten() }
 
     override fun download(id: String, url: String): Observable<DownloadState> = Completable
         .fromAction {

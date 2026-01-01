@@ -1,0 +1,12 @@
+# This directory should contain QNN libraries:
+# - libQnnHtp.so
+# - libQnnHtpV68.so, libQnnHtpV68Skel.so, libQnnHtpV68Stub.so
+# - libQnnHtpV69.so, libQnnHtpV69Skel.so, libQnnHtpV69Stub.so
+# - libQnnHtpV73.so, libQnnHtpV73Skel.so, libQnnHtpV73Stub.so
+# - libQnnHtpV75.so, libQnnHtpV75Skel.so, libQnnHtpV75Stub.so
+# - libQnnHtpV79.so, libQnnHtpV79Skel.so, libQnnHtpV79Stub.so
+# - libQnnHtpV81.so, libQnnHtpV81Skel.so, libQnnHtpV81Stub.so
+# - libQnnSystem.so
+#
+# These files are NOT committed to git due to Qualcomm proprietary licensing.
+# Run scripts/prepare_qnn_libs.sh to download them from LocalDream APK.

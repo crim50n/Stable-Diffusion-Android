@@ -15,6 +15,13 @@ android {
         includeInBundle = false
     }
 
+    packaging {
+        jniLibs {
+            // Required to extract native executable for QNN backend
+            useLegacyPackaging = true
+        }
+    }
+
     defaultConfig {
         applicationId = "com.shifthackz.aisdv1.app"
         versionName = libs.versions.versionName.get()
@@ -76,6 +83,7 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:diffusion"))
     implementation(project(":feature:mediapipe"))
+    implementation(project(":feature:qnn"))
     implementation(project(":feature:work"))
     implementation(project(":data"))
     implementation(project(":demo"))

@@ -220,7 +220,8 @@ private fun ScreenContent(
                     ServerSource.SWARM_UI,
                     ServerSource.HORDE,
                     ServerSource.STABILITY_AI,
-                    ServerSource.HUGGING_FACE -> {
+                    ServerSource.HUGGING_FACE,
+                    ServerSource.LOCAL_QUALCOMM_QNN -> {
                         val scrollState = rememberScrollState()
                         Column(
                             modifier = Modifier
@@ -442,7 +443,7 @@ private fun InputImageState(
                     .padding(horizontal = 16.dp)
                     .fillMaxSize(),
             ) {
-                if (state.mode == ServerSource.AUTOMATIC1111) {
+                if (state.mode == ServerSource.AUTOMATIC1111 || state.mode == ServerSource.LOCAL_QUALCOMM_QNN) {
                     OutlinedButton(
                         modifier = Modifier.weight(1f),
                         onClick = { processIntent(ImageToImageIntent.InPaint) },

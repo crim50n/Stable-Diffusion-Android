@@ -26,4 +26,5 @@ data class TextToImagePayload(
     val aDetailer: ADetailerConfig = ADetailerConfig.DISABLED,
     val hires: HiresConfig = HiresConfig.DISABLED,
     val forgeModules: List<ForgeModule> = emptyList(),
+    val modelName: String = "",
 ) : Serializable

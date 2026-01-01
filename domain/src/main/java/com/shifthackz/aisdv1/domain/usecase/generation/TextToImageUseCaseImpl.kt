@@ -10,6 +10,7 @@ import com.shifthackz.aisdv1.domain.repository.HuggingFaceGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.MediaPipeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.OpenAiGenerationRepository
+import com.shifthackz.aisdv1.domain.repository.QnnGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StabilityAiGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.SwarmUiGenerationRepository
@@ -26,6 +27,7 @@ internal class TextToImageUseCaseImpl(
     private val swarmUiGenerationRepository: SwarmUiGenerationRepository,
     private val localDiffusionGenerationRepository: LocalDiffusionGenerationRepository,
     private val mediaPipeGenerationRepository: MediaPipeGenerationRepository,
+    private val qnnGenerationRepository: QnnGenerationRepository,
     private val preferenceManager: PreferenceManager,
 ) : TextToImageUseCase {
 
@@ -33,7 +35,7 @@ internal class TextToImageUseCaseImpl(
         payload: TextToImagePayload,
     ): Single<List<AiGenerationResult>> = Observable
         .range(1, payload.batchCount)
-        .flatMapSingle { generate(payload) }
+        .concatMapSingle { generate(payload) }
         .toList()
 
     private fun generate(payload: TextToImagePayload) = when (preferenceManager.source) {
@@ -46,5 +48,6 @@ internal class TextToImageUseCaseImpl(
         ServerSource.FAL_AI -> falAiGenerationRepository.generateFromText(payload)
         ServerSource.SWARM_UI -> swarmUiGenerationRepository.generateFromText(payload)
         ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> mediaPipeGenerationRepository.generateFromText(payload)
+        ServerSource.LOCAL_QUALCOMM_QNN -> qnnGenerationRepository.generateFromText(payload)
     }
 }

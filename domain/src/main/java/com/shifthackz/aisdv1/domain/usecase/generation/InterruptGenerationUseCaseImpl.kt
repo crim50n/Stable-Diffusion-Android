@@ -4,6 +4,7 @@ import com.shifthackz.aisdv1.domain.entity.ServerSource
 import com.shifthackz.aisdv1.domain.preference.PreferenceManager
 import com.shifthackz.aisdv1.domain.repository.HordeGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.LocalDiffusionGenerationRepository
+import com.shifthackz.aisdv1.domain.repository.QnnGenerationRepository
 import com.shifthackz.aisdv1.domain.repository.StableDiffusionGenerationRepository
 import io.reactivex.rxjava3.core.Completable
 
@@ -11,6 +12,7 @@ internal class InterruptGenerationUseCaseImpl(
     private val stableDiffusionGenerationRepository: StableDiffusionGenerationRepository,
     private val hordeGenerationRepository: HordeGenerationRepository,
     private val localDiffusionGenerationRepository: LocalDiffusionGenerationRepository,
+    private val qnnGenerationRepository: QnnGenerationRepository,
     private val preferenceManager: PreferenceManager,
 ) : InterruptGenerationUseCase {
 
@@ -18,6 +20,7 @@ internal class InterruptGenerationUseCaseImpl(
         ServerSource.AUTOMATIC1111 -> stableDiffusionGenerationRepository.interruptGeneration()
         ServerSource.HORDE -> hordeGenerationRepository.interruptGeneration()
         ServerSource.LOCAL_MICROSOFT_ONNX -> localDiffusionGenerationRepository.interruptGeneration()
+        ServerSource.LOCAL_QUALCOMM_QNN -> qnnGenerationRepository.interruptGeneration()
         else -> Completable.complete()
     }
 }

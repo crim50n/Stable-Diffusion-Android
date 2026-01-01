@@ -30,6 +30,7 @@ internal class ImageToImageDemoImpl(
         subSeedStrength = 0f,
         denoisingStrength = 0f,
         hidden = false,
+        modelName = input.modelName,
     )
 
     override fun getDemoBase64(payload: ImageToImagePayload) = execute(payload)

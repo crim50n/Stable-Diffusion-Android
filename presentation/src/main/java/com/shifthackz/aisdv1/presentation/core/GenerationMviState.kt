@@ -61,6 +61,12 @@ abstract class GenerationMviState : MviState {
     abstract val falAiPropertyValues: Map<String, Any?>
     abstract val falAiAdvancedVisible: Boolean
 
+    // QNN specific fields
+    abstract val qnnRunOnCpu: Boolean
+
+    // Model name for saving with generation result
+    abstract val modelName: String
+
     open val promptKeywords: List<String>
         get() = prompt.split(",")
             .map { it.trim() }
@@ -115,5 +121,7 @@ abstract class GenerationMviState : MviState {
         falAiSelectedEndpoint: FalAiEndpointUi? = this.falAiSelectedEndpoint,
         falAiPropertyValues: Map<String, Any?> = this.falAiPropertyValues,
         falAiAdvancedVisible: Boolean = this.falAiAdvancedVisible,
+        qnnRunOnCpu: Boolean = this.qnnRunOnCpu,
+        modelName: String = this.modelName,
     ): GenerationMviState = this
 }

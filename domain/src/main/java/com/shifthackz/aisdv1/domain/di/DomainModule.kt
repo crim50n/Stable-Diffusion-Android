@@ -44,8 +44,12 @@ import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalModelUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalModelUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalOnnxModelsUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.GetLocalQnnModelsUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
 import com.shifthackz.aisdv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.downloadable.ScanCustomModelsUseCase
+import com.shifthackz.aisdv1.domain.usecase.downloadable.ScanCustomModelsUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCase
 import com.shifthackz.aisdv1.domain.usecase.forgemodule.GetForgeModulesUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.gallery.DeleteAllGalleryUseCase
@@ -110,6 +114,8 @@ import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToLocalDiffusionUseC
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToLocalDiffusionUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToMediaPipeUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToMediaPipeUseCaseImpl
+import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToQnnUseCase
+import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToQnnUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToOpenAiUseCase
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToOpenAiUseCaseImpl
 import com.shifthackz.aisdv1.domain.usecase.settings.ConnectToFalAiUseCase
@@ -182,6 +188,8 @@ internal val useCasesModule = module {
     factoryOf(::ObserveLocalDiffusionProcessStatusUseCaseImpl) bind ObserveLocalDiffusionProcessStatusUseCase::class
     factoryOf(::GetLocalOnnxModelsUseCaseImpl) bind GetLocalOnnxModelsUseCase::class
     factoryOf(::GetLocalMediaPipeModelsUseCaseImpl) bind GetLocalMediaPipeModelsUseCase::class
+    factoryOf(::GetLocalQnnModelsUseCaseImpl) bind GetLocalQnnModelsUseCase::class
+    factoryOf(::ScanCustomModelsUseCaseImpl) bind ScanCustomModelsUseCase::class
     factoryOf(::DownloadModelUseCaseImpl) bind DownloadModelUseCase::class
     factoryOf(::ObserveLocalOnnxModelsUseCaseImpl) bind ObserveLocalOnnxModelsUseCase::class
     factoryOf(::DeleteModelUseCaseImpl) bind DeleteModelUseCase::class
@@ -191,6 +199,7 @@ internal val useCasesModule = module {
     factoryOf(::ConnectToHordeUseCaseImpl) bind ConnectToHordeUseCase::class
     factoryOf(::ConnectToLocalDiffusionUseCaseImpl) bind ConnectToLocalDiffusionUseCase::class
     factoryOf(::ConnectToMediaPipeUseCaseImpl) bind ConnectToMediaPipeUseCase::class
+    factoryOf(::ConnectToQnnUseCaseImpl) bind ConnectToQnnUseCase::class
     factoryOf(::ConnectToA1111UseCaseImpl) bind ConnectToA1111UseCase::class
     factoryOf(::ConnectToSwarmUiUseCaseImpl) bind ConnectToSwarmUiUseCase::class
     factoryOf(::ConnectToHuggingFaceUseCaseImpl) bind ConnectToHuggingFaceUseCase::class

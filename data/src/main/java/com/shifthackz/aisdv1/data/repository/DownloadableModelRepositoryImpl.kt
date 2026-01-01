@@ -34,5 +34,13 @@ internal class DownloadableModelRepositoryImpl(
             .onErrorResumeNext { localDataSource.getAllMediaPipe() }
     }
 
+    override fun getAllQnn(): Single<List<LocalAiModel>> {
+        return remoteDataSource
+            .fetch()
+            .flatMapCompletable(localDataSource::save)
+            .andThen(localDataSource.getAllQnn())
+            .onErrorResumeNext { localDataSource.getAllQnn() }
+    }
+
     override fun observeAllOnnx() = localDataSource.observeAllOnnx()
 }

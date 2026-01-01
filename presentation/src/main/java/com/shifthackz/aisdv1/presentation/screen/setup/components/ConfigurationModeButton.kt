@@ -81,7 +81,8 @@ fun ConfigurationModeButton(
                     ServerSource.HUGGING_FACE -> Icons.Default.Cloud
 
                     ServerSource.LOCAL_MICROSOFT_ONNX,
-                    ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> Icons.Default.Android
+                    ServerSource.LOCAL_GOOGLE_MEDIA_PIPE,
+                    ServerSource.LOCAL_QUALCOMM_QNN -> Icons.Default.Android
                 },
                 contentDescription = null,
             )
@@ -104,6 +105,7 @@ fun ConfigurationModeButton(
             ServerSource.FAL_AI -> LocalizationR.string.hint_fal_ai_sub_title
             ServerSource.SWARM_UI -> LocalizationR.string.hint_swarm_ui_sub_title
             ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> LocalizationR.string.hint_mediapipe_sub_title
+            ServerSource.LOCAL_QUALCOMM_QNN -> LocalizationR.string.hint_qnn_sub_title
         }
         descriptionId?.let { resId ->
             Text(

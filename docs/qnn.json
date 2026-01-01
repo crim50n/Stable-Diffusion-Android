@@ -1,0 +1,192 @@
+[
+  {
+    "id": "qnn-anything-v5-8gen2",
+    "name": "Anything V5 (8Gen2/3/4)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-anything-v5-8gen1",
+    "name": "Anything V5 (8Gen1)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-qteamix-8gen2",
+    "name": "QteaMix (8Gen2/3/4)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-qteamix-8gen1",
+    "name": "QteaMix (8Gen1)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-cuteyukimix-8gen2",
+    "name": "CuteYukiMix (8Gen2/3/4)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-cuteyukimix-8gen1",
+    "name": "CuteYukiMix (8Gen1)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-absolutereality-8gen2",
+    "name": "Absolute Reality (8Gen2/3/4)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-absolutereality-8gen1",
+    "name": "Absolute Reality (8Gen1)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-chilloutmix-8gen2",
+    "name": "ChilloutMix (8Gen2/3/4)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-chilloutmix-8gen1",
+    "name": "ChilloutMix (8Gen1)",
+    "size": "850 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "mnn-anything-v5",
+    "name": "Anything V5 (CPU/MNN)",
+    "size": "1.1 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/AnythingV5.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "cpu"
+    }
+  },
+  {
+    "id": "mnn-qteamix",
+    "name": "QteaMix (CPU/MNN)",
+    "size": "1.1 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/QteaMix.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "cpu"
+    }
+  },
+  {
+    "id": "mnn-cuteyukimix",
+    "name": "CuteYukiMix (CPU/MNN)",
+    "size": "1.1 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/CuteYukiMix.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "cpu"
+    }
+  },
+  {
+    "id": "mnn-absolutereality",
+    "name": "Absolute Reality (CPU/MNN)",
+    "size": "1.1 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/AbsoluteReality.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "cpu"
+    }
+  },
+  {
+    "id": "mnn-chilloutmix",
+    "name": "ChilloutMix (CPU/MNN)",
+    "size": "1.1 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/ChilloutMix.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "cpu"
+    }
+  }
+]

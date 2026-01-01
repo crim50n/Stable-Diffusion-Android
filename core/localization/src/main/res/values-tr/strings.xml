@@ -159,6 +159,8 @@
 
     <string name="hint_mediapipe_sub_title">Bu yapılandırma Google AI MediaPipe çalışma zamanını kullanır ve uzak bir sunucuya/buluta bağlanmaya gerek kalmadan telefonunuzda Stable Diffusion AI nesillerini çalıştırmanıza olanak tanır.</string>
 
+    <string name="hint_qnn_sub_title">Bu yapılandırma, cihaz üzerinde hızlı Stable Diffusion üretimi için NPU hızlandırması (HTP) ve MNN arka ucu ile Qualcomm QNN SDK kullanır. Snapdragon 8 Gen 1 veya daha yenisi gerektirir.</string>
+
     <string name="drawer_web_ui">Web arayüzü</string>
 
     <string name="home_tab_txt_to_img">Txt2Img</string>
@@ -303,6 +305,7 @@
     <string name="error_localhost_url">Sunucuya bağlanmak için localhost (127.0.0.1) URL adresi kullanamazsınız.</string>
     <string name="error_min_size">Asgari boyut %1$s</string>
     <string name="error_max_size">Azami boyut %1$s</string>
+    <string name="error_qnn_unsupported_resolution">QNN için desteklenmeyen çözünürlük. Geçerli bir çözünürlük seçmek için açılır listeyi kullanın.</string>
     <string name="error_download_fail">Yükleme başarısız</string>
     <string name="error_generic">İsteğiniz işlenirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin.</string>
 
@@ -326,6 +329,10 @@
     <string name="model_local_custom_title">Yerel özel modeli kullanmak için telefonunuzun depolama alanındaki yerel klasöre yerleştirin.</string>
     <string name="model_local_permission_header">İzinler</string>
     <string name="model_local_custom_sub_title">Son klasör yapısı şu şekilde olmalıdır::</string>
+    <string name="model_qnn_custom_sub_title">Gerekli QNN klasör yapısı:</string>
+    <string name="action_scan_models">Modelleri tara</string>
+    <string name="model_scan_empty">Belirtilen klasörde model bulunamadı.\n\nHer modelin gerekli dosyalarla kendi alt klasöründe olduğundan emin olun.</string>
+    <string name="model_scan_found">%1$d model bulundu:</string>
     <string name="model_local_path_header">Model yolu</string>
     <string name="model_local_path_title">Yerel model klasör yolu</string>
     <string name="model_local_path_button">Klasör seç</string>
