@@ -137,3 +137,22 @@ jacoco.exec
 # Fastlane
 fastlane/report.xml
 .kotlin
+
+# QNN proprietary libraries (must be downloaded separately)
+feature/qnn/src/main/jniLibs/
+feature/qnn/src/main/assets/qnnlibs/*.so
+feature/qnn/src/main/assets/cvtbase/*.mnn
+feature/qnn/src/main/assets/cvtbase/*.json
+!feature/qnn/src/main/jniLibs/arm64-v8a/.gitkeep
+!feature/qnn/src/main/assets/qnnlibs/.gitkeep
+!feature/qnn/src/main/assets/cvtbase/.gitkeep
+
+# QNN extracted files
+LocalDream.apk
+qnn-extracted/
+
+# Platform tools
+platform-tools/
+
+# Debug keystore
+debug.keystore
