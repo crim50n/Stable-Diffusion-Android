@@ -26,6 +26,7 @@ val mockGenerationResultEntity = GenerationResultEntity(
     mediaPath = "",
     inputMediaPath = "",
     mediaType = "IMAGE",
+    modelName = "",
 )
 
 val mockGenerationResultEntities = listOf(mockGenerationResultEntity)

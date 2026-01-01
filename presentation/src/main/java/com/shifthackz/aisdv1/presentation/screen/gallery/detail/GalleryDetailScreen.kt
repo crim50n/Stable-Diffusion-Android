@@ -507,6 +507,15 @@ private fun GalleryDetailsTable(
             color = colorOddText,
             onCopyTextClick = onCopyTextClick,
         )
+        if (state.modelName.asString().isNotBlank()) {
+            GalleryDetailRow(
+                modifier = Modifier.background(color = colorOddBg),
+                name = LocalizationR.string.gallery_info_field_model.asUiText(),
+                value = state.modelName,
+                color = colorOddText,
+                onCopyTextClick = onCopyTextClick,
+            )
+        }
         if (state.isFalAi) {
             // Fal AI specific fields
             GalleryDetailRow(

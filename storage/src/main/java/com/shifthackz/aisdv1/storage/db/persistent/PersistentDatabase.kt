@@ -59,6 +59,11 @@ import com.shifthackz.aisdv1.storage.db.persistent.entity.*
          * - [GenerationResultContract.MEDIA_TYPE]
          */
         AutoMigration(from = 7, to = 8),
+        /**
+         * Added 1 field to [GenerationResultEntity]:
+         * - [GenerationResultContract.MODEL_NAME]
+         */
+        AutoMigration(from = 8, to = 9),
     ],
 )
 @TypeConverters(
@@ -74,6 +79,6 @@ internal abstract class PersistentDatabase : RoomDatabase() {
 
     companion object {
         const val DB_NAME = "ai_sd_v1_storage_db"
-        const val DB_VERSION = 8
+        const val DB_VERSION = 9
     }
 }

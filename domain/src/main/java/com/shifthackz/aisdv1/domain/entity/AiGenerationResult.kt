@@ -24,6 +24,7 @@ data class AiGenerationResult(
     val mediaPath: String = "",
     val inputMediaPath: String = "",
     val mediaType: MediaType = MediaType.IMAGE,
+    val modelName: String = "",
 ) {
     enum class Type(val key: String) {
         TEXT_TO_IMAGE("txt2img"),

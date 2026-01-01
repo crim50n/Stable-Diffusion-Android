@@ -51,4 +51,6 @@ data class GenerationResultEntity(
     val inputMediaPath: String,
     @ColumnInfo(name = GenerationResultContract.MEDIA_TYPE, defaultValue = "IMAGE")
     val mediaType: String,
+    @ColumnInfo(name = GenerationResultContract.MODEL_NAME, defaultValue = "")
+    val modelName: String,
 )

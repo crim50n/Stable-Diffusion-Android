@@ -25,4 +25,5 @@ internal object GenerationResultContract {
     const val MEDIA_PATH = "media_path"
     const val INPUT_MEDIA_PATH = "input_media_path"
     const val MEDIA_TYPE = "media_type"
+    const val MODEL_NAME = "model_name"
 }

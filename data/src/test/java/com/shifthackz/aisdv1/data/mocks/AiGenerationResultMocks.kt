@@ -26,6 +26,7 @@ val mockAiGenerationResult = AiGenerationResult(
     mediaPath = "",
     inputMediaPath = "",
     mediaType = MediaType.IMAGE,
+    modelName = "MockModel",
 )
 
 val mockAiGenerationResults = listOf(mockAiGenerationResult)

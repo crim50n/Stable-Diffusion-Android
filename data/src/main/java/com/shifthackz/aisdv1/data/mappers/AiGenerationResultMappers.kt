@@ -31,6 +31,7 @@ fun AiGenerationResult.mapDomainToEntity(): GenerationResultEntity = with(this) 
         mediaPath = mediaPath,
         inputMediaPath = inputMediaPath,
         mediaType = mediaType.key,
+        modelName = modelName,
     )
 }
 //endregion
@@ -62,6 +63,7 @@ fun GenerationResultEntity.mapEntityToDomain(): AiGenerationResult = with(this) 
         mediaPath = mediaPath,
         inputMediaPath = inputMediaPath,
         mediaType = MediaType.parse(mediaType),
+        modelName = modelName,
     )
 }
 //endregion

@@ -71,6 +71,7 @@ sealed interface GalleryDetailState : MviState {
         val hidden: Boolean,
         val isFalAi: Boolean = false,
         val falAiEndpointId: String = "",
+        val modelName: UiText = "".asUiText(),
     ) : GalleryDetailState
 
     fun withTab(tab: Tab): GalleryDetailState = when (this) {
@@ -158,5 +159,6 @@ fun Triple<AiGenerationResult, Base64ToBitmapConverter.Output, Base64ToBitmapCon
             hidden = ai.hidden,
             isFalAi = isFalAi,
             falAiEndpointId = falAiEndpointId,
+            modelName = ai.modelName.asUiText(),
         )
     }

@@ -22,4 +22,5 @@ val mockAiGenerationResult = AiGenerationResult(
     subSeedStrength = 5598f,
     denoisingStrength = 1504f,
     hidden = false,
+    modelName = "MockModel",
 )
