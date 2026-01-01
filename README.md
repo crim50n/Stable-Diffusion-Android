@@ -29,7 +29,11 @@ Stable Diffusion AI (SDAI) is an easy-to-use app that:
 - Can use server environment powered by [Hugging Face Inference API](https://huggingface.co/docs/api-inference/quicktour).
 - Can use server environment powered by [OpenAI](https://platform.openai.com/docs/api-reference/images) (DALL-E-2, DALL-E-3).
 - Can use server environment powered by [Stability AI](https://platform.stability.ai/).
+- Can use server environment powered by [Fal.AI](https://fal.ai/).
 - Can use local environment powered by LocalDiffusion (Beta)
+  - Microsoft ONNX Runtime (txt2img)
+  - Google AI MediaPipe (txt2img)
+  - Qualcomm QNN with NPU acceleration (txt2img, img2img)
 - Supports original Txt2Img, Img2Img modes
   - **Positive** and **negative** prompt support
   - Support dynamic **size** in range from 64 to 2048 px (for width and height)
@@ -52,9 +56,14 @@ Stable Diffusion AI (SDAI) is an easy-to-use app that:
   - Textual inversion picker (for A1111)
   - Hypernetworks picker (for A1111)
   - SD Model picker (for A1111)
+  - Forge Modules support (for A1111/Forge)
+  - ADetailer (After Detailer) support for enhanced face/hand/body fixing (for A1111/Forge)
+  - Hires.Fix support for high-resolution upscaling (for A1111/Forge)
 - In-app Gallery, stored locally, contains all AI generated images
-  - Displays generated images grid
-  - Image detail view: Zoom, Pinch, Generation Info. 
+  - Displays generated images grid with pagination
+  - Image detail view: Advanced zoom/pan controls, Pinch-to-zoom, Generation Info
+  - Navigation between images with swipe gestures
+  - InPaint editor with zoom/pan support for precise mask drawing
   - Export all gallery to **.zip** file
   - Export single photo to **.zip** file
 - Settings
@@ -63,6 +72,7 @@ Stable Diffusion AI (SDAI) is an easy-to-use app that:
   - Server availability monitoring (http-ping method)
   - Enable/Disable auto-saving of generated images
   - Enable/Disable saving generated images to `Download/SDAI` android MediaStore folder
+  - Optimized file-based media storage (faster loading and reduced memory usage)
   - Clear gallery / app cache
 
 ## Setup instruction
@@ -71,7 +81,7 @@ Stable Diffusion AI (SDAI) is an easy-to-use app that:
 
 This requires you to have the AUTOMATIC1111 WebUI that is running in server mode.
 
-You can have it running either on your own hardware with modern GPU from Nvidia or AMD, or running it using Google Colab. 
+You can have it running either on your own hardware with modern GPU from Nvidia or AMD, or running it using Google Colab.
 
 1. Follow the setup instructions on [Stable-Diffusion-WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) repository.
 2. Add the arguments `--api --listen` to the command line arguments of WebUI launch script.
@@ -90,7 +100,7 @@ Please refer to the [SwarmUI documentation](https://github.com/mcmonkeyprojects/
 
 ### Option 3: Use AI Horde
 
-[AI Horde](https://stablehorde.net/) is a crowdsourced distributed cluster of Image generation workers and text generation workers. 
+[AI Horde](https://stablehorde.net/) is a crowdsourced distributed cluster of Image generation workers and text generation workers.
 
 AI Horde requires to use API KEY, this mobile app allows to use either default API KEY (which is "0000000000"), or type your own. You can sign up and get your own AI Horde API KEY [here](https://stablehorde.net/register).
 
@@ -102,7 +112,7 @@ Hugging Face Inference requires to use API KEY, which can be created in [Hugging
 
 ### Option 5: OpenAI
 
-OpenAI provides a service for text to image generation using [DALLE-2](https://openai.com/dall-e-2) or [DALLE-3](https://openai.com/dall-e-3) models. This service is paid. 
+OpenAI provides a service for text to image generation using [DALLE-2](https://openai.com/dall-e-2) or [DALLE-3](https://openai.com/dall-e-3) models. This service is paid.
 
 OpenAI requires to use API KEY, which can be created in [OpenAI API Key settings](https://platform.openai.com/api-keys).
 
@@ -112,19 +122,55 @@ OpenAI requires to use API KEY, which can be created in [OpenAI API Key settings
 
 StabilityAI requires to use API KEY, which can be created in [API Keys page](https://platform.stability.ai/account/keys).
 
-### Option 7: Local Diffusion Microsoft ONNX Runtime (Beta)
+### Option 7: Fal.AI
+
+[Fal.AI](https://fal.ai/) is a modern AI generation service with support for latest FLUX models family.
+
+**Built-in models:**
+- FLUX.1-dev (high quality, slower)
+- FLUX.1-schnell (fast generation)
+- FLUX-LoRA (custom LoRA support)
+- FLUX-2 (latest generation)
+- FLUX-Kontext (context-aware generation)
+
+**Features:**
+- Import OpenAPI.json from fal.ai to add new models
+- Dynamic form generation based on model parameters
+- Support for custom endpoints
+
+Fal.AI requires to use API KEY, which can be created in [Fal.AI dashboard](https://fal.ai/dashboard/keys).
+
+### Option 8: Local Diffusion Microsoft ONNX Runtime (Beta)
 
 Only **txt2img** mode is supported.
 
-Allows to use phone resources to generate images.
+Allows to use phone resources to generate images using Microsoft ONNX Runtime.
 
-### Option 8: Local Diffusion Google AI MediaPipe (Beta)
+### Option 9: Local Diffusion Google AI MediaPipe (Beta)
 
 Available only in **playstore** and **full** flavors.
 
 Only **txt2img** mode is supported.
 
-Allows to use phone resources to generate images.
+Allows to use phone resources to generate images using Google MediaPipe framework.
+
+### Option 10: Local Diffusion Qualcomm QNN (Beta)
+
+Available only in **playstore** and **full** flavors.
+
+Supports both **txt2img** and **img2img** modes.
+
+Uses Qualcomm QNN SDK with NPU acceleration (HTP) and MNN backend for fast on-device Stable Diffusion generation.
+
+**Requirements:**
+- Snapdragon 8 Gen 1 or newer chipset
+- Supports both NPU-accelerated models (8Gen1, 8Gen2/3/4) and CPU/MNN models
+
+**Features:**
+- Hardware NPU acceleration for faster generation
+- Multiple pre-built models available for download
+- Support for custom models (scan local folders)
+- Lower power consumption compared to CPU-only backends
 
 ## Supported languages
 
@@ -150,7 +196,7 @@ The difference between SDAI app flavors are described at the project wiki page [
 
 ## Donate
 
-This software is open source, provided with no warranty, and you are welcome to use it for free. 
+This software is open source, provided with no warranty, and you are welcome to use it for free.
 
 In case you find this software valuable, and you'd like to say thanks and show a little support, here is the button:
 
