@@ -5,8 +5,7 @@
     "size": "1.2 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/chilloutmix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/chilloutmix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/chilloutmix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/chilloutmix.zip"
     ]
   },
   {
@@ -15,8 +14,7 @@
     "size": "1.01 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/majicmix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/majicmix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/majicmix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/majicmix.zip"
     ]
   },
   {
@@ -25,8 +23,7 @@
     "size": "1.8 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/realvision.zip",
-      "https://share.moroz.cc/SDAI/ONNX/realvision.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/realvision.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-14022024/realvision.zip"
     ]
   },
   {
@@ -35,8 +32,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/analogMadness.zip",
-      "https://share.moroz.cc/SDAI/ONNX/analogMadness.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/analogMadness.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/analogMadness.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/miena%2Clyriel%2Ccetus%2Canalogmadness/analogMadness*"
@@ -48,8 +44,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/aniflatmix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/aniflatmix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/aniflatmix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/aniflatmix.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/landscape_modelsfp32noslicing/aniflatmix*"
@@ -61,8 +56,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/beautifulRealistic_v60.zip",
-      "https://share.moroz.cc/SDAI/ONNX/beautifulRealistic_v60.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/beautifulRealistic_v60.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/beautifulRealistic_v60.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/beautifulrealv6%2Cmajicmix%2Ccyberreal%2Cepicrealism%2C/beautifulRealistic_v60"
@@ -74,8 +68,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/cetusMix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/cetusMix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/cetusMix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/cetusMix.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/miena%2Clyriel%2Ccetus%2Canalogmadness/cetusMix*"
@@ -87,8 +80,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0.zip",
-      "https://share.moroz.cc/SDAI/ONNX/counterfit-v3.0.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Counterfeit-V3.0%2CA-ZovyaRPGArtistTools%2CBabes%2CDreamlikeDiffusion/counterfeit*"
@@ -100,8 +92,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0-babes.zip",
-      "https://share.moroz.cc/SDAI/ONNX/counterfit-v3.0-babes.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0-babes.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0-babes.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Counterfeit-V3.0%2CA-ZovyaRPGArtistTools%2CBabes%2CDreamlikeDiffusion/babes*"
@@ -113,8 +104,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0-zovyarpg.zip",
-      "https://share.moroz.cc/SDAI/ONNX/counterfit-v3.0-zovyarpg.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0-zovyarpg.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/counterfit-v3.0-zovyarpg.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Counterfeit-V3.0%2CA-ZovyaRPGArtistTools%2CBabes%2CDreamlikeDiffusion/zovyarpg*"
@@ -126,8 +116,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/cyberrealistic_v32.zip",
-      "https://share.moroz.cc/SDAI/ONNX/cyberrealistic_v32.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/cyberrealistic_v32.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/cyberrealistic_v32.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/beautifulrealv6%2Cmajicmix%2Ccyberreal%2Cepicrealism%2C/cyberrealistic_v32"
@@ -139,8 +128,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/darkjunglemix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/darkjunglemix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/darkjunglemix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/darkjunglemix.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Realisticfantasy%2CdarkjungleMix%2CRestlessExistence%2CJucy666/darkjunglemix*"
@@ -152,8 +140,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/deliberate.zip",
-      "https://share.moroz.cc/SDAI/ONNX/deliberate.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/deliberate.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/deliberate.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/deliberate%2Cdreamshaper/deliberate*"
@@ -165,8 +152,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/dreamshaper.zip",
-      "https://share.moroz.cc/SDAI/ONNX/dreamshaper.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/dreamshaper.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/dreamshaper.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/deliberate%2Cdreamshaper/dreamshaper*"
@@ -178,8 +164,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/dreamlikep_r_2.zip",
-      "https://share.moroz.cc/SDAI/ONNX/dreamlikep_r_2.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/dreamlikep_r_2.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/dreamlikep_r_2.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/dreamlikep_r_2"
@@ -191,8 +176,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/epicrealism_pureEvolutionV4.zip",
-      "https://share.moroz.cc/SDAI/ONNX/epicrealism_pureEvolutionV4.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/epicrealism_pureEvolutionV4.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/epicrealism_pureEvolutionV4.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/beautifulrealv6%2Cmajicmix%2Ccyberreal%2Cepicrealism%2C/epicrealism_pureEvolutionV4"
@@ -204,8 +188,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/fantasticmix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/fantasticmix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/fantasticmix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/fantasticmix.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/othermodels1/fantasticmix*"
@@ -217,8 +200,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/ICBINP.zip",
-      "https://share.moroz.cc/SDAI/ONNX/ICBINP.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/ICBINP.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/ICBINP.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/ICBINP"
@@ -230,8 +212,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/Jucy666.zip",
-      "https://share.moroz.cc/SDAI/ONNX/Jucy666.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/Jucy666.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/Jucy666.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Realisticfantasy%2CdarkjungleMix%2CRestlessExistence%2CJucy666/Jucy666*"
@@ -243,8 +224,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/landscape.zip",
-      "https://share.moroz.cc/SDAI/ONNX/landscape.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/landscape.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/landscape.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/landscape_modelsfp32noslicing/landscape*"
@@ -256,8 +236,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/lyriel.zip",
-      "https://share.moroz.cc/SDAI/ONNX/lyriel.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/lyriel.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/lyriel.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/miena%2Clyriel%2Ccetus%2Canalogmadness/lyriel*"
@@ -269,8 +248,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/majicmixRealistic_betterV2V25.zip",
-      "https://share.moroz.cc/SDAI/ONNX/majicmixRealistic_betterV2V25.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/majicmixRealistic_betterV2V25.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/majicmixRealistic_betterV2V25.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/beautifulrealv6%2Cmajicmix%2Ccyberreal%2Cepicrealism%2C/majicmixRealistic_betterV2V25"
@@ -282,8 +260,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/meinamix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/meinamix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/meinamix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/meinamix.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/miena%2Clyriel%2Ccetus%2Canalogmadness/meinamix*"
@@ -295,8 +272,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/meinaunreal.zip",
-      "https://share.moroz.cc/SDAI/ONNX/meinaunreal.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/meinaunreal.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/meinaunreal.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/othermodels1/meinaunreal*"
@@ -308,8 +284,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/mixreal.zip",
-      "https://share.moroz.cc/SDAI/ONNX/mixreal.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/mixreal.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/mixreal.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/landscape_modelsfp32noslicing/mixreal*"
@@ -321,8 +296,7 @@
     "size": "1.1 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/NED.zip",
-      "https://share.moroz.cc/SDAI/ONNX/NED.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/NED.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/NED.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Never-ending-dream(NED(vae))"
@@ -334,8 +308,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/realexistence.zip",
-      "https://share.moroz.cc/SDAI/ONNX/realexistence.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/realexistence.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/realexistence.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Realisticfantasy%2CdarkjungleMix%2CRestlessExistence%2CJucy666/realexistence*"
@@ -347,8 +320,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/realisticfantasy.zip",
-      "https://share.moroz.cc/SDAI/ONNX/realisticfantasy.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/realisticfantasy.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/realisticfantasy.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/Realisticfantasy%2CdarkjungleMix%2CRestlessExistence%2CJucy666/realisticfantasy*"
@@ -360,8 +332,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/sunshinemix.zip",
-      "https://share.moroz.cc/SDAI/ONNX/sunshinemix.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/sunshinemix.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/sunshinemix.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/othermodels1/sunshinemix*"
@@ -373,8 +344,7 @@
     "size": "1.0 Gb",
     "sources": [
       "https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/universestable.zip",
-      "https://share.moroz.cc/SDAI/ONNX/universestable.zip",
-      "https://gh-proxy.ygxz.in/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/universestable.zip"
+      "https://gh.llkk.cc/https://github.com/ShiftHackZ/Local-Diffusion-Models-SDAI-ONXX/releases/download/patch-25022024/universestable.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/Androidonnxfork/test/tree/main/fp16fullonnxsdquantized_in_ort/othermodels1/universestable*"

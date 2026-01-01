@@ -2,9 +2,9 @@
   {
     "id": "qnn-anything-v5-8gen2",
     "name": "Anything V5 (8Gen2/3/4)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_8gen2.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_qnn2.28_8gen2.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -15,9 +15,9 @@
   {
     "id": "qnn-anything-v5-8gen1",
     "name": "Anything V5 (8Gen1)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_8gen1.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_qnn2.28_8gen1.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -26,11 +26,24 @@
     }
   },
   {
+    "id": "qnn-anything-v5-min",
+    "name": "Anything V5 (Other Snapdragon)",
+    "size": "995 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AnythingV5_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
     "id": "qnn-qteamix-8gen2",
     "name": "QteaMix (8Gen2/3/4)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_8gen2.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_qnn2.28_8gen2.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -41,9 +54,9 @@
   {
     "id": "qnn-qteamix-8gen1",
     "name": "QteaMix (8Gen1)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_8gen1.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_qnn2.28_8gen1.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -52,11 +65,24 @@
     }
   },
   {
+    "id": "qnn-qteamix-min",
+    "name": "QteaMix (Other Snapdragon)",
+    "size": "995 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/QteaMix_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
     "id": "qnn-cuteyukimix-8gen2",
     "name": "CuteYukiMix (8Gen2/3/4)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_8gen2.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_qnn2.28_8gen2.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -67,9 +93,9 @@
   {
     "id": "qnn-cuteyukimix-8gen1",
     "name": "CuteYukiMix (8Gen1)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_8gen1.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_qnn2.28_8gen1.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -78,11 +104,24 @@
     }
   },
   {
+    "id": "qnn-cuteyukimix-min",
+    "name": "CuteYukiMix (Other Snapdragon)",
+    "size": "994 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CuteYukiMix_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
     "id": "qnn-absolutereality-8gen2",
     "name": "Absolute Reality (8Gen2/3/4)",
-    "size": "850 MB",
+    "size": "1.05 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_8gen2.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_qnn2.28_8gen2.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -93,9 +132,9 @@
   {
     "id": "qnn-absolutereality-8gen1",
     "name": "Absolute Reality (8Gen1)",
-    "size": "850 MB",
+    "size": "1.06 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_8gen1.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_qnn2.28_8gen1.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -104,11 +143,24 @@
     }
   },
   {
+    "id": "qnn-absolutereality-min",
+    "name": "Absolute Reality (Other Snapdragon)",
+    "size": "993 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/AbsoluteReality_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
     "id": "qnn-chilloutmix-8gen2",
     "name": "ChilloutMix (8Gen2/3/4)",
-    "size": "850 MB",
+    "size": "1.07 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_8gen2.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_qnn2.28_8gen2.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -119,9 +171,477 @@
   {
     "id": "qnn-chilloutmix-8gen1",
     "name": "ChilloutMix (8Gen1)",
-    "size": "850 MB",
+    "size": "1.07 GB",
     "sources": [
-      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_8gen1.zip"
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-chilloutmix-min",
+    "name": "ChilloutMix (Other Snapdragon)",
+    "size": "1.01 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/ChilloutMix_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-crosskemono-8gen2",
+    "name": "Cross Kemono 2.5 (8Gen2/3/4)",
+    "size": "1.07 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CrossKemono2.5_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-crosskemono-8gen1",
+    "name": "Cross Kemono 2.5 (8Gen1)",
+    "size": "1.07 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CrossKemono2.5_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-crosskemono-min",
+    "name": "Cross Kemono 2.5 (Other Snapdragon)",
+    "size": "1.01 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/CrossKemono2.5_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-darksushiv4-8gen2",
+    "name": "Dark Sushi V4 (8Gen2/3/4)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/DarkSushiV4_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-darksushiv4-8gen1",
+    "name": "Dark Sushi V4 (8Gen1)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/DarkSushiV4_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-darksushiv4-min",
+    "name": "Dark Sushi V4 (Other Snapdragon)",
+    "size": "1.16 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/DarkSushiV4_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-dreamshaperv8-8gen2",
+    "name": "DreamShaper V8 (8Gen2/3/4)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/DreamShaperV8_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-dreamshaperv8-8gen1",
+    "name": "DreamShaper V8 (8Gen1)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/DreamShaperV8_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-dreamshaperv8-min",
+    "name": "DreamShaper V8 (Other Snapdragon)",
+    "size": "1.15 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/DreamShaperV8_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-hyperspirev5-8gen2",
+    "name": "HyperSpire V5 (8Gen2/3/4)",
+    "size": "1.07 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/HyperSpireV5_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-hyperspirev5-8gen1",
+    "name": "HyperSpire V5 (8Gen1)",
+    "size": "1.07 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/HyperSpireV5_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-hyperspirev5-min",
+    "name": "HyperSpire V5 (Other Snapdragon)",
+    "size": "1.01 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/HyperSpireV5_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-majicmixrealisticv7-8gen2",
+    "name": "MajicMix Realistic V7 (8Gen2/3/4)",
+    "size": "1.06 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MajicmixRealisticV7_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-majicmixrealisticv7-8gen1",
+    "name": "MajicMix Realistic V7 (8Gen1)",
+    "size": "1.06 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MajicmixRealisticV7_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-majicmixrealisticv7-min",
+    "name": "MajicMix Realistic V7 (Other Snapdragon)",
+    "size": "993 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MajicmixRealisticV7_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-meinamixv12-8gen2",
+    "name": "MeinaMix V12 (8Gen2/3/4)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MeinaMixV12_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-meinamixv12-8gen1",
+    "name": "MeinaMix V12 (8Gen1)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MeinaMixV12_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-meinamixv12-min",
+    "name": "MeinaMix V12 (Other Snapdragon)",
+    "size": "1.16 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MeinaMixV12_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-mistoonanimev3-8gen2",
+    "name": "Mistoon Anime V3 (8Gen2/3/4)",
+    "size": "1.05 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MistoonAnimeV3_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-mistoonanimev3-8gen1",
+    "name": "Mistoon Anime V3 (8Gen1)",
+    "size": "1.06 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MistoonAnimeV3_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-mistoonanimev3-min",
+    "name": "Mistoon Anime V3 (Other Snapdragon)",
+    "size": "991 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/MistoonAnimeV3_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-naianimev2-8gen2",
+    "name": "NAI Anime V2 (8Gen2/3/4)",
+    "size": "1.05 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/NaiAnimeV2_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-naianimev2-8gen1",
+    "name": "NAI Anime V2 (8Gen1)",
+    "size": "1.06 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/NaiAnimeV2_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-naianimev2-min",
+    "name": "NAI Anime V2 (Other Snapdragon)",
+    "size": "990 MB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/NaiAnimeV2_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-neverendingdreamv122-8gen2",
+    "name": "NeverEnding Dream V1.22 (8Gen2/3/4)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/NeverEndingDreamV122_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-neverendingdreamv122-8gen1",
+    "name": "NeverEnding Dream V1.22 (8Gen1)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/NeverEndingDreamV122_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-neverendingdreamv122-min",
+    "name": "NeverEnding Dream V1.22 (Other Snapdragon)",
+    "size": "1.16 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/NeverEndingDreamV122_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-realisianv6-8gen2",
+    "name": "Realisian V6 (8Gen2/3/4)",
+    "size": "1.04 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/RealisianV6_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-realisianv6-8gen1",
+    "name": "Realisian V6 (8Gen1)",
+    "size": "1.04 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/RealisianV6_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-realisianv6-min",
+    "name": "Realisian V6 (Other Snapdragon)",
+    "size": "1.17 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/RealisianV6_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-realisticvisionhyper-8gen2",
+    "name": "Realistic Vision Hyper (8Gen2/3/4)",
+    "size": "1.07 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/RealisticVisionHyper_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-realisticvisionhyper-8gen1",
+    "name": "Realistic Vision Hyper (8Gen1)",
+    "size": "1.07 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/RealisticVisionHyper_qnn2.28_8gen1.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen1",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-realisticvisionhyper-min",
+    "name": "Realistic Vision Hyper (Other Snapdragon)",
+    "size": "1.01 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/RealisticVisionHyper_qnn2.28_min.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "min",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-sweetmixv22flat-8gen2",
+    "name": "SweetMix V2.2 Flat (8Gen2/3/4)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/SweetMixV22Flat_qnn2.28_8gen2.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-qnn",
+      "chipset": "8gen2",
+      "type": "npu"
+    }
+  },
+  {
+    "id": "qnn-sweetmixv22flat-8gen1",
+    "name": "SweetMix V2.2 Flat (8Gen1)",
+    "size": "1.03 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-qnn/resolve/main/SweetMixV22Flat_qnn2.28_8gen1.zip"
     ],
     "metadata": {
       "src": "https://huggingface.co/xororz/sd-qnn",
@@ -132,7 +652,7 @@
   {
     "id": "mnn-anything-v5",
     "name": "Anything V5 (CPU/MNN)",
-    "size": "1.1 GB",
+    "size": "1.19 GB",
     "sources": [
       "https://huggingface.co/xororz/sd-mnn/resolve/main/AnythingV5.zip"
     ],
@@ -144,7 +664,7 @@
   {
     "id": "mnn-qteamix",
     "name": "QteaMix (CPU/MNN)",
-    "size": "1.1 GB",
+    "size": "1.19 GB",
     "sources": [
       "https://huggingface.co/xororz/sd-mnn/resolve/main/QteaMix.zip"
     ],
@@ -156,7 +676,7 @@
   {
     "id": "mnn-cuteyukimix",
     "name": "CuteYukiMix (CPU/MNN)",
-    "size": "1.1 GB",
+    "size": "1.19 GB",
     "sources": [
       "https://huggingface.co/xororz/sd-mnn/resolve/main/CuteYukiMix.zip"
     ],
@@ -168,7 +688,7 @@
   {
     "id": "mnn-absolutereality",
     "name": "Absolute Reality (CPU/MNN)",
-    "size": "1.1 GB",
+    "size": "1.19 GB",
     "sources": [
       "https://huggingface.co/xororz/sd-mnn/resolve/main/AbsoluteReality.zip"
     ],
@@ -180,7 +700,7 @@
   {
     "id": "mnn-chilloutmix",
     "name": "ChilloutMix (CPU/MNN)",
-    "size": "1.1 GB",
+    "size": "1.2 GB",
     "sources": [
       "https://huggingface.co/xororz/sd-mnn/resolve/main/ChilloutMix.zip"
     ],
