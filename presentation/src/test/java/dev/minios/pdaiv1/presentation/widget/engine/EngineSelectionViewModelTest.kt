@@ -6,6 +6,7 @@ import dev.minios.pdaiv1.domain.entity.ServerSource
 import dev.minios.pdaiv1.domain.entity.Settings
 import dev.minios.pdaiv1.domain.preference.PreferenceManager
 import dev.minios.pdaiv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
+import dev.minios.pdaiv1.domain.usecase.downloadable.GetLocalMediaPipeModelsUseCase
 import dev.minios.pdaiv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
 import dev.minios.pdaiv1.domain.usecase.downloadable.ScanCustomModelsUseCase
 import dev.minios.pdaiv1.domain.usecase.huggingface.FetchAndGetHuggingFaceModelsUseCase
@@ -52,6 +53,7 @@ class EngineSelectionViewModelTest : CoreViewModelTest<EngineSelectionViewModel>
     private val stubFetchAndGetStabilityAiEnginesUseCase = mockk<FetchAndGetStabilityAiEnginesUseCase>()
     private val stubFetchAndGetHuggingFaceModelsUseCase = mockk<FetchAndGetHuggingFaceModelsUseCase>()
     private val stubFetchAndGetSwarmUiModelsUseCase = mockk<FetchAndGetSwarmUiModelsUseCase>()
+    private val stubGetLocalMediaPipeModelsUseCase = mockk<GetLocalMediaPipeModelsUseCase>()
     private val stubGetLocalQnnModelsUseCase = mockk<GetLocalQnnModelsUseCase>()
     private val stubScanCustomModelsUseCase = mockk<ScanCustomModelsUseCase>()
 
@@ -66,6 +68,7 @@ class EngineSelectionViewModelTest : CoreViewModelTest<EngineSelectionViewModel>
         fetchAndGetStabilityAiEnginesUseCase = stubFetchAndGetStabilityAiEnginesUseCase,
         getHuggingFaceModelsUseCase = stubFetchAndGetHuggingFaceModelsUseCase,
         fetchAndGetSwarmUiModelsUseCase = stubFetchAndGetSwarmUiModelsUseCase,
+        getLocalMediaPipeModelsUseCase = stubGetLocalMediaPipeModelsUseCase,
         getLocalQnnModelsUseCase = stubGetLocalQnnModelsUseCase,
         scanCustomModelsUseCase = stubScanCustomModelsUseCase,
     )
@@ -98,6 +101,10 @@ class EngineSelectionViewModelTest : CoreViewModelTest<EngineSelectionViewModel>
 
         every {
             stubGetLocalQnnModelsUseCase()
+        } returns Single.just(emptyList())
+
+        every {
+            stubGetLocalMediaPipeModelsUseCase()
         } returns Single.just(emptyList())
     }
 
