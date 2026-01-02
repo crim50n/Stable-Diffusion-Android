@@ -111,7 +111,7 @@ class DownloadableModelLocalDataSourceTest {
 
         val expected = buildList {
             addAll(mockLocalModelEntities.mapEntityToDomain())
-            add(LocalAiModel.CustomOnnx.copy(downloaded = true))
+            add(LocalAiModel.CustomOnnx.copy(downloaded = false))
         }
 
         localDataSource
@@ -143,7 +143,7 @@ class DownloadableModelLocalDataSourceTest {
             .getAllOnnx()
             .test()
             .assertNoErrors()
-            .assertValue(listOf(LocalAiModel.CustomOnnx.copy(downloaded = true)))
+            .assertValue(listOf(LocalAiModel.CustomOnnx.copy(downloaded = false)))
             .await()
             .assertComplete()
     }
@@ -331,7 +331,7 @@ class DownloadableModelLocalDataSourceTest {
 
         stubObserver
             .assertNoErrors()
-            .assertValueAt(0, listOf(LocalAiModel.CustomOnnx.copy(downloaded = true)))
+            .assertValueAt(0, listOf(LocalAiModel.CustomOnnx.copy(downloaded = false)))
 
         stubLocalModels.onNext(mockLocalModelEntities)
 
@@ -339,7 +339,7 @@ class DownloadableModelLocalDataSourceTest {
             .assertNoErrors()
             .assertValueAt(1, buildList {
                 addAll(mockLocalModelEntities.mapEntityToDomain())
-                add(LocalAiModel.CustomOnnx.copy(downloaded = true))
+                add(LocalAiModel.CustomOnnx.copy(downloaded = false))
             })
     }
 

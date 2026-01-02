@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import kotlin.io.path.createTempDirectory
 
 class ScanCustomModelsUseCaseImplTest {
 
@@ -18,7 +19,7 @@ class ScanCustomModelsUseCaseImplTest {
 
     @Before
     fun setUp() {
-        tempDir = createTempDir("scan_custom_models_test")
+        tempDir = createTempDirectory("scan_custom_models_test").toFile()
     }
 
     @After
