@@ -102,6 +102,59 @@ nav {
     box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
 }
 
+.btn-telegram {
+    background: #229ED9;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-telegram:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 158, 217, 0.4);
+    background: #1b7db3;
+}
+
+.qr-code-container {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: fadeIn 1s ease-out;
+}
+
+.qr-code-container img {
+    border-radius: 15px;
+    border: 4px solid white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.qr-code-container img:hover {
+    transform: scale(1.05);
+}
+
+.qr-code-container p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 0 !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Hero Section */
 .hero {
     padding: 160px 0 80px;
