@@ -114,11 +114,11 @@ class ServerSetupScreenTest : CoreComposeTest {
         setupButton
             .assertIsDisplayed()
             .assertIsNotEnabled()
-            .assertTextEquals("Setup")
+            .assertTextEquals("Start")
     }
 
     @Test
-    fun `given user is on CONFIGURE tab with LOCAL server source, clicks Switch, expected main button with Setup text becomes enabled then clicks Switch again, expected main button with Setup text becomes disabled`() {
+    fun `given user is on CONFIGURE tab with LOCAL server source, clicks Switch, expected main button with Start text becomes enabled then clicks Switch again, expected main button with Start text becomes disabled`() {
         composeTestRule.setContent {
             ServerSetupScreen(viewModel = stubViewModel)
         }
@@ -134,7 +134,7 @@ class ServerSetupScreenTest : CoreComposeTest {
         setupButton
             .assertIsDisplayed()
             .assertIsNotEnabled()
-            .assertTextEquals("Setup")
+            .assertTextEquals("Start")
         switch
             .assertIsDisplayed()
             .assertIsOff()
@@ -144,11 +144,14 @@ class ServerSetupScreenTest : CoreComposeTest {
         stubUiState.update {
             it.copy(
                 localOnnxCustomModel = true,
-                localOnnxModels = it.localOnnxModels.withNewState(
-                    it.localOnnxModels.find { m -> m.id == LocalAiModel.CustomOnnx.id }!!.copy(
+                scannedOnnxCustomModels = listOf(
+                    ServerSetupState.LocalModel(
+                        id = "custom_model",
+                        name = "Custom Model",
+                        size = "1GB",
+                        downloaded = true,
                         selected = true,
-                        downloaded = true
-                    ),
+                    )
                 ),
             )
         }
@@ -156,7 +159,7 @@ class ServerSetupScreenTest : CoreComposeTest {
         setupButton
             .assertIsDisplayed()
             .assertIsEnabled()
-            .assertTextEquals("Setup")
+            .assertTextEquals("Start")
         switch
             .assertIsDisplayed()
             .assertIsOn()
@@ -166,18 +169,14 @@ class ServerSetupScreenTest : CoreComposeTest {
         stubUiState.update {
             it.copy(
                 localOnnxCustomModel = false,
-                localOnnxModels = it.localOnnxModels.withNewState(
-                    it.localOnnxModels.find { m -> m.id == LocalAiModel.CustomOnnx.id }!!.copy(
-                        selected = false,
-                    ),
-                ),
+                scannedOnnxCustomModels = emptyList(),
             )
         }
 
         setupButton
             .assertIsDisplayed()
             .assertIsNotEnabled()
-            .assertTextEquals("Setup")
+            .assertTextEquals("Start")
         switch
             .assertIsDisplayed()
             .assertIsOff()
