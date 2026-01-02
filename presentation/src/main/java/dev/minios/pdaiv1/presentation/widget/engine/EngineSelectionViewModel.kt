@@ -2,7 +2,7 @@ package dev.minios.pdaiv1.presentation.widget.engine
 
 import dev.minios.pdaiv1.core.common.extensions.EmptyLambda
 import dev.minios.pdaiv1.core.common.log.errorLog
-import dev.minios.pdaiv1.core.common.model.Heptagonal
+import dev.minios.pdaiv1.core.common.model.Octagonal
 import dev.minios.pdaiv1.core.common.schedulers.DispatchersProvider
 import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.common.schedulers.subscribeOnMainThread
@@ -11,6 +11,7 @@ import dev.minios.pdaiv1.domain.entity.Configuration
 import dev.minios.pdaiv1.domain.entity.LocalAiModel
 import dev.minios.pdaiv1.domain.entity.ServerSource
 import dev.minios.pdaiv1.domain.preference.PreferenceManager
+import dev.minios.pdaiv1.domain.usecase.downloadable.GetLocalMediaPipeModelsUseCase
 import dev.minios.pdaiv1.domain.usecase.downloadable.GetLocalQnnModelsUseCase
 import dev.minios.pdaiv1.domain.usecase.downloadable.ObserveLocalOnnxModelsUseCase
 import dev.minios.pdaiv1.domain.usecase.downloadable.ScanCustomModelsUseCase
@@ -30,6 +31,7 @@ class EngineSelectionViewModel(
     observeLocalOnnxModelsUseCase: ObserveLocalOnnxModelsUseCase,
     fetchAndGetStabilityAiEnginesUseCase: FetchAndGetStabilityAiEnginesUseCase,
     getHuggingFaceModelsUseCase: FetchAndGetHuggingFaceModelsUseCase,
+    getLocalMediaPipeModelsUseCase: GetLocalMediaPipeModelsUseCase,
     getLocalQnnModelsUseCase: GetLocalQnnModelsUseCase,
     scanCustomModelsUseCase: ScanCustomModelsUseCase,
     private val preferenceManager: PreferenceManager,
@@ -65,9 +67,31 @@ class EngineSelectionViewModel(
             .onErrorReturn { emptyList() }
             .toFlowable()
 
+        // Combine downloaded ONNX models with scanned custom models
         val localAiModels = observeLocalOnnxModelsUseCase()
-            .map { models -> models.filter { it.downloaded || it.id == LocalAiModel.CustomOnnx.id } }
+            .flatMap { downloadedModels ->
+                scanCustomModelsUseCase(LocalAiModel.Type.ONNX)
+                    .map { scannedModels ->
+                        val downloaded = downloadedModels.filter { it.downloaded }
+                        downloaded.filter { it.id != LocalAiModel.CustomOnnx.id } + scannedModels
+                    }
+                    .onErrorReturn { downloadedModels.filter { it.downloaded } }
+                    .toFlowable()
+            }
             .onErrorReturn { emptyList() }
+
+        // Combine downloaded MediaPipe models with scanned custom models
+        val mediaPipeModels = getLocalMediaPipeModelsUseCase()
+            .flatMap { downloadedModels ->
+                scanCustomModelsUseCase(LocalAiModel.Type.MediaPipe)
+                    .map { scannedModels ->
+                        val downloaded = downloadedModels.filter { it.downloaded }
+                        downloaded.filter { it.id != LocalAiModel.CustomMediaPipe.id } + scannedModels
+                    }
+                    .onErrorReturn { downloadedModels.filter { it.downloaded } }
+            }
+            .onErrorReturn { emptyList() }
+            .toFlowable()
 
         // Combine downloaded QNN models with scanned custom models
         val qnnModels = getLocalQnnModelsUseCase()
@@ -75,7 +99,6 @@ class EngineSelectionViewModel(
                 scanCustomModelsUseCase(LocalAiModel.Type.QNN)
                     .map { scannedModels ->
                         val downloaded = downloadedModels.filter { it.downloaded }
-                        // Merge: downloaded models + scanned custom models (exclude old Custom entry)
                         downloaded.filter { it.id != LocalAiModel.CustomQnn.id } + scannedModels
                     }
                     .onErrorReturn { downloadedModels.filter { it.downloaded } }
@@ -90,14 +113,15 @@ class EngineSelectionViewModel(
             huggingFaceModels,
             stabilityAiEngines,
             localAiModels,
+            mediaPipeModels,
             qnnModels,
-            ::Heptagonal,
+            ::Octagonal,
         )
             .subscribeOnMainThread(schedulersProvider)
             .subscribeBy(
                 onError = ::errorLog,
                 onComplete = EmptyLambda,
-                onNext = { (config, sdModels, swarmModels, hfModels, stEngines, localModels, qnnModels) ->
+                onNext = { (config, sdModels, swarmModels, hfModels, stEngines, localModels, mpModels, qnnModels) ->
                     updateState { state ->
                         state.copy(
                             loading = false,
@@ -114,9 +138,16 @@ class EngineSelectionViewModel(
                             selectedStEngine = config.stabilityAiEngineId,
                             localAiModels = localModels,
                             selectedLocalAiModelId = localModels.firstOrNull { it.id == config.localOnnxModelId }?.id
+                                ?: localModels.firstOrNull()?.id
                                 ?: state.selectedLocalAiModelId,
+                            mediaPipeModels = mpModels,
+                            selectedMediaPipeModelId = mpModels.firstOrNull { it.id == config.localMediaPipeModelId }?.id
+                                ?: mpModels.firstOrNull()?.id
+                                ?: state.selectedMediaPipeModelId,
                             qnnModels = qnnModels,
-                            selectedQnnModelId = config.localQnnModelId,
+                            selectedQnnModelId = qnnModels.firstOrNull { it.id == config.localQnnModelId }?.id
+                                ?: qnnModels.firstOrNull()?.id
+                                ?: state.selectedQnnModelId,
                         )
                     }
                 },
@@ -152,7 +183,15 @@ class EngineSelectionViewModel(
 
             ServerSource.STABILITY_AI -> preferenceManager.stabilityAiEngineId = intent.value
 
-            ServerSource.LOCAL_MICROSOFT_ONNX -> preferenceManager.localOnnxModelId = intent.value
+            ServerSource.LOCAL_MICROSOFT_ONNX -> {
+                preferenceManager.localOnnxModelId = intent.value
+                updateState { it.copy(selectedLocalAiModelId = intent.value) }
+            }
+
+            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> {
+                preferenceManager.localMediaPipeModelId = intent.value
+                updateState { it.copy(selectedMediaPipeModelId = intent.value) }
+            }
 
             ServerSource.LOCAL_QUALCOMM_QNN -> {
                 preferenceManager.localQnnModelId = intent.value

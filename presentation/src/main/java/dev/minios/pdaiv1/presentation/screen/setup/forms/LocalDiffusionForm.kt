@@ -437,15 +437,65 @@ fun LocalDiffusionForm(
                     color = LocalContentColor.current,
                 )
             }
+
+            // Scan button
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 8.dp),
+                onClick = { processIntent(ServerSetupIntent.ScanCustomModels) },
+            ) {
+                Icon(
+                    modifier = Modifier.padding(end = 8.dp),
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = null,
+                )
+                Text(
+                    text = stringResource(id = LocalizationR.string.action_scan_models),
+                    color = LocalContentColor.current,
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
         }
-        state.localModels
-            .filter {
-                val customPredicate =
-                    it.id == LocalAiModel.CustomOnnx.id || it.id == LocalAiModel.CustomMediaPipe.id
-                if (state.localCustomModel) customPredicate else !customPredicate
+
+        // Show scanned custom models when custom model mode is enabled
+        if (state.localCustomModel && buildInfoProvider.type != BuildType.PLAY) {
+            val scannedModels = when (state.mode) {
+                ServerSource.LOCAL_MICROSOFT_ONNX -> state.scannedOnnxCustomModels
+                ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> state.scannedMediaPipeCustomModels
+                else -> emptyList()
             }
-            .forEach { localModel -> modelItemUi(localModel) }
+            if (scannedModels.isEmpty()) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    text = stringResource(id = LocalizationR.string.model_scan_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                )
+            } else {
+                Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    text = stringResource(id = LocalizationR.string.model_scan_found, scannedModels.size),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+                scannedModels.forEach { localModel ->
+                    modelItemUi(localModel)
+                }
+            }
+        }
+
+        // Show standard models when not in custom mode
+        if (!state.localCustomModel) {
+            state.localModels
+                .filter {
+                    it.id != LocalAiModel.CustomOnnx.id && it.id != LocalAiModel.CustomMediaPipe.id
+                }
+                .forEach { localModel -> modelItemUi(localModel) }
+        }
         Text(
             modifier = Modifier.padding(top = 16.dp),
             text = stringResource(id = LocalizationR.string.hint_local_diffusion_warning),

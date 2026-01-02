@@ -211,6 +211,7 @@ fun GenerationInputForm(
                 ServerSource.STABILITY_AI,
                 ServerSource.HUGGING_FACE,
                 ServerSource.LOCAL_MICROSOFT_ONNX,
+                ServerSource.LOCAL_GOOGLE_MEDIA_PIPE,
                 ServerSource.LOCAL_QUALCOMM_QNN -> EngineSelectionComponent(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -394,12 +395,21 @@ fun GenerationInputForm(
                 }
 
                 ServerSource.LOCAL_QUALCOMM_QNN -> {
-                    val availableResolutions = QnnResolution.forModelType(state.qnnRunOnCpu)
-                    val defaultResolution = QnnResolution.defaultForModelType(state.qnnRunOnCpu)
+                    // For img2img in CPU/GPU mode, limit to 512x512 for memory stability
+                    val availableResolutions = if (isImg2Img) {
+                        QnnResolution.forImg2Img(state.qnnRunOnCpu)
+                    } else {
+                        QnnResolution.forModelType(state.qnnRunOnCpu)
+                    }
+                    val defaultResolution = if (isImg2Img && state.qnnRunOnCpu) {
+                        QnnResolution.RES_512x512
+                    } else {
+                        QnnResolution.defaultForModelType(state.qnnRunOnCpu)
+                    }
                     val currentResolution = QnnResolution.fromDimensions(
                         state.width.toIntOrNull() ?: defaultResolution.width,
                         state.height.toIntOrNull() ?: defaultResolution.height
-                    ) ?: defaultResolution
+                    )?.takeIf { it in availableResolutions } ?: defaultResolution
                     DropdownTextField(
                         modifier = Modifier.fillMaxWidth(),
                         label = LocalizationR.string.hint_image_size.asUiText(),
@@ -802,6 +812,25 @@ fun GenerationInputForm(
                             onCheckedChange = {
                                 processIntent(GenerationMviIntent.Update.RestoreFaces(it))
                             },
+                        )
+                    }
+                }
+                // QNN Hires.Fix - only for NPU (not CPU/GPU) and only for txt2img
+                if (state.mode == ServerSource.LOCAL_QUALCOMM_QNN && !state.qnnRunOnCpu && !isImg2Img) {
+                    val currentResolution = QnnResolution.fromDimensions(
+                        state.width.toIntOrNull() ?: 512,
+                        state.height.toIntOrNull() ?: 512
+                    ) ?: QnnResolution.DEFAULT
+
+                    // Only show if Hires is available for this resolution (has targets with same aspect ratio)
+                    if (QnnResolution.isHiresAvailable(currentResolution, runOnCpu = false)) {
+                        QnnHiresSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            baseResolution = currentResolution,
+                            config = state.qnnHiresConfig,
+                            onConfigChange = { processIntent(GenerationMviIntent.Update.Qnn.Hires(it)) },
                         )
                     }
                 }

@@ -112,9 +112,10 @@ internal class DownloadableModelLocalDataSource(
     private fun isDownloaded(model: LocalAiModel) = Single.create { emitter ->
         try {
             when (model.id) {
+                // Custom models are never "downloaded" - they use scanned models from custom path
                 LocalAiModel.CustomOnnx.id,
                 LocalAiModel.CustomMediaPipe.id,
-                LocalAiModel.CustomQnn.id -> emitter.onSuccess(true)
+                LocalAiModel.CustomQnn.id -> emitter.onSuccess(false)
 
                 else -> {
 

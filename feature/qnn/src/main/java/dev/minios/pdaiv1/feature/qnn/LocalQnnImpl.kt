@@ -66,6 +66,20 @@ internal class LocalQnnImpl(
     private var currentServerModelId: String = ""
 
     override fun processTextToImage(payload: TextToImagePayload): Single<QnnGenerationResult> {
+        // Check if Hires.Fix is enabled and we're on NPU
+        val useHires = payload.qnnHires.enabled && !preferenceManager.localQnnRunOnCpu
+
+        return if (useHires) {
+            processTextToImageWithHires(payload)
+        } else {
+            processTextToImageDirect(payload)
+        }
+    }
+
+    /**
+     * Direct text-to-image generation without Hires.Fix.
+     */
+    private fun processTextToImageDirect(payload: TextToImagePayload): Single<QnnGenerationResult> {
         return ensureServerRunning(payload.width, payload.height)
             .andThen(Single.create<QnnGenerationResult> { emitter ->
                 try {
@@ -92,6 +106,100 @@ internal class LocalQnnImpl(
                 }
             })
             .subscribeOn(Schedulers.io())
+    }
+
+    /**
+     * Text-to-image with Hires.Fix (NPU only):
+     * 1. Generate at base resolution (from payload width/height)
+     * 2. Upscale to target resolution (with same aspect ratio)
+     * 3. Run img2img refinement pass at target resolution
+     *
+     * Supported upscale paths:
+     * - 512×512 → 768×768, 1024×1024
+     * - 512×768 → 768×1024
+     * - 768×512 → 1024×768
+     * - 768×768 → 1024×1024
+     */
+    private fun processTextToImageWithHires(payload: TextToImagePayload): Single<QnnGenerationResult> {
+        // Base resolution is from payload (user selected)
+        val baseWidth = payload.width
+        val baseHeight = payload.height
+        val targetWidth = payload.qnnHires.targetWidth
+        val targetHeight = payload.qnnHires.targetHeight
+        val hiresSteps = if (payload.qnnHires.steps > 0) payload.qnnHires.steps else payload.samplingSteps
+        val hiresDenoise = payload.qnnHires.denoisingStrength
+
+        Log.i(TAG, "Hires.Fix: ${baseWidth}x${baseHeight} → ${targetWidth}x${targetHeight}, " +
+                "steps=$hiresSteps, denoise=$hiresDenoise")
+
+        // Step 1: Generate at base resolution
+        return ensureServerRunning(baseWidth, baseHeight)
+            .andThen(Single.create<QnnGenerationResult> { emitter ->
+                try {
+                    val scheduler = mapSamplerToQnnScheduler(payload.sampler)
+                    val request = GenerateRequest(
+                        prompt = payload.prompt,
+                        negativePrompt = payload.negativePrompt,
+                        width = baseWidth,
+                        height = baseHeight,
+                        steps = payload.samplingSteps,
+                        cfg = payload.cfgScale,
+                        seed = parseSeed(payload.seed),
+                        scheduler = scheduler,
+                        useOpencl = false, // NPU mode
+                        showDiffusionProcess = preferenceManager.localQnnShowDiffusionProcess,
+                        showDiffusionStride = 1
+                    )
+
+                    Log.d(TAG, "Hires Step 1: Generating base image at ${baseWidth}x${baseHeight}")
+                    val baseResult = executeGenerateRequest(request)
+                    emitter.onSuccess(baseResult)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Hires Step 1 error", e)
+                    emitter.onError(e)
+                }
+            })
+            .subscribeOn(Schedulers.io())
+            // Step 2: Upscale and refine
+            .flatMap { baseResult ->
+                Log.d(TAG, "Hires Step 2: Upscaling ${baseWidth}x${baseHeight} → ${targetWidth}x${targetHeight}")
+
+                // Upscale bitmap to target resolution
+                val upscaledBitmap = Bitmap.createScaledBitmap(
+                    baseResult.bitmap, targetWidth, targetHeight, true
+                )
+                val upscaledBase64 = bitmapToBase64NoWrap(upscaledBitmap)
+
+                // Restart server at target resolution
+                ensureServerRunning(targetWidth, targetHeight)
+                    .andThen(Single.create<QnnGenerationResult> { emitter ->
+                        try {
+                            val scheduler = mapSamplerToQnnScheduler(payload.sampler)
+                            val request = GenerateRequest(
+                                prompt = payload.prompt,
+                                negativePrompt = payload.negativePrompt,
+                                width = targetWidth,
+                                height = targetHeight,
+                                steps = hiresSteps,
+                                cfg = payload.cfgScale,
+                                seed = baseResult.seed, // Use same seed for consistency
+                                scheduler = scheduler,
+                                useOpencl = false, // NPU mode
+                                showDiffusionProcess = preferenceManager.localQnnShowDiffusionProcess,
+                                showDiffusionStride = 1,
+                                image = upscaledBase64,
+                                denoiseStrength = hiresDenoise
+                            )
+
+                            Log.d(TAG, "Hires Step 3: Refining at ${targetWidth}x${targetHeight}")
+                            val refinedResult = executeGenerateRequest(request)
+                            emitter.onSuccess(refinedResult)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Hires Step 3 error", e)
+                            emitter.onError(e)
+                        }
+                    })
+            }
     }
 
     override fun processImageToImage(payload: ImageToImagePayload): Single<QnnGenerationResult> {

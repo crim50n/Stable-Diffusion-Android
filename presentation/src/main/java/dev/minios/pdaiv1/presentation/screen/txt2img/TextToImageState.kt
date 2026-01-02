@@ -9,6 +9,7 @@ import dev.minios.pdaiv1.domain.entity.ADetailerConfig
 import dev.minios.pdaiv1.domain.entity.ForgeModule
 import dev.minios.pdaiv1.domain.entity.HiresConfig
 import dev.minios.pdaiv1.domain.entity.ModelType
+import dev.minios.pdaiv1.domain.entity.QnnHiresConfig
 import dev.minios.pdaiv1.domain.entity.OpenAiModel
 import dev.minios.pdaiv1.domain.entity.OpenAiQuality
 import dev.minios.pdaiv1.domain.entity.OpenAiSize
@@ -66,6 +67,7 @@ data class TextToImageState(
     override val falAiPropertyValues: Map<String, Any?> = emptyMap(),
     override val falAiAdvancedVisible: Boolean = false,
     override val qnnRunOnCpu: Boolean = false,
+    override val qnnHiresConfig: QnnHiresConfig = QnnHiresConfig.DISABLED,
     override val modelName: String = "",
 ) : GenerationMviState() {
 
@@ -111,6 +113,7 @@ data class TextToImageState(
         falAiPropertyValues: Map<String, Any?>,
         falAiAdvancedVisible: Boolean,
         qnnRunOnCpu: Boolean,
+        qnnHiresConfig: QnnHiresConfig,
         modelName: String,
     ): GenerationMviState = copy(
         onBoardingDemo = onBoardingDemo,
@@ -154,6 +157,7 @@ data class TextToImageState(
         falAiPropertyValues = falAiPropertyValues,
         falAiAdvancedVisible = falAiAdvancedVisible,
         qnnRunOnCpu = qnnRunOnCpu,
+        qnnHiresConfig = qnnHiresConfig,
         modelName = modelName,
     )
 }
@@ -192,6 +196,7 @@ fun TextToImageState.mapToPayload(): TextToImagePayload = with(this) {
         stabilityAiStylePreset = selectedStylePreset.takeIf { mode == ServerSource.STABILITY_AI },
         aDetailer = aDetailerConfig.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: ADetailerConfig.DISABLED,
         hires = hiresConfig.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: HiresConfig.DISABLED,
+        qnnHires = qnnHiresConfig.takeIf { mode == ServerSource.LOCAL_QUALCOMM_QNN && !qnnRunOnCpu } ?: QnnHiresConfig.DISABLED,
         forgeModules = selectedForgeModules.takeIf { mode == ServerSource.AUTOMATIC1111 } ?: emptyList(),
         modelName = modelName,
     )

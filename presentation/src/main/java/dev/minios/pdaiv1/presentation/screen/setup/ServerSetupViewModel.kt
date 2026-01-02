@@ -158,8 +158,18 @@ class ServerSetupViewModel(
     }
 
     override fun processIntent(intent: ServerSetupIntent) = when (intent) {
-        is ServerSetupIntent.AllowLocalCustomModel -> updateState { state ->
-            state.withAllowCustomModel(intent.allow)
+        is ServerSetupIntent.AllowLocalCustomModel -> {
+            updateState { state ->
+                state.withAllowCustomModel(intent.allow)
+            }
+            if (intent.allow) {
+                when (currentState.mode) {
+                    ServerSource.LOCAL_MICROSOFT_ONNX -> scanOnnxCustomModels()
+                    ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> scanMediaPipeCustomModels()
+                    ServerSource.LOCAL_QUALCOMM_QNN -> scanQnnCustomModels()
+                    else -> Unit
+                }
+            } else Unit
         }
 
         ServerSetupIntent.DismissDialog -> setScreenModal(Modal.None)
@@ -281,14 +291,9 @@ class ServerSetupViewModel(
             scanQnnCustomModels()
         }
 
-        is ServerSetupIntent.AllowLocalQnnCustomModel -> {
-            updateState { state ->
-                state.withAllowQnnCustomModel(intent.allow)
-            }
-            if (intent.allow) scanQnnCustomModels() else Unit
-        }
-
         is ServerSetupIntent.ScanCustomModels -> when (currentState.mode) {
+            ServerSource.LOCAL_MICROSOFT_ONNX -> scanOnnxCustomModels()
+            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> scanMediaPipeCustomModels()
             ServerSource.LOCAL_QUALCOMM_QNN -> scanQnnCustomModels()
             else -> Unit
         }
@@ -354,9 +359,9 @@ class ServerSetupViewModel(
             updateState {
                 it.copy(localCustomOnnxPathValidationError = validation.mapToUi())
             }
-            validation.isValid
+            validation.isValid && currentState.scannedOnnxCustomModels.isNotEmpty()
         } else {
-            currentState.localOnnxModels.find { it.selected && it.downloaded } != null
+            currentState.localOnnxModels.any { it.downloaded }
         }
 
         ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> when {
@@ -366,11 +371,11 @@ class ServerSetupViewModel(
                 updateState {
                     it.copy(localCustomMediaPipePathValidationError = validation.mapToUi())
                 }
-                validation.isValid
+                validation.isValid && currentState.scannedMediaPipeCustomModels.isNotEmpty()
             }
 
             else -> {
-                currentState.localMediaPipeModels.find { it.selected && it.downloaded } != null
+                currentState.localMediaPipeModels.any { it.downloaded }
             }
         }
 
@@ -411,11 +416,9 @@ class ServerSetupViewModel(
             updateState {
                 it.copy(localCustomQnnPathValidationError = validation.mapToUi())
             }
-            // Valid if path is valid AND at least one scanned model is selected
-            val hasSelectedScannedModel = currentState.scannedQnnCustomModels.any { it.selected }
-            validation.isValid && hasSelectedScannedModel
+            validation.isValid && currentState.scannedQnnCustomModels.isNotEmpty()
         } else {
-            currentState.localQnnModels.find { it.selected && it.downloaded } != null
+            currentState.localQnnModels.any { it.downloaded }
         }
     }
 
@@ -501,23 +504,47 @@ class ServerSetupViewModel(
 
     private fun connectToLocalDiffusion(): Single<Result<Unit>> {
         preferenceManager.localOnnxCustomModelPath = currentState.localOnnxCustomModelPath
-        val localModelId = currentState.localOnnxModels.find { it.selected }?.id ?: ""
+        // Use saved model if available, otherwise first available model
+        val availableModels = if (currentState.localOnnxCustomModel) {
+            currentState.scannedOnnxCustomModels
+        } else {
+            currentState.localOnnxModels.filter { it.downloaded }
+        }
+        val savedModelId = preferenceManager.localOnnxModelId
+        val modelToUse = availableModels.find { it.id == savedModelId }
+            ?: availableModels.firstOrNull()
+        val localModelId = modelToUse?.id ?: ""
         return setupConnectionInterActor.connectToLocal(localModelId)
     }
 
     private fun connectToMediaPipe(): Single<Result<Unit>> {
         preferenceManager.localMediaPipeCustomModelPath = currentState.localMediaPipeCustomModelPath
-        val localModelId = currentState.localMediaPipeModels.find { it.selected }?.id ?: ""
+        // Use saved model if available, otherwise first available model
+        val availableModels = if (currentState.localMediaPipeCustomModel) {
+            currentState.scannedMediaPipeCustomModels
+        } else {
+            currentState.localMediaPipeModels.filter { it.downloaded }
+        }
+        val savedModelId = preferenceManager.localMediaPipeModelId
+        val modelToUse = availableModels.find { it.id == savedModelId }
+            ?: availableModels.firstOrNull()
+        val localModelId = modelToUse?.id ?: ""
         return setupConnectionInterActor.connectToMediaPipe(localModelId)
     }
 
     private fun connectToQnn(): Single<Result<Unit>> {
         preferenceManager.localQnnCustomModelPath = currentState.localQnnCustomModelPath
-        // Check both regular models and scanned custom models
-        val selectedModel = currentState.localQnnModels.find { it.selected }
-            ?: currentState.scannedQnnCustomModels.find { it.selected }
-        val localModelId = selectedModel?.id ?: ""
-        val runOnCpu = selectedModel?.runOnCpu ?: false
+        // Use saved model if available, otherwise first available model
+        val availableModels = if (currentState.localQnnCustomModel) {
+            currentState.scannedQnnCustomModels
+        } else {
+            currentState.localQnnModels.filter { it.downloaded }
+        }
+        val savedModelId = preferenceManager.localQnnModelId
+        val modelToUse = availableModels.find { it.id == savedModelId }
+            ?: availableModels.firstOrNull()
+        val localModelId = modelToUse?.id ?: ""
+        val runOnCpu = modelToUse?.runOnCpu ?: false
         return setupConnectionInterActor.connectToQnn(localModelId, runOnCpu)
     }
 
@@ -602,6 +629,48 @@ class ServerSetupViewModel(
         preferenceManager.forceSetupAfterUpdate = false
         processIntent(ServerSetupIntent.DismissDialog)
         mainRouter.navigateToHomeScreen()
+    }
+
+    private fun scanOnnxCustomModels() {
+        !scanCustomModelsUseCase(LocalAiModel.Type.ONNX)
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(::errorLog) { models ->
+                updateState { state ->
+                    state.copy(
+                        scannedOnnxCustomModels = models.map { model ->
+                            ServerSetupState.LocalModel(
+                                id = model.id,
+                                name = model.name,
+                                size = model.size,
+                                downloaded = true,
+                                selected = false,
+                                downloadState = DownloadState.Unknown,
+                            )
+                        }
+                    )
+                }
+            }
+    }
+
+    private fun scanMediaPipeCustomModels() {
+        !scanCustomModelsUseCase(LocalAiModel.Type.MediaPipe)
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(::errorLog) { models ->
+                updateState { state ->
+                    state.copy(
+                        scannedMediaPipeCustomModels = models.map { model ->
+                            ServerSetupState.LocalModel(
+                                id = model.id,
+                                name = model.name,
+                                size = model.size,
+                                downloaded = true,
+                                selected = false,
+                                downloadState = DownloadState.Unknown,
+                            )
+                        }
+                    )
+                }
+            }
     }
 
     private fun scanQnnCustomModels() {

@@ -48,8 +48,6 @@ sealed interface ServerSetupIntent : MviIntent {
 
     data class AllowLocalCustomModel(val allow: Boolean) : ServerSetupIntent
 
-    data class AllowLocalQnnCustomModel(val allow: Boolean) : ServerSetupIntent
-
     data object ScanCustomModels : ServerSetupIntent
 
     data object MainButtonClick : ServerSetupIntent

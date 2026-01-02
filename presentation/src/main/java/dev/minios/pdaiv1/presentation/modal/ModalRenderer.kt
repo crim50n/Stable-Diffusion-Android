@@ -260,10 +260,18 @@ fun ModalRenderer(
 
         is Modal.ConfirmSaveToGallery -> DecisionInteractiveDialog(
             title = LocalizationR.string.interaction_save_to_gallery_title.asUiText(),
-            text = LocalizationR.string.interaction_save_to_gallery_sub_title.asUiText(),
+            text = if (screenModal.saveAll) {
+                LocalizationR.string.interaction_save_to_gallery_sub_title.asUiText()
+            } else {
+                LocalizationR.string.interaction_save_to_gallery_sub_title_selection.asUiText()
+            },
             confirmActionResId = LocalizationR.string.action_save,
             onConfirmAction = {
-                processIntent(GalleryIntent.SaveToGallery.All.Confirm)
+                if (screenModal.saveAll) {
+                    processIntent(GalleryIntent.SaveToGallery.All.Confirm)
+                } else {
+                    processIntent(GalleryIntent.SaveToGallery.Selection.Confirm)
+                }
             },
             onDismissRequest = dismiss,
         )

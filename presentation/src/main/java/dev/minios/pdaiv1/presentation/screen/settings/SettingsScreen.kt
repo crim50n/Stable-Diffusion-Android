@@ -592,13 +592,6 @@ private fun ContentSettingsState(
             SettingsItem(
                 modifier = itemModifier,
                 loading = state.loading,
-                startIcon = Icons.Default.MonetizationOn,
-                text = LocalizationR.string.settings_item_donate.asUiText(),
-                onClick = { processIntent(SettingsIntent.Action.Donate) },
-            )
-            SettingsItem(
-                modifier = itemModifier,
-                loading = state.loading,
                 startIcon = Icons.Default.AllInclusive,
                 text = LocalizationR.string.settings_item_on_boarding.asUiText(),
                 onClick = { processIntent(SettingsIntent.Action.OnBoarding) },

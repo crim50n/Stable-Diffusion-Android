@@ -175,6 +175,12 @@ class GalleryViewModel(
             )
 
             GalleryIntent.SaveToGallery.All.Confirm -> saveAllToGallery()
+
+            GalleryIntent.SaveToGallery.Selection.Request -> setActiveModal(
+                Modal.ConfirmSaveToGallery(saveAll = false)
+            )
+
+            GalleryIntent.SaveToGallery.Selection.Confirm -> saveSelectionToGallery()
         }
     }
 
@@ -246,6 +252,50 @@ class GalleryViewModel(
                 onComplete = {
                     setActiveModal(Modal.None)
                     emitEffect(GalleryEffect.AllImagesSavedToGallery)
+                }
+            )
+    }
+
+    private fun saveSelectionToGallery() {
+        val selectedIds = currentState.selection
+        !getAllGalleryUseCase()
+            .doOnSubscribe { setActiveModal(Modal.ExportInProgress) }
+            .flatMapObservable { io.reactivex.rxjava3.core.Observable.fromIterable(it) }
+            .filter { item -> selectedIds.contains(item.id) }
+            .flatMapSingle { item ->
+                base64ToBitmapConverter(Base64ToBitmapConverter.Input(item.image))
+                    .map { output -> item to output }
+            }
+            .flatMapCompletable { (item, output) ->
+                Completable.fromAction {
+                    val stream = java.io.ByteArrayOutputStream()
+                    output.bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream)
+                    mediaStoreGateway.exportToFile(
+                        fileName = "pdai_${item.id}_${System.currentTimeMillis()}",
+                        content = stream.toByteArray(),
+                    )
+                }
+            }
+            .subscribeOn(schedulersProvider.io)
+            .subscribeOnMainThread(schedulersProvider)
+            .subscribeBy(
+                onError = { t ->
+                    setActiveModal(
+                        Modal.Error(
+                            (t.localizedMessage ?: "Something went wrong").asUiText()
+                        )
+                    )
+                    errorLog(t)
+                },
+                onComplete = {
+                    setActiveModal(Modal.None)
+                    updateState {
+                        it.copy(
+                            selectionMode = false,
+                            selection = emptyList()
+                        )
+                    }
+                    emitEffect(GalleryEffect.SelectionImagesSavedToGallery)
                 }
             )
     }

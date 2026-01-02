@@ -74,6 +74,20 @@ internal class PushNotificationManagerImpl(
         return createNotification(title.asUiText(), body?.asUiText(), block)
     }
 
+    override fun createProgressNotification(
+        title: String,
+        body: String?,
+        block: NotificationCompat.Builder.() -> Unit
+    ): Notification = with(
+        NotificationCompat.Builder(context, PDAI_PROGRESS_CHANNEL_ID)
+    ) {
+        setSmallIcon(R.drawable.ic_notification)
+        setContentTitle(title)
+        body?.let { setContentText(it) }
+        apply(block)
+        build()
+    }
+
     override fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (manager.getNotificationChannel(PDAI_NOTIFICATION_CHANNEL_ID) == null) {
@@ -86,6 +100,22 @@ internal class PushNotificationManagerImpl(
                         NotificationManager.IMPORTANCE_HIGH,
                     ).also { channel ->
                         channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                    }
+                )
+            }
+            // Create a separate channel for progress notifications with low priority
+            if (manager.getNotificationChannel(PDAI_PROGRESS_CHANNEL_ID) == null) {
+                debugLog("Creating progress notification channel")
+
+                manager.createNotificationChannel(
+                    NotificationChannel(
+                        PDAI_PROGRESS_CHANNEL_ID,
+                        "PDAI Progress",
+                        NotificationManager.IMPORTANCE_LOW,
+                    ).also { channel ->
+                        channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                        channel.setSound(null, null)
+                        channel.enableVibration(false)
                     }
                 )
             }
@@ -102,5 +132,6 @@ internal class PushNotificationManagerImpl(
 
     companion object {
         private const val PDAI_NOTIFICATION_CHANNEL_ID = "PDAI_NOTIFICATION_CHANNEL"
+        const val PDAI_PROGRESS_CHANNEL_ID = "PDAI_PROGRESS_CHANNEL"
     }
 }

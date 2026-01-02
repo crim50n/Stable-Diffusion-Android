@@ -25,6 +25,7 @@ data class TextToImagePayload(
     val stabilityAiStylePreset: StabilityAiStylePreset?,
     val aDetailer: ADetailerConfig = ADetailerConfig.DISABLED,
     val hires: HiresConfig = HiresConfig.DISABLED,
+    val qnnHires: QnnHiresConfig = QnnHiresConfig.DISABLED,
     val forgeModules: List<ForgeModule> = emptyList(),
     val modelName: String = "",
 ) : Serializable

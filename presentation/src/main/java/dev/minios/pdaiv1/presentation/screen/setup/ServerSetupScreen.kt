@@ -155,12 +155,22 @@ fun ServerSetupScreenContent(
                     onClick = { processIntent(ServerSetupIntent.MainButtonClick) },
                     enabled = when (state.step) {
                         ServerSetupState.Step.CONFIGURE -> when (state.mode) {
-                            ServerSource.LOCAL_MICROSOFT_ONNX -> state.localOnnxModels.any {
-                                it.downloaded && it.selected
+                            ServerSource.LOCAL_MICROSOFT_ONNX -> if (state.localOnnxCustomModel) {
+                                state.scannedOnnxCustomModels.isNotEmpty()
+                            } else {
+                                state.localOnnxModels.any { it.downloaded }
                             }
 
-                            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> state.localMediaPipeModels.any {
-                                it.downloaded && it.selected
+                            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> if (state.localMediaPipeCustomModel) {
+                                state.scannedMediaPipeCustomModels.isNotEmpty()
+                            } else {
+                                state.localMediaPipeModels.any { it.downloaded }
+                            }
+
+                            ServerSource.LOCAL_QUALCOMM_QNN -> if (state.localQnnCustomModel) {
+                                state.scannedQnnCustomModels.isNotEmpty()
+                            } else {
+                                state.localQnnModels.any { it.downloaded }
                             }
 
                             else -> true
@@ -177,7 +187,7 @@ fun ServerSetupScreenContent(
                                     ServerSource.LOCAL_MICROSOFT_ONNX,
                                     ServerSource.LOCAL_GOOGLE_MEDIA_PIPE,
                                     ServerSource.LOCAL_QUALCOMM_QNN -> LocalizationR.string
-                                        .action_setup
+                                        .action_start
                                     else -> LocalizationR.string.action_connect
                                 }
                             },

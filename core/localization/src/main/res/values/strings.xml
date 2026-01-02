@@ -37,8 +37,8 @@
     <string name="splash_status_launching">Launching application!</string>
 
     <string name="local_no_img2img_support_title">Not available</string>
-    <string name="local_no_img2img_support_sub_title">Image to Image mode is not available in case you are using your local phone resources to generate images.</string>
-    <string name="local_no_img2img_support_sub_title_2">You can switch to server based generation in Configuration settings to use Image to Image mode.</string>
+    <string name="local_no_img2img_support_sub_title">Image to Image mode is not supported by ONNX and MediaPipe backends.</string>
+    <string name="local_no_img2img_support_sub_title_2">You can switch to QNN, server based generation, or another provider in Configuration settings to use Image to Image mode.</string>
 
     <string name="dalle_no_img2img_support_sub_title">Image to Image mode is not yet supported by DALL·E.</string>
     <string name="dalle_no_img2img_support_sub_title_2">You can switch to any another server based generation in Configuration settings to use Image to Image mode.</string>
@@ -49,6 +49,7 @@
     <string name="action_select">Select</string>
     <string name="action_connect">Connect</string>
     <string name="action_setup">Setup</string>
+    <string name="action_start">Start</string>
     <string name="action_share_prompt">Share</string>
     <string name="action_send_to_txt2img">Use in txt2img</string>
     <string name="action_send_to_img2img">Use in img2img</string>
@@ -111,6 +112,12 @@
     <string name="hint_hires_scale">Scale: %1$s</string>
     <string name="hint_hires_steps">Steps: %1$s (0 = same)</string>
     <string name="hint_hires_denoising">Denoising: %1$s</string>
+    <string name="hint_qnn_hires">Hires. Fix (NPU)</string>
+    <string name="hint_qnn_hires_enabled">Enable Hires. Fix</string>
+    <string name="hint_qnn_hires_target">Target resolution</string>
+    <string name="hint_qnn_hires_steps">Steps: %1$s (0 = same)</string>
+    <string name="hint_qnn_hires_denoising">Denoising: %1$s</string>
+    <string name="hint_qnn_hires_description">Upscale and refine with img2img pass</string>
     <string name="hint_style_preset">Style preset</string>
     <string name="hint_clip_guidance_preset">Clip guidance preset</string>
     <string name="hint_restore_faces">Restore faces</string>
@@ -242,6 +249,7 @@
     <string name="gallery_menu_selection_mode">Selection mode</string>
     <string name="gallery_save_success">Image saved to gallery</string>
     <string name="gallery_save_all_success">All images saved to gallery</string>
+    <string name="gallery_save_selection_success">Selected images saved to gallery</string>
 
     <string name="settings_header_server">AI settings</string>
     <string name="settings_header_app">App settings</string>
@@ -297,6 +305,7 @@
     <string name="interaction_export_sub_title_selection">This will export selected gallery images as *.zip archive. Would you like to proceed?</string>
     <string name="interaction_save_to_gallery_title">Save to Device Gallery</string>
     <string name="interaction_save_to_gallery_sub_title">This will save all images to your device gallery. This process may take some time if you have many images. Would you like to proceed?</string>
+    <string name="interaction_save_to_gallery_sub_title_selection">This will save selected images to your device gallery. Would you like to proceed?</string>
     <string name="interaction_cache_sub_title">This will reset app settings and delete all the generated images. Do you want to proceed?</string>
 
     <string name="interaction_warning_title">Warning</string>

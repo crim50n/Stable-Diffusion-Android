@@ -31,8 +31,8 @@
     <string name="splash_status_launching">Uygulama Başlatılıyor!</string>
 
     <string name="local_no_img2img_support_title">Müsait değil</string>
-    <string name="local_no_img2img_support_sub_title">Görüntü oluşturmak için yerel telefon kaynaklarınızı kullanıyorsanız, Görüntüden Görüntüye modu kullanılamaz.</string>
-    <string name="local_no_img2img_support_sub_title_2">Image to Image modunu kullanmak için Yapılandırma ayarlarında sunucu tabanlı oluşturmaya geçebilirsiniz.</string>
+    <string name="local_no_img2img_support_sub_title">Görüntüden Görüntüye modu ONNX ve MediaPipe arka uçları tarafından desteklenmiyor.</string>
+    <string name="local_no_img2img_support_sub_title_2">QNN, sunucu tabanlı oluşturma veya başka bir sağlayıcıya geçiş yaparak bu modu kullanabilirsiniz.</string>
 
     <string name="dalle_no_img2img_support_sub_title">Görüntüden Görüntüye modu henüz DALL·E tarafından desteklenmiyor.</string>
     <string name="dalle_no_img2img_support_sub_title_2">Görüntüden Görüntüye modunu kullanmak için Yapılandırma ayarlarında herhangi bir başka sunucu tabanlı nesle geçebilirsiniz.</string>
@@ -43,6 +43,7 @@
     <string name="action_select">Seç</string>
     <string name="action_connect">Bağlan</string>
     <string name="action_setup">Kurmak</string>
+    <string name="action_start">Başlat</string>
     <string name="action_share_prompt">İstemi paylaş</string>
     <string name="action_send_to_txt2img">txt2img\'de kullanın</string>
     <string name="action_send_to_img2img">img2img\'de kullanın</string>
@@ -161,6 +162,13 @@
 
     <string name="hint_qnn_sub_title">Bu yapılandırma, cihaz üzerinde hızlı Stable Diffusion üretimi için NPU hızlandırması (HTP) ve MNN arka ucu ile Qualcomm QNN SDK kullanır. Snapdragon 8 Gen 1 veya daha yenisi gerektirir.</string>
 
+    <string name="hint_qnn_hires">Hires. Fix (NPU)</string>
+    <string name="hint_qnn_hires_enabled">Hires. Fix\'i etkinleştir</string>
+    <string name="hint_qnn_hires_target">Hedef çözünürlük</string>
+    <string name="hint_qnn_hires_steps">Adımlar: %1$s (0 = aynı)</string>
+    <string name="hint_qnn_hires_denoising">Gürültü Azaltma: %1$s</string>
+    <string name="hint_qnn_hires_description">Büyüt ve img2img ile iyileştir</string>
+
     <string name="drawer_web_ui">Web arayüzü</string>
 
     <string name="home_tab_txt_to_img">Txt2Img</string>
@@ -207,7 +215,11 @@
     <string name="gallery_menu_selected">Seçili resimler: %1$s</string>
     <string name="gallery_menu_delete_all">Tümünü sil</string>
     <string name="gallery_menu_export_all">Tümünü dışa aktar</string>
+    <string name="gallery_menu_save_all">Tümünü cihaza kaydet</string>
     <string name="gallery_menu_selection_mode">Seçim modu</string>
+    <string name="gallery_save_success">Resim galeriye kaydedildi</string>
+    <string name="gallery_save_all_success">Tüm resimler galeriye kaydedildi</string>
+    <string name="gallery_save_selection_success">Seçili resimler galeriye kaydedildi</string>
 
     <string name="settings_header_server">AI ayarları</string>
     <string name="settings_header_app">Uygulama ayarları</string>
@@ -261,6 +273,9 @@
     <string name="interaction_export_title">Galeriyi Dışa Aktar</string>
     <string name="interaction_export_sub_title">Bu işlem bütün galerideki resimleri tek bir .zip arşivi dosyası olarak dışa aktaracaktır. Galerinizin boyutuna göre bu işlem uzun bir zaman alabailir. Devam etmek istiyor musunuz?</string>
     <string name="interaction_export_sub_title_selection">Bu, seçili galeri resimlerini *.zip arşivi olarak dışa aktaracaktır. Devam etmek istiyor musunuz?</string>
+    <string name="interaction_save_to_gallery_title">Cihaz Galerisine Kaydet</string>
+    <string name="interaction_save_to_gallery_sub_title">Bu, tüm resimleri cihazınızın galerisine kaydedecektir. Çok sayıda resminiz varsa bu işlem biraz zaman alabilir. Devam etmek istiyor musunuz?</string>
+    <string name="interaction_save_to_gallery_sub_title_selection">Bu, seçili resimleri cihazınızın galerisine kaydedecektir. Devam etmek istiyor musunuz?</string>
     <string name="interaction_cache_sub_title">Bu işlem bütün uygulama ayarlarını ve oluşturulan resimleri silecektir. Devam etmek istiyor musunuz?</string>
 
     <string name="interaction_warning_title">Uyarı</string>

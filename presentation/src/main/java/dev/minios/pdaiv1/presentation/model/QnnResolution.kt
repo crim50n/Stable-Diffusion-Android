@@ -81,9 +81,70 @@ enum class QnnResolution(
         }
 
         /**
+         * Get resolutions for img2img mode.
+         * CPU/GPU mode is limited to max 512x512 for stability.
+         * NPU mode supports all NPU resolutions.
+         * @param runOnCpu If true, returns CPU resolutions up to 512x512; otherwise returns NPU resolutions.
+         */
+        fun forImg2Img(runOnCpu: Boolean): List<QnnResolution> {
+            return if (runOnCpu) {
+                // CPU/GPU img2img is limited to max 512x512 for memory stability
+                cpuResolutions().filter { it.width <= 512 && it.height <= 512 }
+            } else {
+                npuResolutions()
+            }
+        }
+
+        /**
          * Get all available resolutions as dimension strings.
          */
         val availableDimensionStrings: List<String>
             get() = entries.map { "${it.width}x${it.height}" }
+
+        /**
+         * Check if Hires.Fix is available for a given base resolution.
+         * Hires is available only for NPU and only for square resolutions.
+         */
+        fun isHiresAvailable(baseResolution: QnnResolution, runOnCpu: Boolean): Boolean {
+            if (runOnCpu) return false
+            return hiresTargetResolutions(baseResolution).isNotEmpty()
+        }
+
+        /**
+         * Get base resolutions that support Hires.Fix (square resolutions with larger targets).
+         * Only for NPU.
+         */
+        fun hiresBaseResolutions(): List<QnnResolution> {
+            return npuResolutions().filter { base ->
+                hiresTargetResolutions(base).isNotEmpty()
+            }
+        }
+
+        /**
+         * Get valid target resolutions for Hires.Fix given a base resolution.
+         * Only available for square resolutions (1:1 aspect ratio).
+         *
+         * Supported upscale paths:
+         * - 512x512 → 768x768, 1024x1024
+         * - 768x768 → 1024x1024
+         */
+        fun hiresTargetResolutions(baseResolution: QnnResolution): List<QnnResolution> {
+            // Only square resolutions support Hires.Fix
+            if (baseResolution.width != baseResolution.height) return emptyList()
+
+            return npuResolutions().filter { target ->
+                // Target must be square AND strictly larger
+                target.width == target.height &&
+                target.width > baseResolution.width
+            }
+        }
+
+        /**
+         * Get default Hires target resolution for a given base.
+         * Returns the largest available target with same aspect ratio, or null if none.
+         */
+        fun defaultHiresTarget(baseResolution: QnnResolution): QnnResolution? {
+            return hiresTargetResolutions(baseResolution).maxByOrNull { it.width * it.height }
+        }
     }
 }

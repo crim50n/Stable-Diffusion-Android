@@ -29,6 +29,9 @@ jobs:
       - name: Grant execute permissions for gradlew
         run: chmod +x ./gradlew
 
+      - name: Prepare QNN libraries
+        run: ./scripts/prepare_qnn_libs.sh
+
       - name: Decode Keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}

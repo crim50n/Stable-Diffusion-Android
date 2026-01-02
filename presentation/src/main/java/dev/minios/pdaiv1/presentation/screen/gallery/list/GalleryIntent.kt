@@ -44,6 +44,9 @@ sealed interface GalleryIntent : MviIntent {
         enum class All : SaveToGallery {
             Request, Confirm;
         }
+        enum class Selection : SaveToGallery {
+            Request, Confirm;
+        }
     }
 
     data class Drawer(val intent: DrawerIntent) : GalleryIntent

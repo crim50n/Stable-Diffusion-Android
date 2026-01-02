@@ -10,6 +10,7 @@ import dev.minios.pdaiv1.domain.entity.OpenAiModel
 import dev.minios.pdaiv1.domain.entity.OpenAiQuality
 import dev.minios.pdaiv1.domain.entity.OpenAiSize
 import dev.minios.pdaiv1.domain.entity.OpenAiStyle
+import dev.minios.pdaiv1.domain.entity.QnnHiresConfig
 import dev.minios.pdaiv1.domain.entity.StabilityAiClipGuidance
 import dev.minios.pdaiv1.domain.entity.StabilityAiStylePreset
 import dev.minios.pdaiv1.presentation.model.Modal
@@ -98,6 +99,7 @@ sealed interface GenerationMviIntent : MviIntent {
 
         sealed interface Qnn : Update {
             data class Resolution(val value: QnnResolution) : Qnn
+            data class Hires(val value: QnnHiresConfig) : Qnn
         }
     }
 

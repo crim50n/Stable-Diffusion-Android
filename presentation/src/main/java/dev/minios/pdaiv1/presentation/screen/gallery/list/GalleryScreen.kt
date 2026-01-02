@@ -145,6 +145,14 @@ fun GalleryScreen() {
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
+
+                GalleryEffect.SelectionImagesSavedToGallery -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(LocalizationR.string.gallery_save_selection_success),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
             }
         },
     ) { state, intentHandler ->
@@ -275,6 +283,16 @@ fun GalleryScreenContent(
                                                 Icon(
                                                     imageVector = Icons.Default.Delete,
                                                     contentDescription = "Delete",
+                                                )
+                                            }
+                                            IconButton(
+                                                onClick = {
+                                                    processIntent(GalleryIntent.SaveToGallery.Selection.Request)
+                                                },
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Default.Save,
+                                                    contentDescription = "Save to Gallery",
                                                 )
                                             }
                                             IconButton(

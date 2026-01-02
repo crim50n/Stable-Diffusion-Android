@@ -87,7 +87,7 @@ internal abstract class CoreGenerationWorker(
                     status.current.toString(),
                     status.total.toString()
                 )
-                backgroundWorkObserver.postStatusMessage(title, subTitle)
+                // Only update system notification with progress bar, don't spam UI widget
                 setForegroundNotification(
                     title = title,
                     body = subTitle,

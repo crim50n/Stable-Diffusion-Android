@@ -63,7 +63,15 @@ fun EngineSelectionComponent(
                 displayDelegate = { it.name.asUiText() },
             )
 
-            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> Unit
+            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> DropdownTextField(
+                label = LocalizationR.string.hint_sd_model.asUiText(),
+                loading = state.loading,
+                modifier = modifier,
+                value = state.mediaPipeModels.firstOrNull { it.id == state.selectedMediaPipeModelId },
+                items = state.mediaPipeModels,
+                onItemSelected = { intentHandler(EngineSelectionIntent(it.id)) },
+                displayDelegate = { it.name.asUiText() },
+            )
 
             ServerSource.LOCAL_QUALCOMM_QNN -> DropdownTextField(
                 label = LocalizationR.string.hint_sd_model.asUiText(),

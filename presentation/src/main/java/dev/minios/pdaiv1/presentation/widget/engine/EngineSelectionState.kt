@@ -19,6 +19,8 @@ data class EngineSelectionState(
     val selectedStEngine: String = "",
     val localAiModels: List<LocalAiModel> = emptyList(),
     val selectedLocalAiModelId: String = "",
+    val mediaPipeModels: List<LocalAiModel> = emptyList(),
+    val selectedMediaPipeModelId: String = "",
     val qnnModels: List<LocalAiModel> = emptyList(),
     val selectedQnnModelId: String = "",
 ): MviState

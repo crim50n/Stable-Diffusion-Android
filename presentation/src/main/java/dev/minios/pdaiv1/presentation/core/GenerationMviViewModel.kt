@@ -95,6 +95,18 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                                         negativePrompt = preferenceManager.localQnnLastNegativePrompt,
                                         qnnRunOnCpu = runOnCpu,
                                     )
+                                } else if (sourceChanged && settings.source == ServerSource.LOCAL_MICROSOFT_ONNX) {
+                                    // When switching to ONNX, restore last prompt
+                                    state.copyState(
+                                        prompt = preferenceManager.localOnnxLastPrompt,
+                                        negativePrompt = preferenceManager.localOnnxLastNegativePrompt,
+                                    )
+                                } else if (sourceChanged && settings.source == ServerSource.LOCAL_GOOGLE_MEDIA_PIPE) {
+                                    // When switching to MediaPipe, restore last prompt
+                                    state.copyState(
+                                        prompt = preferenceManager.localMediaPipeLastPrompt,
+                                        negativePrompt = preferenceManager.localMediaPipeLastNegativePrompt,
+                                    )
                                 } else if (settings.source == ServerSource.LOCAL_QUALCOMM_QNN) {
                                     // Already in QNN mode, just update runOnCpu if changed
                                     val runOnCpu = preferenceManager.localQnnRunOnCpu
@@ -351,6 +363,10 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
                 )
             }
 
+            is GenerationMviIntent.Update.Qnn.Hires -> updateGenerationState {
+                it.copyState(qnnHiresConfig = intent.value)
+            }
+
             is GenerationMviIntent.Result.Save -> !Observable
                 .fromIterable(intent.ai)
                 .flatMapCompletable(saveGenerationResultUseCase::invoke)
@@ -381,12 +397,23 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
             }
 
             GenerationMviIntent.Generate -> {
-                // Auto-save prompts for QNN backend
-                if (preferenceManager.source == ServerSource.LOCAL_QUALCOMM_QNN) {
-                    val state = currentState as? GenerationMviState
-                    state?.let {
-                        preferenceManager.localQnnLastPrompt = it.prompt.trim()
-                        preferenceManager.localQnnLastNegativePrompt = it.negativePrompt.trim()
+                // Auto-save prompts for local backends
+                val state = currentState as? GenerationMviState
+                state?.let {
+                    when (preferenceManager.source) {
+                        ServerSource.LOCAL_QUALCOMM_QNN -> {
+                            preferenceManager.localQnnLastPrompt = it.prompt.trim()
+                            preferenceManager.localQnnLastNegativePrompt = it.negativePrompt.trim()
+                        }
+                        ServerSource.LOCAL_MICROSOFT_ONNX -> {
+                            preferenceManager.localOnnxLastPrompt = it.prompt.trim()
+                            preferenceManager.localOnnxLastNegativePrompt = it.negativePrompt.trim()
+                        }
+                        ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> {
+                            preferenceManager.localMediaPipeLastPrompt = it.prompt.trim()
+                            preferenceManager.localMediaPipeLastNegativePrompt = it.negativePrompt.trim()
+                        }
+                        else -> Unit
                     }
                 }
 

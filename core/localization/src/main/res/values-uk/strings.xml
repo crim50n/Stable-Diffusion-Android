@@ -31,8 +31,8 @@
     <string name="splash_status_launching">Запускаємо додаток!</string>
 
     <string name="local_no_img2img_support_title">Не доступно</string>
-    <string name="local_no_img2img_support_sub_title">Режим «Зображення в зображення» (img2img) недоступний, якщо ви використовуєте локальні ресурси телефону для створення зображень.</string>
-    <string name="local_no_img2img_support_sub_title_2">Ви можете перейти до генерації на основі сервера в налаштуваннях, щоб використовувати цей режим.</string>
+    <string name="local_no_img2img_support_sub_title">Режим «Зображення в зображення» (img2img) не підтримується бекендами ONNX та MediaPipe.</string>
+    <string name="local_no_img2img_support_sub_title_2">Ви можете переключитися на QNN, серверну генерацію або інший провайдер у налаштуваннях конфігурації.</string>
 
     <string name="dalle_no_img2img_support_sub_title">Режим «Зображення в зображення» (img2img) поки не підтримується DALL·E.</string>
     <string name="dalle_no_img2img_support_sub_title_2">Ви можете перейти до генерації на основі будь-якого іншого сервера в налаштуваннях, щоб використовувати цей режим.</string>
@@ -43,6 +43,7 @@
     <string name="action_select">Обрати</string>
     <string name="action_connect">Підключитися</string>
     <string name="action_setup">Налаштувати</string>
+    <string name="action_start">Запустити</string>
     <string name="action_share_prompt">Поділитися запитом</string>
     <string name="action_send_to_txt2img">Відправити в txt2img</string>
     <string name="action_send_to_img2img">Відправити в img2img</string>
@@ -161,6 +162,13 @@
 
     <string name="hint_qnn_sub_title">Ця конфігурація використовує Qualcomm QNN SDK з прискоренням NPU (HTP) та MNN backend для швидкої генерації Stable Diffusion на пристрої. Потрібен Snapdragon 8 Gen 1 або новіший.</string>
 
+    <string name="hint_qnn_hires">Hires. Fix (NPU)</string>
+    <string name="hint_qnn_hires_enabled">Увімкнути Hires. Fix</string>
+    <string name="hint_qnn_hires_target">Цільова роздільна здатність</string>
+    <string name="hint_qnn_hires_steps">Кроки: %1$s (0 = як у першому проході)</string>
+    <string name="hint_qnn_hires_denoising">Шумозаглушення: %1$s</string>
+    <string name="hint_qnn_hires_description">Збільшити та покращити деталі через img2img</string>
+
     <string name="drawer_web_ui">Веб</string>
 
     <string name="home_tab_txt_to_img">Txt2Img</string>
@@ -207,7 +215,11 @@
     <string name="gallery_menu_selected">Обрано: %1$s</string>
     <string name="gallery_menu_delete_all">Видалити все</string>
     <string name="gallery_menu_export_all">Експортувати все</string>
+    <string name="gallery_menu_save_all">Зберегти все на пристрій</string>
     <string name="gallery_menu_selection_mode">Режим вибору</string>
+    <string name="gallery_save_success">Зображення збережено в галерею</string>
+    <string name="gallery_save_all_success">Всі зображення збережено в галерею</string>
+    <string name="gallery_save_selection_success">Обрані зображення збережено в галерею</string>
 
     <string name="settings_header_server">Параметри AI</string>
     <string name="settings_header_app">Налаштування</string>
@@ -261,6 +273,9 @@
     <string name="interaction_export_title">Експорт галереї</string>
     <string name="interaction_export_sub_title">Ця функція експортує всі зображення галереї у архів *.zip. Цей процес може тривати довго, якщо у вас багато зображень. Бажаєте продовжити?</string>
     <string name="interaction_export_sub_title_selection">Ця функція експортує обрані зображення галереї у архів *.zip. Бажаєте продовжити?</string>
+    <string name="interaction_save_to_gallery_title">Зберегти до галереї пристрою</string>
+    <string name="interaction_save_to_gallery_sub_title">Це збереже всі зображення до галереї вашого пристрою. Цей процес може зайняти деякий час, якщо у вас багато зображень. Бажаєте продовжити?</string>
+    <string name="interaction_save_to_gallery_sub_title_selection">Це збереже обрані зображення до галереї вашого пристрою. Бажаєте продовжити?</string>
     <string name="interaction_cache_sub_title">Це призведе до скидання налаштувань програми та видалення всіх створених зображень. Ви бажаєте продовжити?</string>
 
     <string name="interaction_warning_title">Попередження</string>

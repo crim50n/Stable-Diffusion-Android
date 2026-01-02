@@ -42,9 +42,11 @@ data class ServerSetupState(
     val localOnnxModels: List<LocalModel> = emptyList(),
     val localOnnxCustomModel: Boolean = false,
     val localOnnxCustomModelPath: String = "",
+    val scannedOnnxCustomModels: List<LocalModel> = emptyList(),
     val localMediaPipeModels: List<LocalModel> = emptyList(),
     val localMediaPipeCustomModel: Boolean = false,
     val localMediaPipeCustomModelPath: String = "",
+    val scannedMediaPipeCustomModels: List<LocalModel> = emptyList(),
     val localQnnModels: List<LocalModel> = emptyList(),
     val localQnnCustomModel: Boolean = false,
     val localQnnCustomModelPath: String = "",
@@ -196,16 +198,31 @@ data class ServerSetupState(
             value.id.startsWith("CUSTOM_MP:")
 
         return when (mode) {
-            ServerSource.LOCAL_MICROSOFT_ONNX -> copy(
-                localOnnxModels = localOnnxModels.selectModel(),
-            )
+            ServerSource.LOCAL_MICROSOFT_ONNX -> if (isScannedCustomModel) {
+                copy(
+                    scannedOnnxCustomModels = scannedOnnxCustomModels.selectModel(),
+                    localOnnxModels = localOnnxModels.map { it.copy(selected = false) },
+                )
+            } else {
+                copy(
+                    localOnnxModels = localOnnxModels.selectModel(),
+                    scannedOnnxCustomModels = scannedOnnxCustomModels.map { it.copy(selected = false) },
+                )
+            }
 
-            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> copy(
-                localMediaPipeModels = localMediaPipeModels.selectModel(),
-            )
+            ServerSource.LOCAL_GOOGLE_MEDIA_PIPE -> if (isScannedCustomModel) {
+                copy(
+                    scannedMediaPipeCustomModels = scannedMediaPipeCustomModels.selectModel(),
+                    localMediaPipeModels = localMediaPipeModels.map { it.copy(selected = false) },
+                )
+            } else {
+                copy(
+                    localMediaPipeModels = localMediaPipeModels.selectModel(),
+                    scannedMediaPipeCustomModels = scannedMediaPipeCustomModels.map { it.copy(selected = false) },
+                )
+            }
 
             ServerSource.LOCAL_QUALCOMM_QNN -> if (isScannedCustomModel) {
-                // For scanned custom models, update scannedQnnCustomModels
                 copy(
                     scannedQnnCustomModels = scannedQnnCustomModels.selectModel(),
                     localQnnModels = localQnnModels.map { it.copy(selected = false) },
@@ -249,18 +266,6 @@ data class ServerSetupState(
 
             else -> this
         }
-    }
-
-    fun withAllowQnnCustomModel(value: Boolean): ServerSetupState {
-        fun List<LocalModel>.updateCustomModelSelection(id: String) = withNewState(
-            find { m -> m.id == id }?.copy(selected = value)
-        )
-        return this.copy(
-            localQnnCustomModel = value,
-            localQnnModels = localQnnModels.updateCustomModelSelection(
-                id = LocalAiModel.CustomQnn.id,
-            ),
-        )
     }
 
     enum class Step {

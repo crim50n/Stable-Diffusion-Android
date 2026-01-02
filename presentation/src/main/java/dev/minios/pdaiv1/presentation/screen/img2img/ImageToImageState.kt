@@ -8,6 +8,7 @@ import dev.minios.pdaiv1.domain.entity.ForgeModule
 import dev.minios.pdaiv1.domain.entity.HiresConfig
 import dev.minios.pdaiv1.domain.entity.ImageToImagePayload
 import dev.minios.pdaiv1.domain.entity.ModelType
+import dev.minios.pdaiv1.domain.entity.QnnHiresConfig
 import dev.minios.pdaiv1.domain.entity.OpenAiModel
 import dev.minios.pdaiv1.domain.entity.OpenAiQuality
 import dev.minios.pdaiv1.domain.entity.OpenAiSize
@@ -68,6 +69,7 @@ data class ImageToImageState(
     override val falAiPropertyValues: Map<String, Any?> = emptyMap(),
     override val falAiAdvancedVisible: Boolean = false,
     override val qnnRunOnCpu: Boolean = false,
+    override val qnnHiresConfig: QnnHiresConfig = QnnHiresConfig.DISABLED,
     override val modelName: String = "",
 ) : GenerationMviState() {
 
@@ -122,6 +124,7 @@ data class ImageToImageState(
         falAiPropertyValues: Map<String, Any?>,
         falAiAdvancedVisible: Boolean,
         qnnRunOnCpu: Boolean,
+        qnnHiresConfig: QnnHiresConfig,
         modelName: String,
     ): GenerationMviState = copy(
         onBoardingDemo = onBoardingDemo,
@@ -165,6 +168,7 @@ data class ImageToImageState(
         falAiPropertyValues = falAiPropertyValues,
         falAiAdvancedVisible = falAiAdvancedVisible,
         qnnRunOnCpu = qnnRunOnCpu,
+        qnnHiresConfig = qnnHiresConfig,
         modelName = modelName,
     )
 

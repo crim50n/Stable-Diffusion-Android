@@ -254,7 +254,7 @@ fun QnnForm(
                 Switch(
                     checked = state.localQnnCustomModel,
                     onCheckedChange = {
-                        processIntent(ServerSetupIntent.AllowLocalQnnCustomModel(it))
+                        processIntent(ServerSetupIntent.AllowLocalCustomModel(it))
                     },
                 )
                 Text(

@@ -247,6 +247,26 @@ class PreferenceManagerImpl(
         default = "",
     )
 
+    override var localOnnxLastPrompt: String by preferences.delegates.string(
+        key = KEY_ONNX_LAST_PROMPT,
+        default = "",
+    )
+
+    override var localOnnxLastNegativePrompt: String by preferences.delegates.string(
+        key = KEY_ONNX_LAST_NEGATIVE_PROMPT,
+        default = "",
+    )
+
+    override var localMediaPipeLastPrompt: String by preferences.delegates.string(
+        key = KEY_MEDIAPIPE_LAST_PROMPT,
+        default = "",
+    )
+
+    override var localMediaPipeLastNegativePrompt: String by preferences.delegates.string(
+        key = KEY_MEDIAPIPE_LAST_NEGATIVE_PROMPT,
+        default = "",
+    )
+
     override var designUseSystemColorPalette: Boolean by preferences.delegates.boolean(
         key = KEY_DESIGN_DYNAMIC_COLORS,
         onChanged = ::onPreferencesChanged,
@@ -383,6 +403,10 @@ class PreferenceManagerImpl(
         const val KEY_QNN_SHOW_DIFFUSION_PROCESS = "key_qnn_show_diffusion_process"
         const val KEY_QNN_LAST_PROMPT = "key_qnn_last_prompt"
         const val KEY_QNN_LAST_NEGATIVE_PROMPT = "key_qnn_last_negative_prompt"
+        const val KEY_ONNX_LAST_PROMPT = "key_onnx_last_prompt"
+        const val KEY_ONNX_LAST_NEGATIVE_PROMPT = "key_onnx_last_negative_prompt"
+        const val KEY_MEDIAPIPE_LAST_PROMPT = "key_mediapipe_last_prompt"
+        const val KEY_MEDIAPIPE_LAST_NEGATIVE_PROMPT = "key_mediapipe_last_negative_prompt"
         const val KEY_LOCAL_MODEL_ID = "key_local_model_id"
         const val KEY_LOCAL_NN_API = "key_local_nn_api"
         const val KEY_DESIGN_DYNAMIC_COLORS = "key_design_dynamic_colors"

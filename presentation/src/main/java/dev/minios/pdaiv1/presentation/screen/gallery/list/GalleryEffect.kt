@@ -13,4 +13,6 @@ sealed interface GalleryEffect : MviEffect {
     data class OpenUri(val uri: Uri) : GalleryEffect
 
     data object AllImagesSavedToGallery : GalleryEffect
+
+    data object SelectionImagesSavedToGallery : GalleryEffect
 }

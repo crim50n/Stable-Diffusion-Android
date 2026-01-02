@@ -56,25 +56,45 @@ class ScanCustomModelsUseCaseImpl(
 
         return when (type) {
             LocalAiModel.Type.ONNX -> {
-                // ONNX requires: text_encoder, unet, vae_decoder, vae_encoder folders
-                // or *.onnx files
-                files.any { it.endsWith(".onnx") } ||
-                    (files.contains("text_encoder") &&
-                     files.contains("unet") &&
-                     files.contains("vae_decoder"))
+                // ONNX requires: text_encoder/model.ort, unet/model.ort, vae_decoder/model.ort
+                // and tokenizer/vocab.json, tokenizer/merges.txt
+                val hasTextEncoder = File(dir, "text_encoder/model.ort").exists()
+                val hasUnet = File(dir, "unet/model.ort").exists()
+                val hasVaeDecoder = File(dir, "vae_decoder/model.ort").exists()
+                val hasVocab = File(dir, "tokenizer/vocab.json").exists()
+                val hasMerges = File(dir, "tokenizer/merges.txt").exists()
+
+                hasTextEncoder && hasUnet && hasVaeDecoder && hasVocab && hasMerges
             }
             LocalAiModel.Type.MediaPipe -> {
-                // MediaPipe requires .tflite files
-                files.any { it.endsWith(".tflite") || it.endsWith(".bin") }
+                // MediaPipe requires bins folder with model files
+                // Structure: model_folder/bins/* (multiple .bin files)
+                val binsDir = File(dir, "bins")
+                if (binsDir.exists() && binsDir.isDirectory) {
+                    val binsFiles = binsDir.listFiles()?.map { it.name } ?: emptyList()
+                    // Should not contain QNN-specific files
+                    val isNotQnn = !binsFiles.any { it.startsWith("clip.") || it.startsWith("unet.") }
+                    binsFiles.isNotEmpty() && isNotQnn
+                } else {
+                    false
+                }
             }
             LocalAiModel.Type.QNN -> {
-                // QNN requires: clip.bin/mnn, unet.bin/mnn, vae_decoder.bin/mnn, tokenizer.json
-                val hasClip = files.any { it.startsWith("clip.") }
-                val hasUnet = files.any { it.startsWith("unet.") }
-                val hasVae = files.any { it.startsWith("vae_decoder.") || it.startsWith("vae.") }
+                // QNN requires: clip + unet + vae_decoder + tokenizer.json
+                // NPU mode: clip.bin, unet.bin, vae_decoder.bin
+                // CPU mode: clip.mnn (or clip_v2.mnn), unet.mnn, vae_decoder.mnn
+                val hasClipBin = files.contains("clip.bin")
+                val hasClipMnn = files.contains("clip.mnn") || files.contains("clip_v2.mnn")
+                val hasUnetBin = files.contains("unet.bin")
+                val hasUnetMnn = files.contains("unet.mnn")
+                val hasVaeBin = files.contains("vae_decoder.bin")
+                val hasVaeMnn = files.contains("vae_decoder.mnn")
                 val hasTokenizer = files.contains("tokenizer.json")
 
-                (hasClip && hasUnet && hasVae) || hasTokenizer
+                val hasNpuModel = hasClipBin && hasUnetBin && hasVaeBin
+                val hasCpuModel = hasClipMnn && hasUnetMnn && hasVaeMnn
+
+                hasTokenizer && (hasNpuModel || hasCpuModel)
             }
         }
     }

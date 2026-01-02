@@ -38,8 +38,8 @@
 
     <!-- 本地生成模式提示 -->
     <string name="local_no_img2img_support_title">不可用</string>
-    <string name="local_no_img2img_support_sub_title">图像到图像模式不适用于使用本地设备资源生成图像。</string>
-    <string name="local_no_img2img_support_sub_title_2">要使用图像到图像模式，您可以在配置中选择基于服务器生成的方法。</string>
+    <string name="local_no_img2img_support_sub_title">ONNX 和 MediaPipe 后端不支持图像到图像模式。</string>
+    <string name="local_no_img2img_support_sub_title_2">您可以切换到 QNN、基于服务器的生成或其他提供商来使用此模式。</string>
 
     <!-- DALL·E服务提示 -->
     <string name="dalle_no_img2img_support_sub_title">DALL·E 目前不支持图像到图像模式。</string>
@@ -52,6 +52,7 @@
     <string name="action_select">选择</string>
     <string name="action_connect">连接</string>
     <string name="action_setup">设置</string>
+    <string name="action_start">启动</string>
     <string name="action_share_prompt">分享</string>
     <string name="action_send_to_txt2img">在 txt2img 中使用</string>
     <string name="action_send_to_img2img">在 img2img 中使用</string>
@@ -185,6 +186,13 @@
 
     <string name="hint_qnn_sub_title">此配置使用高通 QNN SDK，通过 NPU 加速（HTP）和 MNN 后端在设备上快速生成 Stable Diffusion 图像。需要骁龙 8 Gen 1 或更新版本。</string>
 
+    <string name="hint_qnn_hires">Hires. Fix (NPU)</string>
+    <string name="hint_qnn_hires_enabled">启用 Hires. Fix</string>
+    <string name="hint_qnn_hires_target">目标分辨率</string>
+    <string name="hint_qnn_hires_steps">步数: %1$s (0 = 相同)</string>
+    <string name="hint_qnn_hires_denoising">降噪强度: %1$s</string>
+    <string name="hint_qnn_hires_description">放大并通过 img2img 优化细节</string>
+
     <!-- 抽屉 -->
     <string name="drawer_web_ui">网络界面</string>
 
@@ -236,7 +244,11 @@
     <string name="gallery_menu_selected">已选图片：%1$s</string>
     <string name="gallery_menu_delete_all">全部删除</string>
     <string name="gallery_menu_export_all">全部导出</string>
+    <string name="gallery_menu_save_all">全部保存到设备</string>
     <string name="gallery_menu_selection_mode">选择模式</string>
+    <string name="gallery_save_success">图像已保存到图库</string>
+    <string name="gallery_save_all_success">所有图像已保存到图库</string>
+    <string name="gallery_save_selection_success">选定的图像已保存到图库</string>
 
     <!-- 设置标题 -->
     <string name="settings_header_server">AI 设置</string>
@@ -298,6 +310,9 @@
     <string name="interaction_export_title">图库导出</string>
     <string name="interaction_export_sub_title">这将把所有图库图像导出为 *.zip 压缩包。此过程在图片较多时可能更耗时，您确定继续吗？</string>
     <string name="interaction_export_sub_title_selection">这将选定的图库图像导出为 *.zip 存档。您要继续吗？</string>
+    <string name="interaction_save_to_gallery_title">保存到设备图库</string>
+    <string name="interaction_save_to_gallery_sub_title">这将把所有图像保存到您的设备图库。如果您有许多图像，此过程可能需要一些时间。您要继续吗？</string>
+    <string name="interaction_save_to_gallery_sub_title_selection">这将把选定的图像保存到您的设备图库。您要继续吗？</string>
     <string name="interaction_cache_sub_title">这将重置应用设置并删除所有生成的图像。您想继续吗？</string>
 
     <!-- 警告互动 -->

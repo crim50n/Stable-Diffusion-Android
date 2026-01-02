@@ -33,6 +33,29 @@ Image generation on Snapdragon devices using NPU and GPU.
 - GPU (OpenCL/Adreno) — general-purpose graphics processor
 - CPU — central processor (fallback option)
 
+**Modes:**
+- Text-to-Image, Image-to-Image
+
+**Resolution support:**
+- NPU (HTP): 512×512 to 1024×1024
+- CPU/GPU: 256×256 to 512×512
+
+**Hires.Fix (NPU only):**
+- Generate at 512×512 or 768×768, upscale to larger square resolution, refine with img2img pass
+- Only square resolutions support Hires.Fix (512×512 → 768/1024, 768×768 → 1024)
+- Configurable target resolution, steps, and denoising strength
+
+---
+
+### Local Diffusion Enhancements
+
+Improved support for all local backends (ONNX, MediaPipe, QNN):
+
+- **Custom models scanning** — automatic detection of user-provided models from custom directories
+- **Strict model validation** — each backend validates model structure before loading
+- **Prompt persistence** — last used prompt is saved and restored per backend
+- **Model selection in generation UI** — switch between models directly from the generation screen
+
 ---
 
 ### ADetailer and Hires.Fix for A1111/Forge
@@ -56,6 +79,7 @@ Image generation on Snapdragon devices using NPU and GPU.
 ### Gallery
 - Model name displayed in image details
 - Optimized swipe navigation between images
+- Save selected images to device gallery (in selection mode)
 
 ### Log Export
 - Log file export function for diagnostics
@@ -98,7 +122,7 @@ Image generation on Snapdragon devices using NPU and GPU.
 - Material → 1.13.0
 - RxJava → 3.1.12
 - Apache String Utils → 3.20.0
-- MediaPipe → 0.10.26.1
+- MediaPipe → 0.10.21
 - Serialization → 1.9.0
 - Turbine → 1.2.1
 - Appcompat → 1.7.1
@@ -121,4 +145,4 @@ Image generation on Snapdragon devices using NPU and GPU.
 - Light status bar works correctly
 - Localization files updated (RU, TR, UK, ZH)
 - Added module tests for Fal.AI and Forge, updated existing tests
-
+- Removed donate button from settings

@@ -39,7 +39,11 @@ interface PreferenceManager {
     var forceSetupAfterUpdate: Boolean
     var localOnnxModelId: String
     var localOnnxUseNNAPI: Boolean
+    var localOnnxLastPrompt: String
+    var localOnnxLastNegativePrompt: String
     var localMediaPipeModelId: String
+    var localMediaPipeLastPrompt: String
+    var localMediaPipeLastNegativePrompt: String
     var localQnnModelId: String
     var localQnnRunOnCpu: Boolean
     var localQnnUseOpenCL: Boolean

@@ -5,6 +5,7 @@ import dev.minios.pdaiv1.domain.entity.ADetailerConfig
 import dev.minios.pdaiv1.domain.entity.ForgeModule
 import dev.minios.pdaiv1.domain.entity.HiresConfig
 import dev.minios.pdaiv1.domain.entity.ModelType
+import dev.minios.pdaiv1.domain.entity.QnnHiresConfig
 import dev.minios.pdaiv1.domain.entity.OpenAiModel
 import dev.minios.pdaiv1.domain.entity.OpenAiQuality
 import dev.minios.pdaiv1.domain.entity.OpenAiSize
@@ -63,6 +64,7 @@ abstract class GenerationMviState : MviState {
 
     // QNN specific fields
     abstract val qnnRunOnCpu: Boolean
+    abstract val qnnHiresConfig: QnnHiresConfig
 
     // Model name for saving with generation result
     abstract val modelName: String
@@ -122,6 +124,7 @@ abstract class GenerationMviState : MviState {
         falAiPropertyValues: Map<String, Any?> = this.falAiPropertyValues,
         falAiAdvancedVisible: Boolean = this.falAiAdvancedVisible,
         qnnRunOnCpu: Boolean = this.qnnRunOnCpu,
+        qnnHiresConfig: QnnHiresConfig = this.qnnHiresConfig,
         modelName: String = this.modelName,
     ): GenerationMviState = this
 }

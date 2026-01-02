@@ -84,7 +84,8 @@ internal abstract class NotificationWorker(
         canCancel: Boolean = false,
     ) {
         pushNotificationManager.createNotificationChannel()
-        val notification = pushNotificationManager.createNotification(title, body) {
+        // Use progress notification channel to avoid heads-up notifications
+        val notification = pushNotificationManager.createProgressNotification(title, body) {
             setSilent(silent)
             setTicker(title)
             setOngoing(true)

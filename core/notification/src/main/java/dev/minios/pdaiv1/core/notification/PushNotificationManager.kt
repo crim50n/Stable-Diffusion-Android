@@ -24,5 +24,11 @@ interface PushNotificationManager {
         block: NotificationCompat.Builder.() -> Unit = {},
     ): Notification
 
+    fun createProgressNotification(
+        title: String,
+        body: String?,
+        block: NotificationCompat.Builder.() -> Unit = {},
+    ): Notification
+
     fun createNotificationChannel()
 }
