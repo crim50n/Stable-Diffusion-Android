@@ -67,3 +67,20 @@ jobs:
           name: pdai-release-${{ steps.version.outputs.name }}
           path: release-apks/*.apk
           retention-days: 90
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.version.outputs.name }}"
+          TAG="v${VERSION}"
+
+          # Create tag if it doesn't exist
+          git tag $TAG || true
+          git push origin $TAG || true
+
+          # Create release with release notes
+          gh release create $TAG \
+            --title "${VERSION}" \
+            --notes-file RELEASE_NOTES_${VERSION}.md \
+            release-apks/*.apk
