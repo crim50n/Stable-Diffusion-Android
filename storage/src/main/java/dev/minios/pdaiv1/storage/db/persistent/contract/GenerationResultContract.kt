@@ -22,8 +22,10 @@ internal object GenerationResultContract {
     const val SUB_SEED_STRENGTH = "sub_seed_strength"
     const val DENOISING_STRENGTH = "denoising_strength"
     const val HIDDEN = "hidden"
+    const val LIKED = "liked"
     const val MEDIA_PATH = "media_path"
     const val INPUT_MEDIA_PATH = "input_media_path"
     const val MEDIA_TYPE = "media_type"
     const val MODEL_NAME = "model_name"
+    const val BLUR_HASH = "blur_hash"
 }

@@ -45,6 +45,8 @@ data class GenerationResultEntity(
     val denoisingStrength: Float,
     @ColumnInfo(name = GenerationResultContract.HIDDEN, defaultValue = "0")
     val hidden: Boolean,
+    @ColumnInfo(name = GenerationResultContract.LIKED, defaultValue = "0")
+    val liked: Boolean,
     @ColumnInfo(name = GenerationResultContract.MEDIA_PATH, defaultValue = "")
     val mediaPath: String,
     @ColumnInfo(name = GenerationResultContract.INPUT_MEDIA_PATH, defaultValue = "")
@@ -53,4 +55,6 @@ data class GenerationResultEntity(
     val mediaType: String,
     @ColumnInfo(name = GenerationResultContract.MODEL_NAME, defaultValue = "")
     val modelName: String,
+    @ColumnInfo(name = GenerationResultContract.BLUR_HASH, defaultValue = "")
+    val blurHash: String,
 )

@@ -70,6 +70,16 @@ import dev.minios.pdaiv1.storage.db.persistent.entity.*
          * - [LocalModelContract.RUN_ON_CPU]
          */
         AutoMigration(from = 9, to = 10),
+        /**
+         * Added 1 field to [GenerationResultEntity]:
+         * - [GenerationResultContract.BLUR_HASH]
+         */
+        AutoMigration(from = 10, to = 11),
+        /**
+         * Added 1 field to [GenerationResultEntity]:
+         * - [GenerationResultContract.LIKED]
+         */
+        AutoMigration(from = 11, to = 12),
     ],
 )
 @TypeConverters(
@@ -85,6 +95,6 @@ internal abstract class PersistentDatabase : RoomDatabase() {
 
     companion object {
         const val DB_NAME = "ai_sd_v1_storage_db"
-        const val DB_VERSION = 10
+        const val DB_VERSION = 12
     }
 }
