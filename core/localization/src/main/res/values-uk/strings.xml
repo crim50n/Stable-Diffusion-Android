@@ -9,6 +9,14 @@
     <string name="cancel">Скасувати</string>
     <string name="retry">Повторити</string>
     <string name="delete">Видалити</string>
+    <string name="share">Поділитися</string>
+    <string name="gallery_save_to_gallery">Зберегти в галерею</string>
+    <string name="edit">Редагувати</string>
+    <string name="editor_rotate">Повернути</string>
+    <string name="editor_adjust">Налаштування</string>
+    <string name="editor_brightness">Яскравість</string>
+    <string name="editor_contrast">Контраст</string>
+    <string name="editor_saturation">Насиченість</string>
     <string name="download">Завантажити</string>
     <string name="width">Ширина</string>
     <string name="height">Висота</string>
@@ -19,10 +27,12 @@
     <string name="success">✅ Успіх</string>
     <string name="failure">❌ Помилка</string>
 
+    <string name="one">Один</string>
     <string name="two">Два</string>
     <string name="three">Три</string>
     <string name="four">Чотири</string>
     <string name="five">П\'ять</string>
+    <string name="six">Шість</string>
 
     <string name="version">Версія %1$s</string>
 
@@ -214,6 +224,7 @@
     <string name="gallery_menu_unselect_all">Скасувати вибір</string>
     <string name="gallery_menu_selected">Обрано: %1$s</string>
     <string name="gallery_menu_delete_all">Видалити все</string>
+    <string name="gallery_menu_delete_unliked">Видалити невподобані</string>
     <string name="gallery_menu_export_all">Експортувати все</string>
     <string name="gallery_menu_save_all">Зберегти все на пристрій</string>
     <string name="gallery_menu_selection_mode">Режим вибору</string>
@@ -292,6 +303,9 @@
 
     <string name="interaction_delete_local_model_title">Видалити модель</string>
     <string name="interaction_delete_local_model_sub_title">Ви впевнені, що хочете видалити модель "%1$s"?</string>
+
+    <string name="interaction_delete_unliked_title">Видалити невподобані зображення</string>
+    <string name="interaction_delete_unliked_sub_title">Ви впевнені, що хочете остаточно видалити всі зображення, які не позначено як вподобані?</string>
 
     <string name="interaction_in_paint_clear_title">Очистити креслення</string>
     <string name="interaction_in_paint_clear_sub_title">Ви впевнені що хочете очистити креслення?</string>

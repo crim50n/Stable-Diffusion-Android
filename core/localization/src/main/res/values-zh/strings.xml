@@ -13,6 +13,14 @@
     <string name="cancel">取消</string>
     <string name="retry">重试</string>
     <string name="delete">删除</string>
+    <string name="share">分享</string>
+    <string name="gallery_save_to_gallery">保存到图库</string>
+    <string name="edit">编辑</string>
+    <string name="editor_rotate">旋转</string>
+    <string name="editor_adjust">调整</string>
+    <string name="editor_brightness">亮度</string>
+    <string name="editor_contrast">对比度</string>
+    <string name="editor_saturation">饱和度</string>
     <string name="download">下载</string>
     <string name="width">宽度</string>
     <string name="height">高度</string>
@@ -23,10 +31,12 @@
     <string name="success">✅ 成功</string>
     <string name="failure">❌ 失败</string>
 
+    <string name="one">一</string>
     <string name="two">二</string>
     <string name="three">三</string>
     <string name="four">四</string>
     <string name="five">五</string>
+    <string name="six">六</string>
 
     <!-- 设置和配置 -->
     <string name="version">版本 %1$s</string>
@@ -243,6 +253,7 @@
     <string name="gallery_menu_unselect_all">取消全部选择</string>
     <string name="gallery_menu_selected">已选图片：%1$s</string>
     <string name="gallery_menu_delete_all">全部删除</string>
+    <string name="gallery_menu_delete_unliked">删除未喜欢的</string>
     <string name="gallery_menu_export_all">全部导出</string>
     <string name="gallery_menu_save_all">全部保存到设备</string>
     <string name="gallery_menu_selection_mode">选择模式</string>
@@ -332,6 +343,10 @@
     <!-- 删除本地模型提示 -->
     <string name="interaction_delete_local_model_title">删除模型</string>
     <string name="interaction_delete_local_model_sub_title">您确定要删除模型 "%1$s" 吗？</string>
+
+    <!-- 删除未喜欢的图像提示 -->
+    <string name="interaction_delete_unliked_title">删除未喜欢的图像</string>
+    <string name="interaction_delete_unliked_sub_title">您确定要永久删除所有未标记为喜欢的图像吗？</string>
 
     <!-- 清除绘画提示 -->
     <string name="interaction_in_paint_clear_title">清除绘画</string>

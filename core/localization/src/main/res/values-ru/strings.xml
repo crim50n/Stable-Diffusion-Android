@@ -9,6 +9,14 @@
     <string name="cancel">Отмена</string>
     <string name="retry">Повторить</string>
     <string name="delete">Удалить</string>
+    <string name="share">Поделиться</string>
+    <string name="gallery_save_to_gallery">Сохранить в галерею</string>
+    <string name="edit">Редактировать</string>
+    <string name="editor_rotate">Повернуть</string>
+    <string name="editor_adjust">Настройки</string>
+    <string name="editor_brightness">Яркость</string>
+    <string name="editor_contrast">Контраст</string>
+    <string name="editor_saturation">Насыщенность</string>
     <string name="download">Загрузить</string>
     <string name="width">Ширина</string>
     <string name="height">Высота</string>
@@ -21,10 +29,12 @@
     <string name="success">✅ Успешно</string>
     <string name="failure">❌ Ошибка</string>
 
+    <string name="one">Один</string>
     <string name="two">Два</string>
     <string name="three">Три</string>
     <string name="four">Четыре</string>
     <string name="five">Пять</string>
+    <string name="six">Шесть</string>
 
     <string name="version">Версия %1$s</string>
 
@@ -219,6 +229,7 @@
     <string name="gallery_menu_unselect_all">Отменить выбор</string>
     <string name="gallery_menu_selected">Выбранно: %1$s</string>
     <string name="gallery_menu_delete_all">Удалить все</string>
+    <string name="gallery_menu_delete_unliked">Удалить неотмеченные</string>
     <string name="gallery_menu_export_all">Экспортировать все</string>
     <string name="gallery_menu_save_all">Сохранить все на устройство</string>
     <string name="gallery_menu_selection_mode">Режим выбора</string>
@@ -294,6 +305,9 @@
 
     <string name="interaction_delete_local_model_title">Удалить модель</string>
     <string name="interaction_delete_local_model_sub_title">Вы уверены, что хотите удалить модель "%1$s"?</string>
+
+    <string name="interaction_delete_unliked_title">Удалить неотмеченные изображения</string>
+    <string name="interaction_delete_unliked_sub_title">Вы уверены, что хотите безвозвратно удалить все изображения, которые не отмечены как понравившиеся?</string>
 
     <string name="interaction_in_paint_clear_title">Очистить зарисовки</string>
     <string name="interaction_in_paint_clear_sub_title">Вы уверены что хотите очистить зарисовки?</string>

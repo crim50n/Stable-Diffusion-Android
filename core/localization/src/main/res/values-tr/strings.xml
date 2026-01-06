@@ -9,6 +9,14 @@
     <string name="cancel">İptal</string>
     <string name="retry">Yeniden dene</string>
     <string name="delete">Silmek</string>
+    <string name="share">Paylaş</string>
+    <string name="gallery_save_to_gallery">Galeriye kaydet</string>
+    <string name="edit">Düzenle</string>
+    <string name="editor_rotate">Döndür</string>
+    <string name="editor_adjust">Ayarla</string>
+    <string name="editor_brightness">Parlaklık</string>
+    <string name="editor_contrast">Kontrast</string>
+    <string name="editor_saturation">Doygunluk</string>
     <string name="download">İndirmek</string>
     <string name="width">Genişlik</string>
     <string name="height">Yükseklik</string>
@@ -19,10 +27,12 @@
     <string name="success">✅ Başarılı</string>
     <string name="failure">❌ Başarısızlık</string>
 
+    <string name="one">Bir</string>
     <string name="two">İki</string>
     <string name="three">Üç</string>
     <string name="four">Dört</string>
     <string name="five">Beş</string>
+    <string name="six">Altı</string>
 
     <string name="version">Versiyon %1$s</string>
 
@@ -214,6 +224,7 @@
     <string name="gallery_menu_unselect_all">Tümünü seç</string>
     <string name="gallery_menu_selected">Seçili resimler: %1$s</string>
     <string name="gallery_menu_delete_all">Tümünü sil</string>
+    <string name="gallery_menu_delete_unliked">Beğenilmeyenleri sil</string>
     <string name="gallery_menu_export_all">Tümünü dışa aktar</string>
     <string name="gallery_menu_save_all">Tümünü cihaza kaydet</string>
     <string name="gallery_menu_selection_mode">Seçim modu</string>
@@ -292,6 +303,9 @@
 
     <string name="interaction_delete_local_model_title">Modeli sil</string>
     <string name="interaction_delete_local_model_sub_title">Modeli silmek istediğinizden emin misiniz "%1$s"?</string>
+
+    <string name="interaction_delete_unliked_title">Beğenilmeyen resimleri sil</string>
+    <string name="interaction_delete_unliked_sub_title">Beğenilmemiş olarak işaretlenen tüm resimleri kalıcı olarak silmek istediğinizden emin misiniz?</string>
 
     <string name="interaction_in_paint_clear_title">Çizimleri temizle</string>
     <string name="interaction_in_paint_clear_sub_title">Çizimleri temizlemek istediğinizden emin misiniz?</string>
