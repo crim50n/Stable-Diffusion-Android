@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.datasource.OpenAiGenerationDataSource
@@ -18,6 +19,7 @@ internal class OpenAiGenerationRepositoryImpl(
     preferenceManager: PreferenceManager,
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val remoteDataSource: OpenAiGenerationDataSource.Remote,
 ) : CoreGenerationRepository(
     mediaStoreGateway = mediaStoreGateway,
@@ -26,6 +28,7 @@ internal class OpenAiGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), OpenAiGenerationRepository {
 
     override fun validateApiKey() = remoteDataSource.validateApiKey()

@@ -80,6 +80,25 @@ internal class MediaStoreGatewayImpl(
         }
     }
 
+    override fun exportFromFile(fileName: String, sourceFile: File) {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/PDAI/")
+        }
+
+        val extVolumeUri: Uri = MediaStore.Files.getContentUri("external")
+        val fileUri = context.contentResolver.insert(extVolumeUri, contentValues)
+
+        if (fileUri != null) {
+            context.contentResolver.openOutputStream(fileUri, "wt")?.use { os ->
+                sourceFile.inputStream().use { input ->
+                    input.copyTo(os, bufferSize = 8192)
+                }
+            }
+        }
+    }
+
     override fun getInfo(): MediaStoreInfo {
         try {
             val extVolumeUri: Uri = MediaStore.Files.getContentUri("external")

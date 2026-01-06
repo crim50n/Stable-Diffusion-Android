@@ -2,6 +2,7 @@ package dev.minios.pdaiv1.data.repository
 
 import android.graphics.Bitmap
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.datasource.StabilityAiCreditsDataSource
@@ -23,6 +24,7 @@ internal class StabilityAiGenerationRepositoryImpl(
     private val base64ToBitmapConverter: Base64ToBitmapConverter,
     localDataSource: GenerationResultDataSource.Local,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val preferenceManager: PreferenceManager,
     private val generationRds: StabilityAiGenerationDataSource.Remote,
     private val creditsRds: StabilityAiCreditsDataSource.Remote,
@@ -34,6 +36,7 @@ internal class StabilityAiGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), StabilityAiGenerationRepository {
 
     override fun validateApiKey() = generationRds.validateApiKey()

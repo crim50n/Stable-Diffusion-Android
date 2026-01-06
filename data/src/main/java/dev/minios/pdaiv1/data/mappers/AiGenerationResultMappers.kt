@@ -28,10 +28,12 @@ fun AiGenerationResult.mapDomainToEntity(): GenerationResultEntity = with(this) 
         subSeedStrength = subSeedStrength,
         denoisingStrength = denoisingStrength,
         hidden = hidden,
+        liked = liked,
         mediaPath = mediaPath,
         inputMediaPath = inputMediaPath,
         mediaType = mediaType.key,
         modelName = modelName,
+        blurHash = blurHash,
     )
 }
 //endregion
@@ -60,10 +62,12 @@ fun GenerationResultEntity.mapEntityToDomain(): AiGenerationResult = with(this) 
         subSeedStrength = subSeedStrength,
         denoisingStrength = denoisingStrength,
         hidden = hidden,
+        liked = liked,
         mediaPath = mediaPath,
         inputMediaPath = inputMediaPath,
         mediaType = MediaType.parse(mediaType),
         modelName = modelName,
+        blurHash = blurHash,
     )
 }
 //endregion

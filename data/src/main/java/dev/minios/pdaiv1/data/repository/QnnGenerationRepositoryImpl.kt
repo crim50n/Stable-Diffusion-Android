@@ -3,6 +3,7 @@ package dev.minios.pdaiv1.data.repository
 import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.imageprocessing.BitmapToBase64Converter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.data.mappers.QnnGenerationData
 import dev.minios.pdaiv1.data.mappers.mapQnnResultToAiGenResult
@@ -23,6 +24,7 @@ internal class QnnGenerationRepositoryImpl(
     localDataSource: GenerationResultDataSource.Local,
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val preferenceManager: PreferenceManager,
     private val localQnn: LocalQnn,
     private val bitmapToBase64Converter: BitmapToBase64Converter,
@@ -34,6 +36,7 @@ internal class QnnGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), QnnGenerationRepository {
 
     override fun observeStatus() = localQnn.observeStatus()

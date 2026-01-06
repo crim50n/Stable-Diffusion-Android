@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.core
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.entity.AiGenerationResult
 import dev.minios.pdaiv1.domain.entity.MediaType
@@ -17,6 +18,7 @@ internal abstract class CoreGenerationRepository(
     private val preferenceManager: PreferenceManager,
     private val backgroundWorkObserver: BackgroundWorkObserver,
     private val mediaFileManager: MediaFileManager,
+    private val blurHashEncoder: BlurHashEncoder,
 ) : CoreMediaStoreRepository(preferenceManager, mediaStoreGateway, base64ToBitmapConverter) {
 
     protected fun insertGenerationResult(ai: AiGenerationResult): Single<AiGenerationResult> {
@@ -25,6 +27,7 @@ internal abstract class CoreGenerationRepository(
             return localDataSource
                 .insert(converted)
                 .flatMap { id -> exportToMediaStore(ai).andThen(Single.just(ai.copy(id))) }
+                .doOnSuccess { backgroundWorkObserver.postNewImageSignal() }
         }
         return Single.just(ai)
     }
@@ -32,14 +35,20 @@ internal abstract class CoreGenerationRepository(
     /**
      * Converts base64 data to files before saving to database.
      * This prevents SQLiteBlobTooBigException for large images.
+     * Also generates BlurHash for gallery placeholders.
      */
     private fun AiGenerationResult.saveMediaToFiles(): AiGenerationResult {
         var mediaPath = this.mediaPath
         var inputMediaPath = this.inputMediaPath
+        var blurHash = this.blurHash
 
-        // Convert main image base64 to file
+        // Convert main image base64 to file and generate BlurHash
         if (image.isNotEmpty() && !mediaFileManager.isFilePath(image) && !mediaFileManager.isVideoUrl(image)) {
             mediaPath = mediaFileManager.migrateBase64ToFile(image, mediaType)
+            // Generate BlurHash for gallery placeholder
+            if (blurHash.isEmpty()) {
+                blurHash = generateBlurHash(image)
+            }
         }
 
         // Convert input image base64 to file
@@ -52,6 +61,28 @@ internal abstract class CoreGenerationRepository(
             inputImage = "", // Clear base64 from database
             mediaPath = mediaPath,
             inputMediaPath = inputMediaPath,
+            blurHash = blurHash,
         )
+    }
+
+    /**
+     * Generates BlurHash from base64 image string.
+     * Returns empty string on failure.
+     */
+    private fun generateBlurHash(base64Image: String): String {
+        return try {
+            val bytes = android.util.Base64.decode(base64Image, android.util.Base64.DEFAULT)
+            val bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            if (bitmap != null) {
+                // Scale down for faster encoding
+                val scaledBitmap = android.graphics.Bitmap.createScaledBitmap(bitmap, 32, 32, true)
+                val hash = blurHashEncoder.encodeSync(scaledBitmap)
+                if (scaledBitmap != bitmap) scaledBitmap.recycle()
+                bitmap.recycle()
+                hash
+            } else ""
+        } catch (e: Exception) {
+            ""
+        }
     }
 }

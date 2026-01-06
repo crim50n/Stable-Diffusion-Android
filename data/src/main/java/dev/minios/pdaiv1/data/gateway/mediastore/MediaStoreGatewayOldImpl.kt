@@ -31,6 +31,14 @@ internal class MediaStoreGatewayOldImpl : MediaStoreGateway {
         file.writeBytes(content)
     }
 
+    override fun exportFromFile(fileName: String, sourceFile: File) {
+        val dirPath = Environment.getExternalStorageDirectory().path + DIR_PATH
+        val dir = File(dirPath)
+        if (!dir.exists()) dir.mkdirs()
+        val destFile = File("${dirPath}/${fileName}.png")
+        sourceFile.copyTo(destFile, overwrite = true)
+    }
+
     override fun getInfo(): MediaStoreInfo {
         val dirPath = Environment.getExternalStorageDirectory().path + DIR_PATH
         val dir = File(dirPath)

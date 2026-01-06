@@ -3,6 +3,7 @@ package dev.minios.pdaiv1.data.repository
 import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.imageprocessing.BitmapToBase64Converter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.data.mappers.mapLocalDiffusionToAiGenResult
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
@@ -24,6 +25,7 @@ internal class MediaPipeGenerationRepositoryImpl(
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
     preferenceManager: PreferenceManager,
+    blurHashEncoder: BlurHashEncoder,
     private val schedulersProvider: SchedulersProvider,
     private val mediaPipe: MediaPipe,
     private val bitmapToBase64Converter: BitmapToBase64Converter,
@@ -34,6 +36,7 @@ internal class MediaPipeGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), MediaPipeGenerationRepository {
 
     override fun generateFromText(payload: TextToImagePayload): Single<AiGenerationResult> = mediaPipe

@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.datasource.HordeGenerationDataSource
@@ -19,6 +20,7 @@ internal class HordeGenerationRepositoryImpl(
     preferenceManager: PreferenceManager,
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val remoteDataSource: HordeGenerationDataSource.Remote,
     private val statusSource: HordeGenerationDataSource.StatusSource,
 ) : CoreGenerationRepository(
@@ -28,6 +30,7 @@ internal class HordeGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), HordeGenerationRepository {
 
     override fun observeStatus() = statusSource.observe()

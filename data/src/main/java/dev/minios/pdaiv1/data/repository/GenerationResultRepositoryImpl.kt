@@ -30,6 +30,10 @@ internal class GenerationResultRepositoryImpl(
 
     override fun getAllIds() = localDataSource.queryAllIds()
 
+    override fun getAllIdsWithBlurHash() = localDataSource.queryAllIdsWithBlurHash()
+
+    override fun getThumbnailInfoByIds(idList: List<Long>) = localDataSource.queryThumbnailInfoByIdList(idList)
+
     override fun getPage(limit: Int, offset: Int) = localDataSource.queryPage(limit, offset)
         .map { results -> results.map { it.loadMediaFromFiles() } }
 
@@ -40,6 +44,8 @@ internal class GenerationResultRepositoryImpl(
 
     override fun getByIds(idList: List<Long>) = localDataSource.queryByIdList(idList)
         .map { results -> results.map { it.loadMediaFromFiles() } }
+
+    override fun getByIdsRaw(idList: List<Long>) = localDataSource.queryByIdList(idList)
 
     override fun insert(result: AiGenerationResult): Single<Long> {
         val converted = result.saveMediaToFiles()
@@ -88,12 +94,25 @@ internal class GenerationResultRepositoryImpl(
         }
         .flatMapCompletable { localDataSource.deleteAll() }
 
+    override fun deleteAllUnliked(): Completable = localDataSource.deleteAllUnliked()
+
     override fun toggleVisibility(id: Long): Single<Boolean> = localDataSource
         .queryById(id)
         .map { it.copy(hidden = !it.hidden) }
         .flatMap(localDataSource::insert)
         .flatMap { localDataSource.queryById(id) }
         .map(AiGenerationResult::hidden)
+
+    override fun toggleLike(id: Long): Single<Boolean> = localDataSource
+        .queryById(id)
+        .map { it.copy(liked = !it.liked) }
+        .flatMap(localDataSource::insert)
+        .flatMap { localDataSource.queryById(id) }
+        .map(AiGenerationResult::liked)
+
+    override fun likeByIds(idList: List<Long>): Completable = localDataSource.likeByIds(idList)
+
+    override fun hideByIds(idList: List<Long>): Completable = localDataSource.hideByIds(idList)
 
     override fun migrateBase64ToFiles(): Completable = localDataSource.queryAll()
         .flatMapCompletable { results ->

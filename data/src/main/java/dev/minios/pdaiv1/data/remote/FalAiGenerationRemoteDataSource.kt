@@ -15,7 +15,6 @@ import dev.minios.pdaiv1.domain.feature.MediaFileManager
 import dev.minios.pdaiv1.network.api.falai.FalAiApi
 import dev.minios.pdaiv1.network.request.FalAiImageSize
 import dev.minios.pdaiv1.network.request.FalAiTextToImageRequest
-import dev.minios.pdaiv1.network.response.FalAiGenerationResponse
 import dev.minios.pdaiv1.network.response.FalAiImage
 import dev.minios.pdaiv1.network.response.FalAiQueueResponse
 import io.reactivex.rxjava3.core.Single
@@ -127,7 +126,6 @@ internal class FalAiGenerationRemoteDataSource(
 
             when (mediaType) {
                 MediaType.IMAGE -> {
-                    // Decode to bitmap and re-encode to ensure proper PNG format
                     val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                         ?: throw IllegalStateException("Failed to decode image")
 
@@ -136,18 +134,18 @@ internal class FalAiGenerationRemoteDataSource(
                     mediaFileManager.saveMedia(outputStream.toByteArray(), MediaType.IMAGE)
                 }
                 MediaType.VIDEO -> {
-                    // Save video bytes directly
                     mediaFileManager.saveMedia(bytes, MediaType.VIDEO)
                 }
             }
         }
     }
 
-    @Deprecated("Use downloadAndSaveMedia instead", replaceWith = ReplaceWith("downloadAndSaveMedia(imageUrl, MediaType.IMAGE)"))
     private fun downloadAndConvertToBase64(imageUrl: String): Single<String> {
         return Single.fromCallable {
+            debugLog("FalAi downloadAndConvertToBase64: starting download from $imageUrl")
             val request = Request.Builder().url(imageUrl).build()
             val response = httpClient.newCall(request).execute()
+            debugLog("FalAi downloadAndConvertToBase64: response code=${response.code}")
 
             if (!response.isSuccessful) {
                 throw IllegalStateException("Failed to download image: ${response.code}")
@@ -155,14 +153,17 @@ internal class FalAiGenerationRemoteDataSource(
 
             val bytes = response.body?.bytes()
                 ?: throw IllegalStateException("Empty response body")
+            debugLog("FalAi downloadAndConvertToBase64: downloaded ${bytes.size} bytes")
 
-            // Decode to bitmap and re-encode to ensure proper format
             val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 ?: throw IllegalStateException("Failed to decode image")
+            debugLog("FalAi downloadAndConvertToBase64: decoded bitmap ${bitmap.width}x${bitmap.height}")
 
             val outputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-            Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+            val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+            debugLog("FalAi downloadAndConvertToBase64: converted to base64, length=${base64.length}")
+            base64
         }
     }
 
@@ -219,6 +220,9 @@ internal class FalAiGenerationRemoteDataSource(
         debugLog("FalAi generateDynamic: url=$url, params=$requestBody")
 
         return api.submitDynamicToQueue(url, requestBody)
+            .doOnSuccess { queueResponse -> 
+                debugLog("FalAi submitDynamicToQueue response: requestId=${queueResponse.requestId}, statusUrl=${queueResponse.statusUrl}, images=${queueResponse.images?.size}, seed=${queueResponse.seed}")
+            }
             .doOnError { t -> errorLog("FalAi submitDynamicToQueue error: ${t.message}") }
             .flatMap { queueResponse -> handleDynamicQueueResponse(queueResponse, endpoint, parameters) }
     }
@@ -310,9 +314,13 @@ internal class FalAiGenerationRemoteDataSource(
         responseSeed: String? = null,
         responsePrompt: String? = null,
     ): Single<List<AiGenerationResult>> {
+        debugLog("FalAi processImages: starting to process ${images.size} images")
         return io.reactivex.rxjava3.core.Observable.fromIterable(images)
             .flatMapSingle { image ->
+                debugLog("FalAi processImages: downloading image from ${image.url}")
                 downloadAndConvertToBase64(image.url)
+                    .doOnSuccess { debugLog("FalAi processImages: downloaded and converted image, base64 length=${it.length}") }
+                    .doOnError { t -> errorLog("FalAi processImages: error downloading image: ${t.message}") }
                     .map { base64 ->
                         createDynamicImageResult(
                             endpoint = endpoint,
@@ -407,18 +415,12 @@ internal class FalAiGenerationRemoteDataSource(
         imageWidth: Int? = null,
         imageHeight: Int? = null,
     ): AiGenerationResult {
-        // Prefer response values over input parameters
         val prompt = responsePrompt ?: parameters["prompt"]?.toString() ?: ""
         val negativePrompt = parameters["negative_prompt"]?.toString() ?: ""
-
-        // Prefer actual image dimensions from response, then parameters, then defaults
         val width = imageWidth ?: extractWidth(parameters)
         val height = imageHeight ?: extractHeight(parameters)
-
         val steps = (parameters["num_inference_steps"] as? Number)?.toInt() ?: 28
         val guidance = (parameters["guidance_scale"] as? Number)?.toFloat() ?: 3.5f
-
-        // Use seed from response if available (server may generate random seed)
         val seed = responseSeed ?: parameters["seed"]?.toString() ?: ""
 
         val generationType = when (endpoint.category) {
@@ -454,7 +456,6 @@ internal class FalAiGenerationRemoteDataSource(
     }
 
     private fun extractWidth(parameters: Map<String, Any?>): Int {
-        // Handle image_size as object with width/height
         val imageSize = parameters["image_size"]
         return when (imageSize) {
             is Map<*, *> -> (imageSize["width"] as? Number)?.toInt() ?: 1024
@@ -473,7 +474,6 @@ internal class FalAiGenerationRemoteDataSource(
     }
 
     private fun parseImageSizeDimension(sizeStr: String, isWidth: Boolean): Int {
-        // Handle formats like "1024x1024", "landscape_16_9", etc.
         return if (sizeStr.contains("x")) {
             val parts = sizeStr.split("x")
             (if (isWidth) parts.getOrNull(0) else parts.getOrNull(1))
@@ -485,7 +485,6 @@ internal class FalAiGenerationRemoteDataSource(
 
     companion object {
         private const val BASE_URL = "https://queue.fal.run/"
-        private const val DEFAULT_MODEL = "fal-ai/flux-lora"
         private const val POLL_INTERVAL_MS = 2000L
     }
 }

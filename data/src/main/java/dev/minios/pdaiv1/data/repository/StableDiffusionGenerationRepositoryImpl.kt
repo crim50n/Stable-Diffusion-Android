@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.datasource.StableDiffusionGenerationDataSource
@@ -22,6 +23,7 @@ internal class StableDiffusionGenerationRepositoryImpl(
     base64ToBitmapConverter: Base64ToBitmapConverter,
     localDataSource: GenerationResultDataSource.Local,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val remoteDataSource: StableDiffusionGenerationDataSource.Remote,
     private val preferenceManager: PreferenceManager,
     private val textToImageDemo: TextToImageDemo,
@@ -33,6 +35,7 @@ internal class StableDiffusionGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), StableDiffusionGenerationRepository {
 
     override fun checkApiAvailability() = remoteDataSource.checkAvailability()

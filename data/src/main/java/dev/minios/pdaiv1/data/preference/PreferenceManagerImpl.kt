@@ -307,9 +307,9 @@ class PreferenceManagerImpl(
 
     override var galleryGrid: Grid by preferences.delegates.complexInt(
         key = KEY_GALLERY_GRID,
-        default = Grid.entries.first(),
-        serialize = { grid -> grid.ordinal },
-        deserialize = { index -> Grid.entries[index] },
+        default = Grid.Fixed2,
+        serialize = { grid -> grid.size },
+        deserialize = { size -> Grid.fromSize(size) },
         onChanged = ::onPreferencesChanged,
     )
 

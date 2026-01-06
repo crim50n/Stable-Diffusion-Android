@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.datasource.HuggingFaceGenerationDataSource
@@ -18,6 +19,7 @@ internal class HuggingFaceGenerationRepositoryImpl(
     localDataSource: GenerationResultDataSource.Local,
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val preferenceManager: PreferenceManager,
     private val remoteDataSource: HuggingFaceGenerationDataSource.Remote,
 ) : CoreGenerationRepository(
@@ -27,6 +29,7 @@ internal class HuggingFaceGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), HuggingFaceGenerationRepository {
 
     override fun validateApiKey() = remoteDataSource.validateApiKey()

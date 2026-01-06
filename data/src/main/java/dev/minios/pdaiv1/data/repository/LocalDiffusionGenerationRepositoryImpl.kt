@@ -3,6 +3,7 @@ package dev.minios.pdaiv1.data.repository
 import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.imageprocessing.BitmapToBase64Converter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.data.mappers.mapLocalDiffusionToAiGenResult
 import dev.minios.pdaiv1.domain.datasource.DownloadableModelDataSource
@@ -22,6 +23,7 @@ internal class LocalDiffusionGenerationRepositoryImpl(
     localDataSource: GenerationResultDataSource.Local,
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val preferenceManager: PreferenceManager,
     private val localDiffusion: LocalDiffusion,
     private val downloadableLocalDataSource: DownloadableModelDataSource.Local,
@@ -34,6 +36,7 @@ internal class LocalDiffusionGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), LocalDiffusionGenerationRepository {
 
     override fun observeStatus() = localDiffusion.observeStatus()

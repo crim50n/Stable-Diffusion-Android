@@ -386,4 +386,107 @@ class GenerationResultRepositoryImplTest {
             .await()
             .assertNotComplete()
     }
+
+    @Test
+    fun `given attempt to toggle like, local returns data, expected boolean value`() {
+        every {
+            stubLocalDataSource.queryById(any())
+        } returns Single.just(mockAiGenerationResult)
+
+        every {
+            stubLocalDataSource.insert(any())
+        } returns Single.just(5598L)
+
+        repository
+            .toggleLike(5598L)
+            .test()
+            .assertNoErrors()
+            .assertValue(true)
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given attempt to like by ids, local success, expected complete value`() {
+        every {
+            stubLocalDataSource.likeByIds(any())
+        } returns Completable.complete()
+
+        repository
+            .likeByIds(listOf(5598L, 151297L))
+            .test()
+            .assertNoErrors()
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given attempt to like by ids, local fails, expected error value`() {
+        every {
+            stubLocalDataSource.likeByIds(any())
+        } returns Completable.error(stubException)
+
+        repository
+            .likeByIds(listOf(5598L, 151297L))
+            .test()
+            .assertError(stubException)
+            .await()
+            .assertNotComplete()
+    }
+
+    @Test
+    fun `given attempt to hide by ids, local success, expected complete value`() {
+        every {
+            stubLocalDataSource.hideByIds(any())
+        } returns Completable.complete()
+
+        repository
+            .hideByIds(listOf(5598L, 151297L))
+            .test()
+            .assertNoErrors()
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given attempt to hide by ids, local fails, expected error value`() {
+        every {
+            stubLocalDataSource.hideByIds(any())
+        } returns Completable.error(stubException)
+
+        repository
+            .hideByIds(listOf(5598L, 151297L))
+            .test()
+            .assertError(stubException)
+            .await()
+            .assertNotComplete()
+    }
+
+    @Test
+    fun `given attempt to delete all unliked, local success, expected complete value`() {
+        every {
+            stubLocalDataSource.deleteAllUnliked()
+        } returns Completable.complete()
+
+        repository
+            .deleteAllUnliked()
+            .test()
+            .assertNoErrors()
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given attempt to delete all unliked, local fails, expected error value`() {
+        every {
+            stubLocalDataSource.deleteAllUnliked()
+        } returns Completable.error(stubException)
+
+        repository
+            .deleteAllUnliked()
+            .test()
+            .assertError(stubException)
+            .await()
+            .assertNotComplete()
+    }
 }

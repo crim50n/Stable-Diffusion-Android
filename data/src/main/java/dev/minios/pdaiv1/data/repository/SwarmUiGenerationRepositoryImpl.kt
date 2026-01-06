@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.core.CoreGenerationRepository
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.datasource.SwarmUiGenerationDataSource
@@ -22,6 +23,7 @@ internal class SwarmUiGenerationRepositoryImpl(
     localDataSource: GenerationResultDataSource.Local,
     backgroundWorkObserver: BackgroundWorkObserver,
     mediaFileManager: MediaFileManager,
+    blurHashEncoder: BlurHashEncoder,
     private val preferenceManager: PreferenceManager,
     private val session: SwarmUiSessionDataSource,
     private val remoteDataSource: SwarmUiGenerationDataSource.Remote,
@@ -32,6 +34,7 @@ internal class SwarmUiGenerationRepositoryImpl(
     preferenceManager = preferenceManager,
     backgroundWorkObserver = backgroundWorkObserver,
     mediaFileManager = mediaFileManager,
+    blurHashEncoder = blurHashEncoder,
 ), SwarmUiGenerationRepository {
 
     override fun checkApiAvailability(): Completable = session
