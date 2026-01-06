@@ -1,14 +1,24 @@
 package dev.minios.pdaiv1.presentation.navigation.graph
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.minios.pdaiv1.presentation.model.LaunchSource
+import dev.minios.pdaiv1.presentation.navigation.LocalAnimatedVisibilityScope
 import dev.minios.pdaiv1.presentation.navigation.NavigationRoute
 import dev.minios.pdaiv1.presentation.screen.debug.DebugMenuScreen
 import dev.minios.pdaiv1.presentation.screen.donate.DonateScreen
 import dev.minios.pdaiv1.presentation.screen.gallery.detail.GalleryDetailScreen
+import dev.minios.pdaiv1.presentation.screen.gallery.editor.ImageEditorScreen
+import dev.minios.pdaiv1.presentation.screen.gallery.list.GalleryScreen
 import dev.minios.pdaiv1.presentation.screen.inpaint.InPaintScreen
 import dev.minios.pdaiv1.presentation.screen.loader.ConfigurationLoaderScreen
 import dev.minios.pdaiv1.presentation.screen.logger.LoggerScreen
@@ -25,6 +35,7 @@ import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 import kotlin.reflect.typeOf
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.mainNavGraph() {
 
     composable<NavigationRoute.Splash> {
@@ -51,9 +62,38 @@ fun NavGraphBuilder.mainNavGraph() {
 
     homeScreenNavGraph()
 
-    composable<NavigationRoute.GalleryDetail> { entry ->
-        val itemId = entry.toRoute<NavigationRoute.GalleryDetail>().itemId
-        GalleryDetailScreen(itemId = itemId)
+    // Full Gallery screen (for Immich-style shared element transitions)
+    composable<NavigationRoute.GalleryFull> {
+        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+            GalleryScreen()
+        }
+    }
+
+    // Gallery Detail - transparent transitions for Immich-style overlay effect
+    // The gallery stays visible underneath during navigation
+    composable<NavigationRoute.GalleryDetail>(
+        enterTransition = { fadeIn(animationSpec = tween(150)) },
+        exitTransition = { fadeOut(animationSpec = tween(150)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(150)) },
+        popExitTransition = { fadeOut(animationSpec = tween(200)) },
+    ) { entry ->
+        // Provide AnimatedVisibilityScope for shared element transitions
+        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+            val itemId = entry.toRoute<NavigationRoute.GalleryDetail>().itemId
+            GalleryDetailScreen(itemId = itemId)
+        }
+    }
+
+    composable<NavigationRoute.ImageEditor>(
+        enterTransition = {
+            fadeIn(animationSpec = tween(300))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(300))
+        },
+    ) { entry ->
+        val itemId = entry.toRoute<NavigationRoute.ImageEditor>().itemId
+        ImageEditorScreen(itemId = itemId)
     }
 
     composable<NavigationRoute.ReportImage> { entry ->

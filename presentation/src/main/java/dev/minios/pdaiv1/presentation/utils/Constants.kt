@@ -3,7 +3,7 @@ package dev.minios.pdaiv1.presentation.utils
 import dev.minios.pdaiv1.presentation.navigation.NavigationRoute.HomeNavigation
 
 object Constants {
-    const val PAGINATION_PAYLOAD_SIZE = 30
+    const val PAGINATION_PAYLOAD_SIZE = 30 // Smaller pages = faster initial load
     const val DEBUG_MENU_ACCESS_TAPS = 7
 
     const val SUB_SEED_STRENGTH_MIN = 0f

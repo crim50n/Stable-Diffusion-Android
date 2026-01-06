@@ -67,6 +67,22 @@ internal class MainRouterImpl : MainRouter {
         )
     }
 
+    override fun navigateToImageEditor(itemId: Long) {
+        effectSubject.onNext(
+            NavigationEffect.Navigate.Route(
+                navRoute = NavigationRoute.ImageEditor(itemId = itemId)
+            )
+        )
+    }
+
+    override fun navigateToGalleryFull() {
+        effectSubject.onNext(
+            NavigationEffect.Navigate.Route(
+                navRoute = NavigationRoute.GalleryFull
+            )
+        )
+    }
+
     override fun navigateToReportImage(itemId: Long) {
         effectSubject.onNext(
             NavigationEffect.Navigate.Route(

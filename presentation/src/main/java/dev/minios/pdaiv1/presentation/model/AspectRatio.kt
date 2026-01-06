@@ -20,16 +20,11 @@ enum class AspectRatio(
         val normalizedWidth = widthRatio / gcd
         val normalizedHeight = heightRatio / gcd
 
-        return if (normalizedWidth >= normalizedHeight) {
-            val width = baseSize
-            val height = (baseSize * normalizedHeight) / normalizedWidth
-            // Round to nearest 8 for better compatibility
-            Pair(roundTo8(width), roundTo8(height))
-        } else {
-            val height = baseSize
-            val width = (baseSize * normalizedWidth) / normalizedHeight
-            Pair(roundTo8(width), roundTo8(height))
-        }
+        // Always use baseSize as width
+        val width = baseSize
+        val height = (baseSize * normalizedHeight) / normalizedWidth
+        // Round to nearest 8 for better compatibility
+        return Pair(roundTo8(width), roundTo8(height))
     }
 
     private fun gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)

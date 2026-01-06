@@ -12,13 +12,16 @@ import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter.Input
 import dev.minios.pdaiv1.core.viewmodel.MviRxViewModel
 import dev.minios.pdaiv1.domain.entity.AiGenerationResult
 import dev.minios.pdaiv1.domain.entity.ServerSource
+import dev.minios.pdaiv1.domain.feature.work.BackgroundWorkObserver
 import dev.minios.pdaiv1.domain.gateway.MediaStoreGateway
 import dev.minios.pdaiv1.domain.preference.PreferenceManager
 import dev.minios.pdaiv1.domain.usecase.caching.GetLastResultFromCacheUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.DeleteGalleryItemUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.ToggleImageVisibilityUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.ToggleLikeUseCase
 import dev.minios.pdaiv1.domain.usecase.generation.GetGenerationResultUseCase
+import dev.minios.pdaiv1.presentation.core.GalleryItemStateEvent
 import dev.minios.pdaiv1.presentation.core.GenerationFormUpdateEvent
 import dev.minios.pdaiv1.presentation.model.Modal
 import dev.minios.pdaiv1.presentation.navigation.router.main.MainRouter
@@ -30,6 +33,7 @@ import java.util.concurrent.TimeUnit
 
 class GalleryDetailViewModel(
     private val itemId: Long,
+    private val onNavigateBackCallback: (() -> Unit)? = null,
     dispatchersProvider: DispatchersProvider,
     private val buildInfoProvider: BuildInfoProvider,
     private val preferenceManager: PreferenceManager,
@@ -38,12 +42,15 @@ class GalleryDetailViewModel(
     private val getGalleryPagedIdsUseCase: GetGalleryPagedIdsUseCase,
     private val deleteGalleryItemUseCase: DeleteGalleryItemUseCase,
     private val toggleImageVisibilityUseCase: ToggleImageVisibilityUseCase,
+    private val toggleLikeUseCase: ToggleLikeUseCase,
     private val galleryDetailBitmapExporter: GalleryDetailBitmapExporter,
     private val base64ToBitmapConverter: Base64ToBitmapConverter,
     private val schedulersProvider: SchedulersProvider,
     private val generationFormUpdateEvent: GenerationFormUpdateEvent,
+    private val galleryItemStateEvent: GalleryItemStateEvent,
     private val mainRouter: MainRouter,
     private val mediaStoreGateway: MediaStoreGateway,
+    private val backgroundWorkObserver: BackgroundWorkObserver,
 ) : MviRxViewModel<GalleryDetailState, GalleryDetailIntent, GalleryDetailEffect>() {
 
     override val initialState = GalleryDetailState.Loading(currentSource = preferenceManager.source)
@@ -51,6 +58,11 @@ class GalleryDetailViewModel(
     override val effectDispatcher = dispatchersProvider.immediate
 
     private var currentItemId: Long = itemId
+
+    // Helper to navigate back - uses callback if available, otherwise mainRouter
+    private fun navigateBack() {
+        onNavigateBackCallback?.invoke() ?: mainRouter.navigateBack()
+    }
 
     init {
         // Load all gallery IDs first, then load the current item
@@ -73,7 +85,7 @@ class GalleryDetailViewModel(
                     val newIndex = state.galleryIds.indexOf(id).coerceAtLeast(0)
                     ai.mapToUi(preferenceManager.source)
                         .copy(
-                            showReportButton = buildInfoProvider.type != BuildType.FOSS,
+                            showReportButton = buildInfoProvider.type == BuildType.PLAY,
                             galleryIds = state.galleryIds,
                             currentIndex = newIndex,
                             bitmapCache = state.bitmapCache + (id to ai.second.bitmap),
@@ -139,7 +151,7 @@ class GalleryDetailViewModel(
                 emitEffect(GalleryDetailEffect.ShareGenerationParams(currentState))
             }
 
-            GalleryDetailIntent.NavigateBack -> mainRouter.navigateBack()
+            GalleryDetailIntent.NavigateBack -> navigateBack()
 
             is GalleryDetailIntent.SelectTab -> updateState {
                 it.withTab(intent.tab)
@@ -163,8 +175,24 @@ class GalleryDetailViewModel(
 
             GalleryDetailIntent.ToggleVisibility -> toggleVisibility()
 
+            GalleryDetailIntent.ToggleLike -> toggleLike()
+
             GalleryDetailIntent.ToggleControlsVisibility -> updateState {
                 it.withControlsVisible(!it.controlsVisible)
+            }
+
+            GalleryDetailIntent.ShowInfoBottomSheet -> updateState {
+                it.withInfoBottomSheet(true)
+            }
+
+            GalleryDetailIntent.HideInfoBottomSheet -> updateState {
+                it.withInfoBottomSheet(false)
+            }
+
+            GalleryDetailIntent.OpenEditor -> {
+                (currentState as? GalleryDetailState.Content)?.id?.let { id ->
+                    mainRouter.navigateToImageEditor(id)
+                }
             }
 
             GalleryDetailIntent.SaveToGallery -> saveToGallery()
@@ -228,9 +256,10 @@ class GalleryDetailViewModel(
         if (newIds.isEmpty()) {
             // No more images after deletion, just delete and go back
             !deleteGalleryItemUseCase(deletedId)
+                .doOnComplete { backgroundWorkObserver.postGalleryChangedSignal() }
                 .subscribeOnMainThread(schedulersProvider)
                 .subscribeBy(::errorLog) {
-                    mainRouter.navigateBack()
+                    navigateBack()
                 }
         } else {
             // Determine target page for swipe animation (next or previous)
@@ -247,6 +276,7 @@ class GalleryDetailViewModel(
 
             // After animation completes, delete and update state
             !deleteGalleryItemUseCase(deletedId)
+                .doOnComplete { backgroundWorkObserver.postGalleryChangedSignal() }
                 .delay(350, TimeUnit.MILLISECONDS)
                 .subscribeOnMainThread(schedulersProvider)
                 .subscribeBy(::errorLog) {
@@ -287,7 +317,7 @@ class GalleryDetailViewModel(
         val state = (currentState as? GalleryDetailState.Content) ?: return
         !getGenerationResult(currentItemId)
             .subscribeOnMainThread(schedulersProvider)
-            .doFinally { mainRouter.navigateBack() }
+            .doFinally { navigateBack() }
             .subscribeBy(::errorLog) { ai ->
                 generationFormUpdateEvent.update(
                     ai,
@@ -301,7 +331,7 @@ class GalleryDetailViewModel(
     private fun sendPromptToFalAi() {
         !getGenerationResult(currentItemId)
             .subscribeOnMainThread(schedulersProvider)
-            .doFinally { mainRouter.navigateBack() }
+            .doFinally { navigateBack() }
             .subscribeBy(::errorLog) { ai ->
                 generationFormUpdateEvent.updateFalAi(ai)
             }
@@ -311,6 +341,14 @@ class GalleryDetailViewModel(
         .subscribeOnMainThread(schedulersProvider)
         .subscribeBy(::errorLog) { hidden ->
             updateState { it.withHiddenState(hidden) }
+            galleryItemStateEvent.emitHiddenChange(currentItemId, hidden)
+        }
+
+    private fun toggleLike() = !toggleLikeUseCase(currentItemId)
+        .subscribeOnMainThread(schedulersProvider)
+        .subscribeBy(::errorLog) { liked ->
+            updateState { it.withLikedState(liked) }
+            galleryItemStateEvent.emitLikedChange(currentItemId, liked)
         }
 
     private fun getGenerationResult(id: Long): Single<AiGenerationResult> {

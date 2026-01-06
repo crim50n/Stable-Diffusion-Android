@@ -23,10 +23,18 @@ sealed interface GalleryIntent : MviIntent {
             Request, Confirm;
         }
 
+        enum class AllUnliked : Delete {
+            Request, Confirm;
+        }
+
         enum class Selection : Delete {
             Request, Confirm;
         }
     }
+
+    // Bulk actions for selected items
+    data object LikeSelection : GalleryIntent
+    data object HideSelection : GalleryIntent
 
     enum class Dropdown : GalleryIntent {
         Toggle, Show, Close;
@@ -34,7 +42,9 @@ sealed interface GalleryIntent : MviIntent {
 
     data object DismissDialog : GalleryIntent
 
-    data class OpenItem(val item: GalleryGridItemUi, val index: Int) : GalleryIntent
+    data class OpenItem(val id: Long, val index: Int) : GalleryIntent
+
+    data object CloseItem : GalleryIntent
 
     data object ClearScrollPosition : GalleryIntent
 
@@ -56,4 +66,18 @@ sealed interface GalleryIntent : MviIntent {
     data object UnselectAll : GalleryIntent
 
     data class ToggleItemSelection(val id: Long) : GalleryIntent
+
+    sealed interface GridZoom : GalleryIntent {
+        data object ZoomIn : GridZoom  // Less columns, bigger thumbnails
+        data object ZoomOut : GridZoom // More columns, smaller thumbnails
+    }
+
+    sealed interface DragSelection : GalleryIntent {
+        data class Start(val itemId: Long) : DragSelection
+        data class UpdateRange(val fromIndex: Int, val toIndex: Int, val itemIds: List<Long>) : DragSelection
+        data object End : DragSelection
+    }
+
+    // Immich-style lazy loading
+    data class LoadThumbnails(val ids: List<Long>) : GalleryIntent
 }

@@ -31,10 +31,12 @@ fun GridBottomSheet(
         Grid.entries.forEach { grid ->
             val textCount = stringResource(
                 id = when (grid) {
+                    Grid.Fixed1 -> LocalizationR.string.one
                     Grid.Fixed2 -> LocalizationR.string.two
                     Grid.Fixed3 -> LocalizationR.string.three
                     Grid.Fixed4 -> LocalizationR.string.four
                     Grid.Fixed5 -> LocalizationR.string.five
+                    Grid.Fixed6 -> LocalizationR.string.six
                 },
             )
             SettingsItem(

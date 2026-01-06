@@ -213,7 +213,7 @@ class ImageToImageViewModel(
                         Modal.Image.create(
                             list = ai,
                             autoSaveEnabled = preferenceManager.autoSaveAiResults,
-                            reportEnabled = buildInfoProvider.type != BuildType.FOSS,
+                            reportEnabled = buildInfoProvider.type == BuildType.PLAY,
                         )
                     )
                 }

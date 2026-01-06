@@ -25,8 +25,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +43,7 @@ import dev.minios.pdaiv1.presentation.modal.ModalRenderer
 import dev.minios.pdaiv1.presentation.model.Modal
 import dev.minios.pdaiv1.presentation.screen.drawer.DrawerIntent
 import dev.minios.pdaiv1.presentation.widget.input.GenerationInputForm
+import dev.minios.pdaiv1.presentation.widget.scaffold.CollapsibleScaffold
 import dev.minios.pdaiv1.presentation.widget.toolbar.GenerationBottomToolbar
 import dev.minios.pdaiv1.presentation.widget.work.BackgroundWorkWidget
 import org.koin.androidx.compose.koinViewModel
@@ -72,65 +73,45 @@ fun TextToImageScreenContent(
     val negativePromptChipTextFieldState = remember { mutableStateOf(TextFieldValue()) }
     val keyboardController = LocalSoftwareKeyboardController.current
     Box(modifier) {
-        Scaffold(
-            topBar = {
-                Column {
-                    CenterAlignedTopAppBar(
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                processIntent(GenerationMviIntent.Drawer(DrawerIntent.Open))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Menu",
-                                )
-                            }
-                        },
-                        title = {
-                            Text(
-                                text = stringResource(id = LocalizationR.string.title_text_to_image),
-                                style = MaterialTheme.typography.headlineMedium,
+        CollapsibleScaffold(
+            scrollState = scrollState,
+            bottomToolbarHeight = 150.dp,
+            topBarContent = {
+                CenterAlignedTopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            processIntent(GenerationMviIntent.Drawer(DrawerIntent.Open))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Menu",
                             )
-                        },
-                        actions = {
-                            IconButton(onClick = {
-                                processIntent(
-                                    GenerationMviIntent.SetModal(
-                                        Modal.PromptBottomSheet(
-                                            AiGenerationResult.Type.TEXT_TO_IMAGE,
-                                        ),
+                        }
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(id = LocalizationR.string.title_text_to_image),
+                            style = MaterialTheme.typography.headlineMedium,
+                        )
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            processIntent(
+                                GenerationMviIntent.SetModal(
+                                    Modal.PromptBottomSheet(
+                                        AiGenerationResult.Type.TEXT_TO_IMAGE,
                                     ),
-                                )
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                        windowInsets = WindowInsets(0, 0, 0, 0),
-                    )
-                    BackgroundWorkWidget(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(vertical = 4.dp),
-                    )
-                }
-            },
-            content = { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .verticalScroll(scrollState)
-                        .padding(horizontal = 16.dp),
-                ) {
-                    GenerationInputForm(
-                        state = state,
-                        promptChipTextFieldState = promptChipTextFieldState,
-                        negativePromptChipTextFieldState = negativePromptChipTextFieldState,
-                        processIntent = processIntent,
-                    )
-                }
+                                ),
+                            )
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = null,
+                            )
+                        }
+                    },
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                )
             },
             bottomBar = {
                 GenerationBottomToolbar(
@@ -175,6 +156,18 @@ fun TextToImageScreenContent(
                             color = LocalContentColor.current,
                         )
                     }
+                }
+            },
+            contentScrollable = {
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    GenerationInputForm(
+                        state = state,
+                        promptChipTextFieldState = promptChipTextFieldState,
+                        negativePromptChipTextFieldState = negativePromptChipTextFieldState,
+                        processIntent = processIntent,
+                    )
                 }
             }
         )

@@ -18,6 +18,10 @@ interface MainRouter : Router<NavigationEffect> {
 
     fun navigateToGalleryDetails(itemId: Long)
 
+    fun navigateToGalleryFull()
+
+    fun navigateToImageEditor(itemId: Long)
+
     fun navigateToReportImage(itemId: Long)
 
     fun navigateToInPaint()

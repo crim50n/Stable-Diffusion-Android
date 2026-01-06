@@ -26,6 +26,7 @@ import dev.minios.pdaiv1.core.common.log.debugLog
 import dev.minios.pdaiv1.presentation.extensions.navigatePopUpToCurrent
 import dev.minios.pdaiv1.presentation.navigation.NavigationEffect
 import dev.minios.pdaiv1.presentation.navigation.NavigationRoute
+import dev.minios.pdaiv1.presentation.navigation.SharedTransitionProvider
 import dev.minios.pdaiv1.presentation.navigation.graph.mainNavGraph
 import dev.minios.pdaiv1.presentation.screen.drawer.DrawerScreen
 import dev.minios.pdaiv1.presentation.theme.global.AiSdAppTheme
@@ -129,19 +130,21 @@ class AiStableDiffusionActivity : AppCompatActivity() {
                         }
                     }
                 ) { state ->
-                    DrawerScreen(
-                        drawerState = drawerState,
-                        backStackEntry = backStackEntry,
-                        homeRouteEntry = homeRouteEntry,
-                        onRootNavigate = navController::navigate,
-                        onHomeNavigate = { viewModel.processIntent(AppIntent.HomeRoute(it)) },
-                        navItems = state.drawerItems,
-                    ) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = NavigationRoute.Splash,
-                            builder = { mainNavGraph() },
-                        )
+                    SharedTransitionProvider {
+                        DrawerScreen(
+                            drawerState = drawerState,
+                            backStackEntry = backStackEntry,
+                            homeRouteEntry = homeRouteEntry,
+                            onRootNavigate = navController::navigate,
+                            onHomeNavigate = { viewModel.processIntent(AppIntent.HomeRoute(it)) },
+                            navItems = state.drawerItems,
+                        ) {
+                            NavHost(
+                                navController = navController,
+                                startDestination = NavigationRoute.Splash,
+                                builder = { mainNavGraph() },
+                            )
+                        }
                     }
                 }
             }

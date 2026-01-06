@@ -24,6 +24,8 @@ sealed interface Modal {
         val isMultiple: Boolean,
     ) : Modal
 
+    data object DeleteUnlikedConfirm : Modal
+
     data class ConfirmExport(val exportAll: Boolean) : Modal
 
     data class ConfirmSaveToGallery(val saveAll: Boolean) : Modal

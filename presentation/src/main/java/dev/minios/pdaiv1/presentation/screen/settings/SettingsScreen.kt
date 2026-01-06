@@ -50,7 +50,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,6 +80,7 @@ import dev.minios.pdaiv1.presentation.widget.item.GridIcon
 import dev.minios.pdaiv1.presentation.widget.item.SettingsHeader
 import dev.minios.pdaiv1.presentation.widget.item.SettingsItem
 import dev.minios.pdaiv1.presentation.widget.item.SettingsItemContent
+import dev.minios.pdaiv1.presentation.widget.scaffold.CollapsibleScaffold
 import dev.minios.pdaiv1.presentation.widget.work.BackgroundWorkWidget
 import com.shifthackz.android.compose.daynightswitch.DayNightSwitch
 import org.koin.androidx.compose.koinViewModel
@@ -145,44 +145,31 @@ fun SettingsScreenContent(
     processIntent: (SettingsIntent) -> Unit = {},
 ) {
     Box(modifier) {
-        Scaffold(
-            topBar = {
-                Column {
-                    CenterAlignedTopAppBar(
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                processIntent(SettingsIntent.Drawer(DrawerIntent.Open))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Menu",
-                                )
-                            }
-                        },
-                        title = {
-                            Text(
-                                text = stringResource(id = LocalizationR.string.title_settings),
-                                style = MaterialTheme.typography.headlineMedium,
+        CollapsibleScaffold(
+            topBarContent = {
+                CenterAlignedTopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            processIntent(SettingsIntent.Drawer(DrawerIntent.Open))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Menu",
                             )
-                        },
-                        windowInsets = WindowInsets(0, 0, 0, 0),
-                    )
-                    BackgroundWorkWidget(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(vertical = 4.dp),
-                    )
-                }
-            },
-            content = { paddingValues ->
-                ContentSettingsState(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = paddingValues.calculateStartPadding(
-                                LocalLayoutDirection.current,
-                            ),
+                        }
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(id = LocalizationR.string.title_settings),
+                            style = MaterialTheme.typography.headlineMedium,
                         )
-                        .padding(horizontal = 16.dp),
+                    },
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                )
+            },
+            contentScrollable = {
+                ContentSettingsState(
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     state = state,
                     processIntent = processIntent,
                 )
@@ -205,9 +192,8 @@ private fun ContentSettingsState(
         isDark = isDark,
         darkThemeToken = state.darkThemeToken,
     )
-    val scrollState = rememberScrollState()
     Column(
-        modifier = modifier.verticalScroll(scrollState),
+        modifier = modifier,
     ) {
         val headerModifier = Modifier.padding(top = 28.dp, bottom = 8.dp)
 

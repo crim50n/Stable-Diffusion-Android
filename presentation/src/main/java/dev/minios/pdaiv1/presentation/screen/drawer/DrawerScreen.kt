@@ -2,10 +2,13 @@ package dev.minios.pdaiv1.presentation.screen.drawer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
@@ -36,6 +39,7 @@ import dev.minios.pdaiv1.presentation.model.NavItem
 import dev.minios.pdaiv1.presentation.navigation.NavigationRoute
 import dev.minios.pdaiv1.presentation.utils.Constants
 import dev.minios.pdaiv1.presentation.widget.item.NavigationItemIcon
+import dev.minios.pdaiv1.presentation.widget.work.BackgroundWorkWidget
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -63,11 +67,7 @@ fun DrawerScreen(
         viewModel = koinViewModel<DrawerViewModel>(),
     ) { _, intentHandler ->
         ModalNavigationDrawer(
-            gesturesEnabled = if (drawerState.isOpen) {
-                true
-            } else {
-                currentRootRoute?.hasRoute(NavigationRoute.Home::class) == true
-            },
+            gesturesEnabled = drawerState.isOpen, // Only allow gesture to close, not to open
             drawerState = drawerState,
             drawerContent = {
                 ModalDrawerSheet(
@@ -141,7 +141,17 @@ fun DrawerScreen(
                 }
             },
         ) {
-            content()
+            Box(modifier = Modifier.fillMaxSize()) {
+                content()
+                
+                // Global floating BackgroundWorkWidget - inside drawer content so drawer is on top
+                BackgroundWorkWidget(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .navigationBarsPadding()
+                        .padding(bottom = 88.dp), // Above bottom navigation with extra spacing for swipe
+                )
+            }
         }
     }
 }

@@ -8,14 +8,17 @@ import dev.minios.pdaiv1.core.common.appbuild.BuildInfoProvider
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.model.asUiText
 import dev.minios.pdaiv1.domain.entity.AiGenerationResult
+import dev.minios.pdaiv1.domain.feature.work.BackgroundWorkObserver
 import dev.minios.pdaiv1.domain.usecase.caching.GetLastResultFromCacheUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.DeleteGalleryItemUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.ToggleImageVisibilityUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.ToggleLikeUseCase
 import dev.minios.pdaiv1.domain.usecase.generation.GetGenerationResultUseCase
 import dev.minios.pdaiv1.domain.preference.PreferenceManager
 import dev.minios.pdaiv1.domain.gateway.MediaStoreGateway
 import dev.minios.pdaiv1.presentation.core.CoreViewModelTest
+import dev.minios.pdaiv1.presentation.core.GalleryItemStateEvent
 import dev.minios.pdaiv1.presentation.core.GenerationFormUpdateEvent
 import dev.minios.pdaiv1.presentation.extensions.mapToUi
 import dev.minios.pdaiv1.presentation.mocks.mockAiGenerationResult
@@ -27,6 +30,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.firstOrNull
@@ -47,13 +51,16 @@ class GalleryDetailViewModelTest : CoreViewModelTest<GalleryDetailViewModel>() {
     private val stubGetLastResultFromCacheUseCase = mockk<GetLastResultFromCacheUseCase>()
     private val stubDeleteGalleryItemUseCase = mockk<DeleteGalleryItemUseCase>()
     private val stubToggleImageVisibilityUseCase = mockk<ToggleImageVisibilityUseCase>()
+    private val stubToggleLikeUseCase = mockk<ToggleLikeUseCase>()
     private val stubGalleryDetailBitmapExporter = mockk<GalleryDetailBitmapExporter>()
     private val stubBase64ToBitmapConverter = mockk<Base64ToBitmapConverter>()
     private val stubGenerationFormUpdateEvent = mockk<GenerationFormUpdateEvent>()
+    private val stubGalleryItemStateEvent = mockk<GalleryItemStateEvent>()
     private val stubMainRouter = mockk<MainRouter>()
     private val stubPreferenceManager = mockk<PreferenceManager>()
     private val stubGetGalleryPagedIdsUseCase = mockk<GetGalleryPagedIdsUseCase>()
     private val stubMediaStoreGateway = mockk<MediaStoreGateway>()
+    private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
 
     override fun initializeViewModel() = GalleryDetailViewModel(
         itemId = 5598L,
@@ -63,14 +70,17 @@ class GalleryDetailViewModelTest : CoreViewModelTest<GalleryDetailViewModel>() {
         getLastResultFromCacheUseCase = stubGetLastResultFromCacheUseCase,
         deleteGalleryItemUseCase = stubDeleteGalleryItemUseCase,
         toggleImageVisibilityUseCase = stubToggleImageVisibilityUseCase,
+        toggleLikeUseCase = stubToggleLikeUseCase,
         galleryDetailBitmapExporter = stubGalleryDetailBitmapExporter,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         schedulersProvider = stubSchedulersProvider,
         generationFormUpdateEvent = stubGenerationFormUpdateEvent,
+        galleryItemStateEvent = stubGalleryItemStateEvent,
         mainRouter = stubMainRouter,
         preferenceManager = stubPreferenceManager,
         getGalleryPagedIdsUseCase = stubGetGalleryPagedIdsUseCase,
         mediaStoreGateway = stubMediaStoreGateway,
+        backgroundWorkObserver = stubBackgroundWorkObserver,
     )
 
     @Before
@@ -88,6 +98,10 @@ class GalleryDetailViewModelTest : CoreViewModelTest<GalleryDetailViewModel>() {
         every {
             stubBase64ToBitmapConverter(any())
         } returns Single.just(Base64ToBitmapConverter.Output(stubBitmap))
+
+        every {
+            stubBackgroundWorkObserver.observeGalleryChanged()
+        } returns Flowable.empty()
     }
 
     @Test
@@ -279,15 +293,44 @@ class GalleryDetailViewModelTest : CoreViewModelTest<GalleryDetailViewModel>() {
     }
 
     @Test
-    fun `given received ToggleVisibility intent, expected`() {
+    fun `given received ToggleVisibility intent, expected hidden state updated and event emitted`() {
         every {
             stubToggleImageVisibilityUseCase(any())
         } returns Single.just(true)
+
+        every {
+            stubGalleryItemStateEvent.emitHiddenChange(any(), any())
+        } returns Unit
 
         viewModel.processIntent(GalleryDetailIntent.ToggleVisibility)
 
         val expected = true
         val actual = (viewModel.state.value as? GalleryDetailState.Content)?.hidden
         Assert.assertEquals(expected, actual)
+
+        verify {
+            stubGalleryItemStateEvent.emitHiddenChange(5598L, true)
+        }
+    }
+
+    @Test
+    fun `given received ToggleLike intent, expected liked state updated and event emitted`() {
+        every {
+            stubToggleLikeUseCase(any())
+        } returns Single.just(true)
+
+        every {
+            stubGalleryItemStateEvent.emitLikedChange(any(), any())
+        } returns Unit
+
+        viewModel.processIntent(GalleryDetailIntent.ToggleLike)
+
+        val expected = true
+        val actual = (viewModel.state.value as? GalleryDetailState.Content)?.liked
+        Assert.assertEquals(expected, actual)
+
+        verify {
+            stubGalleryItemStateEvent.emitLikedChange(5598L, true)
+        }
     }
 }

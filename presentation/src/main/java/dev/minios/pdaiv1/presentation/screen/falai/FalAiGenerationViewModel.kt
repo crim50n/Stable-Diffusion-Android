@@ -391,7 +391,7 @@ class FalAiGenerationViewModel(
                                     screenModal = Modal.Image.create(
                                         list = results,
                                         autoSaveEnabled = true,
-                                        reportEnabled = buildInfoProvider.type != BuildType.FOSS,
+                                        reportEnabled = buildInfoProvider.type == BuildType.PLAY,
                                     ),
                                 )
                             }
@@ -404,7 +404,7 @@ class FalAiGenerationViewModel(
                                 screenModal = Modal.Image.create(
                                     list = results,
                                     autoSaveEnabled = false,
-                                    reportEnabled = buildInfoProvider.type != BuildType.FOSS,
+                                    reportEnabled = buildInfoProvider.type == BuildType.PLAY,
                                 ),
                             )
                         }

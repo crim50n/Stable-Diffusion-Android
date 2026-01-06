@@ -239,6 +239,15 @@ fun ModalRenderer(
             onDismissRequest = dismiss,
         )
 
+        Modal.DeleteUnlikedConfirm -> DecisionInteractiveDialog(
+            title = LocalizationR.string.interaction_delete_unliked_title.asUiText(),
+            text = LocalizationR.string.interaction_delete_unliked_sub_title.asUiText(),
+            confirmActionResId = LocalizationR.string.yes,
+            dismissActionResId = LocalizationR.string.no,
+            onConfirmAction = { processIntent(GalleryIntent.Delete.AllUnliked.Confirm) },
+            onDismissRequest = dismiss,
+        )
+
         is Modal.ConfirmExport -> DecisionInteractiveDialog(
             title = LocalizationR.string.interaction_export_title.asUiText(),
             text = if (screenModal.exportAll) {

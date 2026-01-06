@@ -44,7 +44,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,6 +80,7 @@ import dev.minios.pdaiv1.presentation.utils.Constants.DENOISING_STRENGTH_MIN
 import dev.minios.pdaiv1.presentation.utils.PermissionUtil
 import dev.minios.pdaiv1.presentation.utils.uriToBitmap
 import dev.minios.pdaiv1.presentation.widget.input.GenerationInputForm
+import dev.minios.pdaiv1.presentation.widget.scaffold.CollapsibleScaffold
 import dev.minios.pdaiv1.presentation.widget.toolbar.GenerationBottomToolbar
 import dev.minios.pdaiv1.presentation.widget.work.BackgroundWorkWidget
 import org.koin.androidx.compose.koinViewModel
@@ -165,19 +165,19 @@ private fun ScreenContent(
     val negativePromptChipTextFieldState = remember { mutableStateOf(TextFieldValue()) }
     val keyboardController = LocalSoftwareKeyboardController.current
     Box(modifier) {
-        Scaffold(
-            topBar = {
-                Column {
-                    CenterAlignedTopAppBar(
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                processIntent(GenerationMviIntent.Drawer(DrawerIntent.Open))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Menu",
-                                )
-                            }
+        CollapsibleScaffold(
+            bottomToolbarHeight = 150.dp,
+            topBarContent = {
+                CenterAlignedTopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            processIntent(GenerationMviIntent.Drawer(DrawerIntent.Open))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Menu",
+                            )
+                        }
                         },
                         title = {
                             Text(
@@ -207,14 +207,8 @@ private fun ScreenContent(
                         },
                         windowInsets = WindowInsets(0, 0, 0, 0),
                     )
-                    BackgroundWorkWidget(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(vertical = 4.dp),
-                    )
-                }
             },
-            content = { paddingValues ->
+            contentScrollable = {
                 when (state.mode) {
                     ServerSource.AUTOMATIC1111,
                     ServerSource.SWARM_UI,
@@ -222,12 +216,7 @@ private fun ScreenContent(
                     ServerSource.STABILITY_AI,
                     ServerSource.HUGGING_FACE,
                     ServerSource.LOCAL_QUALCOMM_QNN -> {
-                        val scrollState = rememberScrollState()
-                        Column(
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .verticalScroll(scrollState)
-                        ) {
+                        Column {
                             InputImageState(
                                 modifier = Modifier.fillMaxWidth(),
                                 state = state,
@@ -268,7 +257,6 @@ private fun ScreenContent(
                     else -> {
                         Column(
                             modifier = Modifier
-                                .padding(paddingValues)
                                 .padding(horizontal = 36.dp)
                                 .fillMaxSize(),
                             verticalArrangement = Arrangement.Center,

@@ -24,7 +24,15 @@ sealed interface GalleryDetailIntent : MviIntent {
 
     data object ToggleVisibility : GalleryDetailIntent
 
+    data object ToggleLike : GalleryDetailIntent
+
     data object ToggleControlsVisibility : GalleryDetailIntent
+
+    data object ShowInfoBottomSheet : GalleryDetailIntent
+
+    data object HideInfoBottomSheet : GalleryDetailIntent
+
+    data object OpenEditor : GalleryDetailIntent
 
     data object SaveToGallery : GalleryDetailIntent
 

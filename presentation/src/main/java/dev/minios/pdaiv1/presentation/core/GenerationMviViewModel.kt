@@ -250,10 +250,7 @@ abstract class GenerationMviViewModel<S : GenerationMviState, I : GenerationMviI
             }
 
             is GenerationMviIntent.Update.Size.AspectRatio -> updateGenerationState {
-                val baseSize = maxOf(
-                    it.width.toIntOrNull() ?: 512,
-                    it.height.toIntOrNull() ?: 512
-                )
+                val baseSize = it.width.toIntOrNull() ?: 512
                 val (newWidth, newHeight) = intent.ratio.calculateDimensions(baseSize)
                 it.copyState(
                     width = newWidth.toString(),

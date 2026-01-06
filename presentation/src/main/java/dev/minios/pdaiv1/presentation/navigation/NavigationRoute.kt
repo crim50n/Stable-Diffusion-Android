@@ -35,6 +35,12 @@ sealed interface NavigationRoute {
     data class GalleryDetail(val itemId: Long) : NavigationRoute
 
     @Serializable
+    data object GalleryFull : NavigationRoute
+
+    @Serializable
+    data class ImageEditor(val itemId: Long) : NavigationRoute
+
+    @Serializable
     data class ReportImage(val itemId: Long) : NavigationRoute
 
     @Serializable

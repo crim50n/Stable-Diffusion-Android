@@ -45,8 +45,14 @@ class BackgroundWorkViewModel(
                         ?.firstOrNull()
                         ?.image
                         ?.also(::setBitmap)
+                    
+                    val shouldBeVisible = work.running || result !is BackgroundWorkResult.None
+                    // Reset dismissed flag when state changes (new generation or new result)
+                    val newDismissed = if (shouldBeVisible != state.visible) false else state.dismissed
+                    
                     state.copy(
-                        visible = work.running || result !is BackgroundWorkResult.None,
+                        visible = shouldBeVisible && !newDismissed,
+                        dismissed = newDismissed,
                         title = if (work.running) work.statusTitle.asUiText() else resultTitle,
                         subTitle = if (work.running) work.statusSubTitle.asUiText() else UiText.empty,
                         isError = !work.running && result is BackgroundWorkResult.Error,
@@ -59,8 +65,7 @@ class BackgroundWorkViewModel(
     override fun processIntent(intent: BackgroundWorkIntent) {
         when (intent) {
             BackgroundWorkIntent.Dismiss -> {
-                updateState { it.copy(visible = false, isError = false, bitmap = null) }
-                backgroundWorkObserver.dismissResult()
+                updateState { it.copy(visible = false, dismissed = true, bitmap = null) }
             }
         }
     }

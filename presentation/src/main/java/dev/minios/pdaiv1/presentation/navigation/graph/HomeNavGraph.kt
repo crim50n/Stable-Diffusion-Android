@@ -20,6 +20,7 @@ import dev.minios.pdaiv1.domain.preference.PreferenceManager
 import dev.minios.pdaiv1.presentation.model.NavItem
 import dev.minios.pdaiv1.presentation.navigation.NavigationRoute
 import dev.minios.pdaiv1.presentation.navigation.router.home.HomeRouter
+import dev.minios.pdaiv1.presentation.navigation.router.main.MainRouter
 import dev.minios.pdaiv1.presentation.screen.falai.FalAiGenerationScreen
 import dev.minios.pdaiv1.presentation.screen.gallery.list.GalleryScreen
 import dev.minios.pdaiv1.presentation.screen.home.HomeNavigationScreen
@@ -35,6 +36,7 @@ import dev.minios.pdaiv1.presentation.R as PresentationR
 fun NavGraphBuilder.homeScreenNavGraph() {
     composable<NavigationRoute.Home> {
         val preferenceManager: PreferenceManager = koinInject()
+        val mainRouter: MainRouter = koinInject()
         var serverSource by remember { mutableStateOf(preferenceManager.source) }
 
         DisposableEffect(preferenceManager) {
@@ -102,6 +104,7 @@ fun galleryTab() = NavItem(
         modifier = Modifier.size(24.dp),
     ),
     content = {
+        // Gallery as a regular tab within Home
         HomeTabBase(NavigationRoute.HomeNavigation.Gallery) {
             GalleryScreen()
         }

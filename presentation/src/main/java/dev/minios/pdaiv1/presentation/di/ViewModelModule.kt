@@ -12,6 +12,7 @@ import dev.minios.pdaiv1.presentation.screen.donate.DonateViewModel
 import dev.minios.pdaiv1.presentation.screen.drawer.DrawerViewModel
 import dev.minios.pdaiv1.presentation.screen.falai.FalAiGenerationViewModel
 import dev.minios.pdaiv1.presentation.screen.gallery.detail.GalleryDetailViewModel
+import dev.minios.pdaiv1.presentation.screen.gallery.editor.ImageEditorViewModel
 import dev.minios.pdaiv1.presentation.screen.gallery.list.GalleryViewModel
 import dev.minios.pdaiv1.presentation.screen.home.HomeNavigationViewModel
 import dev.minios.pdaiv1.presentation.screen.img2img.ImageToImageViewModel
@@ -42,7 +43,34 @@ val viewModelModule = module {
     viewModelOf(::ConfigurationLoaderViewModel)
     viewModelOf(::TextToImageViewModel)
     viewModelOf(::SettingsViewModel)
-    viewModelOf(::GalleryViewModel)
+    viewModel {
+        GalleryViewModel(
+            dispatchersProvider = get(),
+            getMediaStoreInfoUseCase = get(),
+            backgroundWorkObserver = get(),
+            preferenceManager = get(),
+            deleteAllGalleryUseCase = get(),
+            deleteAllUnlikedUseCase = get(),
+            deleteGalleryItemsUseCase = get(),
+            getGenerationResultPagedUseCase = get(),
+            getGalleryPagedIdsUseCase = get(),
+            getGalleryItemsUseCase = get(),
+            getGalleryItemsRawUseCase = get(),
+            getThumbnailInfoUseCase = get(),
+            base64ToBitmapConverter = get(),
+            thumbnailGenerator = get(),
+            galleryExporter = get(),
+            schedulersProvider = get(),
+            mainRouter = get(),
+            drawerRouter = get(),
+            mediaStoreGateway = get(),
+            mediaFileManager = get(),
+            getAllGalleryUseCase = get(),
+            galleryItemStateEvent = get(),
+            likeItemsUseCase = get(),
+            hideItemsUseCase = get(),
+        )
+    }
     viewModelOf(::ConnectivityViewModel)
     viewModelOf(::InputHistoryViewModel)
     viewModelOf(::DebugMenuViewModel)
@@ -99,6 +127,7 @@ val viewModelModule = module {
     viewModel { parameters ->
         GalleryDetailViewModel(
             itemId = parameters.get(),
+            onNavigateBackCallback = parameters.getOrNull(),
             dispatchersProvider = get(),
             buildInfoProvider = get(),
             preferenceManager = get(),
@@ -107,12 +136,15 @@ val viewModelModule = module {
             getGalleryPagedIdsUseCase = get(),
             deleteGalleryItemUseCase = get(),
             toggleImageVisibilityUseCase = get(),
+            toggleLikeUseCase = get(),
             galleryDetailBitmapExporter = get(),
             base64ToBitmapConverter = get(),
             schedulersProvider = get(),
             generationFormUpdateEvent = get(),
+            galleryItemStateEvent = get(),
             mainRouter = get(),
             mediaStoreGateway = get(),
+            backgroundWorkObserver = get(),
         )
     }
 
@@ -126,6 +158,18 @@ val viewModelModule = module {
             mainRouter = get(),
             schedulersProvider = get(),
             buildInfoProvider = get(),
+        )
+    }
+
+    viewModel { parameters ->
+        ImageEditorViewModel(
+            itemId = parameters.get(),
+            dispatchersProvider = get(),
+            getGenerationResultUseCase = get(),
+            base64ToBitmapConverter = get(),
+            mediaStoreGateway = get(),
+            schedulersProvider = get(),
+            mainRouter = get(),
         )
     }
 

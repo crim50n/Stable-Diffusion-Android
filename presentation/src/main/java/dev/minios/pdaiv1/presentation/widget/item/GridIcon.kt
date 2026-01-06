@@ -48,6 +48,12 @@ fun GridIcon(
 
 @Composable
 @Preview
+private fun GridIconsPreview1() {
+    GridIcon(Grid.Fixed1)
+}
+
+@Composable
+@Preview
 private fun GridIconsPreview2() {
     GridIcon(Grid.Fixed2)
 }
@@ -68,4 +74,10 @@ private fun GridIconsPreview4() {
 @Preview
 private fun GridIconsPreview5() {
     GridIcon(Grid.Fixed5)
+}
+
+@Composable
+@Preview
+private fun GridIconsPreview6() {
+    GridIcon(Grid.Fixed6)
 }

@@ -25,6 +25,7 @@ sealed interface GalleryDetailState : MviState {
     val controlsVisible: Boolean
     val currentSource: ServerSource
     val animateToPage: Int?
+    val showInfoBottomSheet: Boolean
 
     @Immutable
     data class Loading(
@@ -37,6 +38,7 @@ sealed interface GalleryDetailState : MviState {
         override val controlsVisible: Boolean = true,
         override val currentSource: ServerSource = ServerSource.AUTOMATIC1111,
         override val animateToPage: Int? = null,
+        override val showInfoBottomSheet: Boolean = false,
     ) : GalleryDetailState
 
     @Immutable
@@ -50,6 +52,7 @@ sealed interface GalleryDetailState : MviState {
         override val controlsVisible: Boolean = true,
         override val currentSource: ServerSource = ServerSource.AUTOMATIC1111,
         override val animateToPage: Int? = null,
+        override val showInfoBottomSheet: Boolean = false,
         val showReportButton: Boolean = false,
         val generationType: AiGenerationResult.Type,
         val id: Long,
@@ -69,6 +72,7 @@ sealed interface GalleryDetailState : MviState {
         val subSeedStrength: UiText,
         val denoisingStrength: UiText,
         val hidden: Boolean,
+        val liked: Boolean = false,
         val isFalAi: Boolean = false,
         val falAiEndpointId: String = "",
         val modelName: UiText = "".asUiText(),
@@ -89,9 +93,19 @@ sealed interface GalleryDetailState : MviState {
         is Loading -> this
     }
 
+    fun withLikedState(value: Boolean) = when (this) {
+        is Content -> copy(liked = value)
+        is Loading -> this
+    }
+
     fun withControlsVisible(value: Boolean) = when (this) {
         is Content -> copy(controlsVisible = value)
         is Loading -> copy(controlsVisible = value)
+    }
+
+    fun withInfoBottomSheet(value: Boolean) = when (this) {
+        is Content -> copy(showInfoBottomSheet = value)
+        is Loading -> copy(showInfoBottomSheet = value)
     }
 
     fun withGalleryIds(ids: List<Long>, index: Int) = when (this) {
@@ -108,6 +122,22 @@ sealed interface GalleryDetailState : MviState {
         if (pageIndex !in galleryIds.indices) return null
         val id = galleryIds[pageIndex]
         return bitmapCache[id]
+    }
+
+    /**
+     * Get thumbnail for blur placeholder (like Immich's loadingBuilder).
+     * Returns any available bitmap for blur effect while loading.
+     */
+    fun getThumbnailForPage(pageIndex: Int): Bitmap? {
+        // First try to get cached bitmap for this page
+        val cached = getBitmapForPage(pageIndex)
+        if (cached != null) return cached
+
+        // Fallback: use current bitmap if available (for adjacent pages)
+        return when (this) {
+            is Content -> bitmap
+            is Loading -> null
+        }
     }
 
     enum class Tab(
@@ -157,6 +187,7 @@ fun Triple<AiGenerationResult, Base64ToBitmapConverter.Output, Base64ToBitmapCon
             subSeedStrength = ai.subSeedStrength.toString().asUiText(),
             denoisingStrength = ai.denoisingStrength.toString().asUiText(),
             hidden = ai.hidden,
+            liked = ai.liked,
             isFalAi = isFalAi,
             falAiEndpointId = falAiEndpointId,
             modelName = ai.modelName.asUiText(),

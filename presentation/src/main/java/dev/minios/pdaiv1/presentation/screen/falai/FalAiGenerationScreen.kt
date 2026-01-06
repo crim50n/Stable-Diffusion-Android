@@ -2,7 +2,6 @@
 
 package dev.minios.pdaiv1.presentation.screen.falai
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
@@ -23,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +33,7 @@ import dev.minios.pdaiv1.presentation.modal.ModalRenderer
 import dev.minios.pdaiv1.presentation.model.Modal
 import dev.minios.pdaiv1.presentation.screen.drawer.DrawerIntent
 import dev.minios.pdaiv1.presentation.widget.falai.FalAiDynamicForm
-import dev.minios.pdaiv1.presentation.widget.work.BackgroundWorkWidget
+import dev.minios.pdaiv1.presentation.widget.scaffold.CollapsibleScaffold
 import org.koin.androidx.compose.koinViewModel
 import dev.minios.pdaiv1.core.localization.R as LocalizationR
 
@@ -63,42 +60,37 @@ fun FalAiGenerationScreenContent(
     val scrollState = rememberScrollState()
 
     Box(modifier) {
-        Scaffold(
-            topBar = {
-                Column {
-                    CenterAlignedTopAppBar(
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                processIntent(FalAiGenerationIntent.Drawer(DrawerIntent.Open))
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Menu",
-                                )
-                            }
-                        },
-                        title = {
-                            Text(
-                                text = "Fal AI",
-                                style = MaterialTheme.typography.headlineMedium,
+        CollapsibleScaffold(
+            scrollState = scrollState,
+            bottomToolbarHeight = 0.dp,
+            topBarContent = {
+                CenterAlignedTopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            processIntent(FalAiGenerationIntent.Drawer(DrawerIntent.Open))
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Menu",
                             )
-                        },
-                        windowInsets = WindowInsets(0, 0, 0, 0),
-                    )
-                    BackgroundWorkWidget(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(vertical = 4.dp),
-                    )
-                }
+                        }
+                    },
+                    title = {
+                        Text(
+                            text = "Fal AI",
+                            style = MaterialTheme.typography.headlineMedium,
+                        )
+                    },
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                )
             },
-            content = { paddingValues ->
+            contentScrollable = {
                 when {
                     state.loading -> {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(paddingValues),
+                                .padding(vertical = 64.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             CircularProgressIndicator()
@@ -109,7 +101,7 @@ fun FalAiGenerationScreenContent(
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(paddingValues),
+                                .padding(vertical = 64.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
@@ -121,10 +113,7 @@ fun FalAiGenerationScreenContent(
 
                     else -> {
                         Column(
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .verticalScroll(scrollState)
-                                .padding(horizontal = 16.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp),
                         ) {
                             Spacer(modifier = Modifier.height(8.dp))
 

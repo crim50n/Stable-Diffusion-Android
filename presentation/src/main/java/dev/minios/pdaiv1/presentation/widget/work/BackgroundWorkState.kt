@@ -6,6 +6,7 @@ import com.shifthackz.android.core.mvi.MviState
 
 data class BackgroundWorkState(
     val visible: Boolean = false,
+    val dismissed: Boolean = false,
     val title: UiText = UiText.empty,
     val subTitle: UiText = UiText.empty,
     val bitmap: Bitmap? = null,
