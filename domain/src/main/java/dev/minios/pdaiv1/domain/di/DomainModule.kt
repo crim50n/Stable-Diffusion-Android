@@ -62,12 +62,24 @@ import dev.minios.pdaiv1.domain.usecase.gallery.GetAllGalleryUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetAllGalleryUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryItemsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryItemsUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryItemsRawUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryItemsRawUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryPagedIdsUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.gallery.GetMediaStoreInfoUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetMediaStoreInfoUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.GetThumbnailInfoUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.GetThumbnailInfoUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.gallery.ToggleImageVisibilityUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.ToggleImageVisibilityUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.ToggleLikeUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.ToggleLikeUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.DeleteAllUnlikedUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.DeleteAllUnlikedUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.LikeItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.LikeItemsUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.HideItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.HideItemsUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.generation.FalAiGenerationUseCase
 import dev.minios.pdaiv1.domain.usecase.generation.FalAiGenerationUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.generation.GetGenerationResultPagedUseCase
@@ -157,7 +169,9 @@ internal val useCasesModule = module {
     factoryOf(::GetGenerationResultPagedUseCaseImpl) bind GetGenerationResultPagedUseCase::class
     factoryOf(::GetAllGalleryUseCaseImpl) bind GetAllGalleryUseCase::class
     factoryOf(::GetGalleryItemsUseCaseImpl) bind GetGalleryItemsUseCase::class
+    factoryOf(::GetGalleryItemsRawUseCaseImpl) bind GetGalleryItemsRawUseCase::class
     factoryOf(::GetGalleryPagedIdsUseCaseImpl) bind GetGalleryPagedIdsUseCase::class
+    factoryOf(::GetThumbnailInfoUseCaseImpl) bind GetThumbnailInfoUseCase::class
     factoryOf(::GetGenerationResultUseCaseImpl) bind GetGenerationResultUseCase::class
     factoryOf(::DeleteGalleryItemUseCaseImpl) bind DeleteGalleryItemUseCase::class
     factoryOf(::DeleteGalleryItemsUseCaseImpl) bind DeleteGalleryItemsUseCase::class
@@ -182,6 +196,10 @@ internal val useCasesModule = module {
     factoryOf(::ObserveHordeProcessStatusUseCaseImpl) bind ObserveHordeProcessStatusUseCase::class
     factoryOf(::GetMediaStoreInfoUseCaseImpl) bind GetMediaStoreInfoUseCase::class
     factoryOf(::ToggleImageVisibilityUseCaseImpl) bind ToggleImageVisibilityUseCase::class
+    factoryOf(::ToggleLikeUseCaseImpl) bind ToggleLikeUseCase::class
+    factoryOf(::DeleteAllUnlikedUseCaseImpl) bind DeleteAllUnlikedUseCase::class
+    factoryOf(::LikeItemsUseCaseImpl) bind LikeItemsUseCase::class
+    factoryOf(::HideItemsUseCaseImpl) bind HideItemsUseCase::class
     factoryOf(::GetRandomImageUseCaseImpl) bind GetRandomImageUseCase::class
     factoryOf(::SaveLastResultToCacheUseCaseImpl) bind SaveLastResultToCacheUseCase::class
     factoryOf(::GetLastResultFromCacheUseCaseImpl) bind GetLastResultFromCacheUseCase::class

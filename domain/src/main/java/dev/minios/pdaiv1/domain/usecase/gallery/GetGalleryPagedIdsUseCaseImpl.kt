@@ -8,4 +8,6 @@ class GetGalleryPagedIdsUseCaseImpl(
 ) : GetGalleryPagedIdsUseCase {
 
     override fun invoke(): Single<List<Long>> = repository.getAllIds()
+
+    override fun withBlurHash(): Single<List<Pair<Long, String>>> = repository.getAllIdsWithBlurHash()
 }

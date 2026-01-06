@@ -21,10 +21,12 @@ data class AiGenerationResult(
     val subSeedStrength: Float,
     val denoisingStrength: Float,
     val hidden: Boolean,
+    val liked: Boolean = false,
     val mediaPath: String = "",
     val inputMediaPath: String = "",
     val mediaType: MediaType = MediaType.IMAGE,
     val modelName: String = "",
+    val blurHash: String = "",
 ) {
     enum class Type(val key: String) {
         TEXT_TO_IMAGE("txt2img"),
