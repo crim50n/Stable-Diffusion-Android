@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class FalAiQueueResponse(
     @SerializedName("request_id")
-    val requestId: String,
+    val requestId: String? = null,
 
     @SerializedName("status")
     val status: String? = null,

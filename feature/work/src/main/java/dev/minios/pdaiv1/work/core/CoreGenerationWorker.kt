@@ -119,6 +119,7 @@ internal abstract class CoreGenerationWorker(
     protected fun handleSuccess(result: List<AiGenerationResult>) {
         backgroundWorkObserver.refreshStatus()
         backgroundWorkObserver.postSuccessSignal(result)
+        backgroundWorkObserver.postGalleryChangedSignal()
         val title = applicationContext.getString(LocalizationR.string.notification_finish_title)
         val subTitle = applicationContext.getString(LocalizationR.string.notification_finish_sub_title)
         showGenericNotification(title, subTitle)

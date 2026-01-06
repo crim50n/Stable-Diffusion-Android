@@ -13,6 +13,14 @@
     <string name="cancel">Cancel</string>
     <string name="retry">Retry</string>
     <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="gallery_save_to_gallery">Save to gallery</string>
+    <string name="edit">Edit</string>
+    <string name="editor_rotate">Rotate</string>
+    <string name="editor_adjust">Adjust</string>
+    <string name="editor_brightness">Brightness</string>
+    <string name="editor_contrast">Contrast</string>
+    <string name="editor_saturation">Saturation</string>
     <string name="download">Download</string>
     <string name="width">Width</string>
     <string name="height">Height</string>
@@ -25,10 +33,12 @@
     <string name="success">✅ Success</string>
     <string name="failure">❌ Failure</string>
 
+    <string name="one">One</string>
     <string name="two">Two</string>
     <string name="three">Three</string>
     <string name="four">Four</string>
     <string name="five">Five</string>
+    <string name="six">Six</string>
 
     <string name="version">Version %1$s</string>
 
@@ -244,6 +254,7 @@
     <string name="gallery_menu_unselect_all">Unselect all</string>
     <string name="gallery_menu_selected">Selected images: %1$s</string>
     <string name="gallery_menu_delete_all">Delete all</string>
+    <string name="gallery_menu_delete_unliked">Delete unliked</string>
     <string name="gallery_menu_export_all">Export all</string>
     <string name="gallery_menu_save_all">Save all to device</string>
     <string name="gallery_menu_selection_mode">Selection mode</string>
@@ -325,6 +336,9 @@
 
     <string name="interaction_delete_local_model_title">Delete model</string>
     <string name="interaction_delete_local_model_sub_title">Are you sure you want to delete model "%1$s"?</string>
+
+    <string name="interaction_delete_unliked_title">Delete unliked images</string>
+    <string name="interaction_delete_unliked_sub_title">Are you sure you want to permanently delete all images that are not liked?</string>
 
     <string name="interaction_in_paint_clear_title">Clear drawings</string>
     <string name="interaction_in_paint_clear_sub_title">Are you sure you want to clear drawings?</string>

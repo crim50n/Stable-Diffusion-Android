@@ -2,6 +2,7 @@
 agp = "8.9.1"
 apacheStringUtils = "3.20.0"
 appcompat = "1.7.1"
+blurhash = "0.3.0"
 catppuccin = "0.1.2"
 compileSdk = "36"
 composeActivity = "1.12.2"
@@ -14,6 +15,7 @@ crop = "0.1.1"
 crypto = "1.1.0"
 dayNightSwitch = "1.0.0"
 exif = "1.4.2"
+falClient = "0.7.1"
 gson = "2.13.2"
 junit = "4.13.2"
 koin = "4.1.1"
@@ -45,8 +47,8 @@ targetSdk = "34"
 testCoroutines = "1.10.2"
 timber = "5.0.1"
 turbine = "1.2.1"
-versionCode = "191"
-versionName = "0.7.0"
+versionCode = "192"
+versionName = "0.7.1"
 workManager = "2.11.0"
 
 [libraries]
@@ -75,8 +77,10 @@ androidx-room-rx = { module = "androidx.room:room-rxjava3", version.ref = "room"
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "crypto" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workManager" }
 apache-stringutils = { module = "org.apache.commons:commons-lang3", version.ref = "apacheStringUtils" }
+blurhash = { module = "com.vanniktech:blurhash", version.ref = "blurhash" }
 compose-crop = { module = "io.github.mr0xf00:easycrop", version.ref = "crop" }
 compose-gestures = { module = "com.github.SmartToolFactory:Compose-Extended-Gestures", version.ref = "composeGestures" }
+fal-client-kotlin = { module = "ai.fal.client:fal-client-kotlin", version.ref = "falClient" }
 google-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 google-material = { module = "com.google.android.material:material", version.ref = "material" }
 google-mediapipe-image-generator = { module = "com.google.mediapipe:tasks-vision-image-generator", version.ref = "mediaPipeGenerator" }
@@ -103,6 +107,7 @@ shifthackz-mvi = { module = "com.github.ShiftHackZ:AndroidCoreMVI", version.ref 
 shifthackz-preferences = { module = "com.github.ShiftHackZ:AndroidPreferences", version.ref = "preferences" }
 test-compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeJunit" }
 test-compose-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeJunit" }
+kotlinx-coroutines-rx3 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-rx3", version.ref = "testCoroutines" }
 test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "testCoroutines" }
 test-junit = { module = "junit:junit", version.ref = "junit" }
 test-koin = { module = "io.insert-koin:koin-test", version.ref = "koin" }

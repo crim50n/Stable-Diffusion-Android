@@ -16,6 +16,8 @@ internal class BackgroundWorkObserverImpl : BackgroundWorkObserver {
     private val stateSubject = BehaviorSubject.createDefault(false)
     private val messageSubject = BehaviorSubject.createDefault("" to "")
     private val resultSubject = BehaviorSubject.createDefault<BackgroundWorkResult>(BackgroundWorkResult.None)
+    private val newImageSubject = io.reactivex.rxjava3.subjects.PublishSubject.create<Unit>()
+    private val galleryChangedSubject = io.reactivex.rxjava3.subjects.PublishSubject.create<Unit>()
 
     override fun observeStatus(): Flowable<BackgroundWorkStatus> {
         refreshStatus()
@@ -29,6 +31,14 @@ internal class BackgroundWorkObserverImpl : BackgroundWorkObserver {
 
     override fun observeResult(): Flowable<BackgroundWorkResult> {
         return resultSubject.toFlowable(BackpressureStrategy.LATEST)
+    }
+
+    override fun observeNewImage(): Flowable<Unit> {
+        return newImageSubject.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    override fun observeGalleryChanged(): Flowable<Unit> {
+        return galleryChangedSubject.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     override fun dismissResult() {
@@ -53,6 +63,14 @@ internal class BackgroundWorkObserverImpl : BackgroundWorkObserver {
         stateSubject.onNext(false)
         messageSubject.onNext("" to "")
         resultSubject.onNext(BackgroundWorkResult.Success(result))
+    }
+
+    override fun postNewImageSignal() {
+        newImageSubject.onNext(Unit)
+    }
+
+    override fun postGalleryChangedSignal() {
+        galleryChangedSubject.onNext(Unit)
     }
 
     override fun postCancelSignal() {

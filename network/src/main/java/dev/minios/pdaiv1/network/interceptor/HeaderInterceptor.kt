@@ -18,7 +18,12 @@ internal class HeaderInterceptor(
         .addHeader(NetworkHeaders.APP_VERSION, buildInfoProvider.version.toString())
         .applyIf(apiKeyProvider() != null) {
             val (header, key) = apiKeyProvider.invoke() ?: ("" to "")
-            addHeader(header, key)
+            // Sanitize key - remove control characters that OkHttp doesn't allow
+            val sanitizedKey = key.filter { it.code >= 0x20 || it == '\t' }
+            if (header.isNotEmpty() && sanitizedKey.isNotEmpty()) {
+                addHeader(header, sanitizedKey)
+            }
+            this
         }
         .build()
         .let(chain::proceed)
