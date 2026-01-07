@@ -68,7 +68,9 @@ val viewModelModule = module {
             getAllGalleryUseCase = get(),
             galleryItemStateEvent = get(),
             likeItemsUseCase = get(),
+            unlikeItemsUseCase = get(),
             hideItemsUseCase = get(),
+            unhideItemsUseCase = get(),
         )
     }
     viewModelOf(::ConnectivityViewModel)

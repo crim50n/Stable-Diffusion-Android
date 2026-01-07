@@ -424,6 +424,15 @@ private fun InputImageState(
                         contentScale = ContentScale.Fit,
                     )
                 }
+                state.inPaintModel.bitmap?.asImageBitmap()?.let { maskBitmap ->
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        bitmap = maskBitmap,
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        alpha = 0.5f,
+                    )
+                }
             }
             Row(
                 modifier = Modifier

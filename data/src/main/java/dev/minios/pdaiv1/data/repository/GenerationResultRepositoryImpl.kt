@@ -112,7 +112,11 @@ internal class GenerationResultRepositoryImpl(
 
     override fun likeByIds(idList: List<Long>): Completable = localDataSource.likeByIds(idList)
 
+    override fun unlikeByIds(idList: List<Long>): Completable = localDataSource.unlikeByIds(idList)
+
     override fun hideByIds(idList: List<Long>): Completable = localDataSource.hideByIds(idList)
+
+    override fun unhideByIds(idList: List<Long>): Completable = localDataSource.unhideByIds(idList)
 
     override fun migrateBase64ToFiles(): Completable = localDataSource.queryAll()
         .flatMapCompletable { results ->

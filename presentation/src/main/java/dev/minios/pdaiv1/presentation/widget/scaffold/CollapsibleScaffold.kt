@@ -105,6 +105,7 @@ fun CollapsibleScaffold(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .nestedScroll(nestedScrollConnection)
     ) {
         // Main content - scrollable Column with internal spacing (like Gallery's contentPadding)
@@ -128,7 +129,7 @@ fun CollapsibleScaffold(
                 .graphicsLayer {
                     translationY = -topBarHeightPx * animatedOffset
                 }
-                .background(MaterialTheme.colorScheme.surface)
+                .background(MaterialTheme.colorScheme.background)
                 .statusBarsPadding()
         ) {
             topBarContent()
@@ -200,6 +201,7 @@ fun CollapsibleScaffold(
     Box(
         modifier = modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .nestedScroll(nestedScrollConnection)
     ) {
         // Content with padding values - content must handle scrolling
@@ -218,7 +220,7 @@ fun CollapsibleScaffold(
                 .graphicsLayer {
                     translationY = -topBarHeightPx * animatedOffset
                 }
-                .background(MaterialTheme.colorScheme.surface)
+                .background(MaterialTheme.colorScheme.background)
                 .statusBarsPadding()
         ) {
             topBarContent()

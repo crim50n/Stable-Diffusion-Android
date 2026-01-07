@@ -78,8 +78,12 @@ import dev.minios.pdaiv1.domain.usecase.gallery.DeleteAllUnlikedUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.DeleteAllUnlikedUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.gallery.LikeItemsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.LikeItemsUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.UnlikeItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.UnlikeItemsUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.gallery.HideItemsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.HideItemsUseCaseImpl
+import dev.minios.pdaiv1.domain.usecase.gallery.UnhideItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.UnhideItemsUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.generation.FalAiGenerationUseCase
 import dev.minios.pdaiv1.domain.usecase.generation.FalAiGenerationUseCaseImpl
 import dev.minios.pdaiv1.domain.usecase.generation.GetGenerationResultPagedUseCase
@@ -199,7 +203,9 @@ internal val useCasesModule = module {
     factoryOf(::ToggleLikeUseCaseImpl) bind ToggleLikeUseCase::class
     factoryOf(::DeleteAllUnlikedUseCaseImpl) bind DeleteAllUnlikedUseCase::class
     factoryOf(::LikeItemsUseCaseImpl) bind LikeItemsUseCase::class
+    factoryOf(::UnlikeItemsUseCaseImpl) bind UnlikeItemsUseCase::class
     factoryOf(::HideItemsUseCaseImpl) bind HideItemsUseCase::class
+    factoryOf(::UnhideItemsUseCaseImpl) bind UnhideItemsUseCase::class
     factoryOf(::GetRandomImageUseCaseImpl) bind GetRandomImageUseCase::class
     factoryOf(::SaveLastResultToCacheUseCaseImpl) bind SaveLastResultToCacheUseCase::class
     factoryOf(::GetLastResultFromCacheUseCaseImpl) bind GetLastResultFromCacheUseCase::class

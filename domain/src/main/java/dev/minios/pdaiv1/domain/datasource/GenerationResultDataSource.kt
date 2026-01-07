@@ -21,6 +21,8 @@ sealed interface GenerationResultDataSource {
         fun deleteAll(): Completable
         fun deleteAllUnliked(): Completable
         fun likeByIds(idList: List<Long>): Completable
+        fun unlikeByIds(idList: List<Long>): Completable
         fun hideByIds(idList: List<Long>): Completable
+        fun unhideByIds(idList: List<Long>): Completable
     }
 }

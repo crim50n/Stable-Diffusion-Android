@@ -53,5 +53,9 @@ internal class GenerationResultLocalDataSource(
 
     override fun likeByIds(idList: List<Long>) = dao.likeByIds(idList)
 
+    override fun unlikeByIds(idList: List<Long>) = dao.unlikeByIds(idList)
+
     override fun hideByIds(idList: List<Long>) = dao.hideByIds(idList)
+
+    override fun unhideByIds(idList: List<Long>) = dao.unhideByIds(idList)
 }

@@ -26,7 +26,9 @@ import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetMediaStoreInfoUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetThumbnailInfoUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.LikeItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.UnlikeItemsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.HideItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.UnhideItemsUseCase
 import dev.minios.pdaiv1.domain.feature.MediaFileManager
 import dev.minios.pdaiv1.domain.gateway.MediaStoreGateway
 import dev.minios.pdaiv1.domain.usecase.generation.GetGenerationResultPagedUseCase
@@ -65,7 +67,9 @@ class GalleryViewModel(
     private val getAllGalleryUseCase: GetAllGalleryUseCase,
     private val galleryItemStateEvent: GalleryItemStateEvent,
     private val likeItemsUseCase: LikeItemsUseCase,
+    private val unlikeItemsUseCase: UnlikeItemsUseCase,
     private val hideItemsUseCase: HideItemsUseCase,
+    private val unhideItemsUseCase: UnhideItemsUseCase,
 ) : MviRxViewModel<GalleryState, GalleryIntent, GalleryEffect>() {
 
     override val initialState = GalleryState()
@@ -323,20 +327,30 @@ class GalleryViewModel(
             GalleryIntent.LikeSelection -> {
                 val selection = currentState.selection
                 if (selection.isNotEmpty()) {
-                    !likeItemsUseCase(selection)
+                    // Toggle logic: if ALL selected are liked -> unlike, otherwise -> like all
+                    val allLiked = selection.all { it in currentState.likedIds }
+                    val useCase = if (allLiked) unlikeItemsUseCase(selection) else likeItemsUseCase(selection)
+                    val newLikedState = !allLiked
+                    
+                    !useCase
                         .subscribeOn(schedulersProvider.io)
                         .subscribeOnMainThread(schedulersProvider)
                         .subscribeBy(::errorLog) {
                             // Update liked state and emit events for real-time sync
                             updateState { state ->
+                                val newLikedIds = if (newLikedState) {
+                                    state.likedIds + selection.toSet()
+                                } else {
+                                    state.likedIds - selection.toSet()
+                                }
                                 state.copy(
-                                    likedIds = state.likedIds + selection.toSet(),
+                                    likedIds = newLikedIds,
                                     selectionMode = false,
                                     selection = emptyList(),
                                 )
                             }
                             selection.forEach { id ->
-                                galleryItemStateEvent.emitLikedChange(id, true)
+                                galleryItemStateEvent.emitLikedChange(id, newLikedState)
                             }
                         }
                 }
@@ -345,20 +359,30 @@ class GalleryViewModel(
             GalleryIntent.HideSelection -> {
                 val selection = currentState.selection
                 if (selection.isNotEmpty()) {
-                    !hideItemsUseCase(selection)
+                    // Toggle logic: if ALL selected are hidden -> unhide, otherwise -> hide all
+                    val allHidden = selection.all { it in currentState.hiddenIds }
+                    val useCase = if (allHidden) unhideItemsUseCase(selection) else hideItemsUseCase(selection)
+                    val newHiddenState = !allHidden
+                    
+                    !useCase
                         .subscribeOn(schedulersProvider.io)
                         .subscribeOnMainThread(schedulersProvider)
                         .subscribeBy(::errorLog) {
                             // Update hidden state and emit events for real-time sync
                             updateState { state ->
+                                val newHiddenIds = if (newHiddenState) {
+                                    state.hiddenIds + selection.toSet()
+                                } else {
+                                    state.hiddenIds - selection.toSet()
+                                }
                                 state.copy(
-                                    hiddenIds = state.hiddenIds + selection.toSet(),
+                                    hiddenIds = newHiddenIds,
                                     selectionMode = false,
                                     selection = emptyList(),
                                 )
                             }
                             selection.forEach { id ->
-                                galleryItemStateEvent.emitHiddenChange(id, true)
+                                galleryItemStateEvent.emitHiddenChange(id, newHiddenState)
                             }
                         }
                 }

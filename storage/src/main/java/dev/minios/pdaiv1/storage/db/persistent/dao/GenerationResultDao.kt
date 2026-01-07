@@ -56,6 +56,12 @@ interface GenerationResultDao {
     @Query("UPDATE ${GenerationResultContract.TABLE} SET ${GenerationResultContract.LIKED} = 1 WHERE ${GenerationResultContract.ID} IN (:idList)")
     fun likeByIds(idList: List<Long>): Completable
 
+    @Query("UPDATE ${GenerationResultContract.TABLE} SET ${GenerationResultContract.LIKED} = 0 WHERE ${GenerationResultContract.ID} IN (:idList)")
+    fun unlikeByIds(idList: List<Long>): Completable
+
     @Query("UPDATE ${GenerationResultContract.TABLE} SET ${GenerationResultContract.HIDDEN} = 1 WHERE ${GenerationResultContract.ID} IN (:idList)")
     fun hideByIds(idList: List<Long>): Completable
+
+    @Query("UPDATE ${GenerationResultContract.TABLE} SET ${GenerationResultContract.HIDDEN} = 0 WHERE ${GenerationResultContract.ID} IN (:idList)")
+    fun unhideByIds(idList: List<Long>): Completable
 }

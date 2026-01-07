@@ -46,7 +46,11 @@ interface GenerationResultRepository {
 
     fun likeByIds(idList: List<Long>): Completable
 
+    fun unlikeByIds(idList: List<Long>): Completable
+
     fun hideByIds(idList: List<Long>): Completable
+
+    fun unhideByIds(idList: List<Long>): Completable
 
     /**
      * Migrates existing gallery items from base64 storage to file-based storage.

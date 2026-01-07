@@ -146,6 +146,7 @@ fun SettingsScreenContent(
 ) {
     Box(modifier) {
         CollapsibleScaffold(
+            bottomNavBarHeight = if (state.onBoardingDemo) 0.dp else 80.dp,
             topBarContent = {
                 CenterAlignedTopAppBar(
                     navigationIcon = {

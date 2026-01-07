@@ -14,6 +14,7 @@
 ### Hide Images
 
 - Bulk hide: "Hide" button in selection mode hides all selected images
+- Bulk unhide: tapping "Hide" when all selected are hidden — reveals them
 - Real-time sync of hide status between detail view and grid
 - Fallback for Android < 12: dimming with icon instead of blur
 
@@ -50,8 +51,8 @@ Built-in editor for generated images:
 - Smooth animations when opening images
 
 **Selection Mode Actions:**
-- Like (heart) — like all selected
-- Hide (eye) — hide all selected
+- Like (heart) — like all selected (or unlike if all already liked)
+- Hide (eye) — hide all selected (or unhide if all already hidden)
 - Delete — delete all selected
 - Save to device gallery
 - Export
@@ -75,6 +76,8 @@ Built-in editor for generated images:
 - Appears on scroll up or when reaching top of list
 - Standard NestedScrollConnection pattern (like Google Photos)
 - Unified height of 72dp on all screens
+- Background color unified to `background` (was `surface`)
+- Consistent bottom padding accounting for navigation bar across all screens (txt2img, settings)
 
 **Swipe Navigation:**
 - Swipe between home screen tabs (HorizontalPager)
@@ -144,7 +147,8 @@ Built-in editor for generated images:
 - `GalleryItemStateEvent` — real-time sync of hide/like states
 - `GetThumbnailInfoUseCase` / `GetGalleryItemsRawUseCase` — use cases for file-based thumbnail loading
 - `ToggleLikeUseCase` / `DeleteAllUnlikedUseCase` — use cases for favorites feature
-- `LikeItemsUseCase` / `HideItemsUseCase` — use cases for bulk operations
+- `LikeItemsUseCase` / `UnlikeItemsUseCase` — use cases for bulk like/unlike operations
+- `HideItemsUseCase` / `UnhideItemsUseCase` — use cases for bulk hide/unhide operations
 
 ---
 
