@@ -21,7 +21,9 @@ import dev.minios.pdaiv1.domain.usecase.gallery.GetGalleryPagedIdsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetMediaStoreInfoUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.GetThumbnailInfoUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.LikeItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.UnlikeItemsUseCase
 import dev.minios.pdaiv1.domain.usecase.gallery.HideItemsUseCase
+import dev.minios.pdaiv1.domain.usecase.gallery.UnhideItemsUseCase
 import dev.minios.pdaiv1.domain.usecase.generation.GetGenerationResultPagedUseCase
 import dev.minios.pdaiv1.domain.gateway.MediaStoreGateway
 import dev.minios.pdaiv1.presentation.core.CoreViewModelTest
@@ -77,7 +79,9 @@ class GalleryViewModelTest : CoreViewModelTest<GalleryViewModel>() {
     private val stubGetAllGalleryUseCase = mockk<GetAllGalleryUseCase>()
     private val stubGalleryItemStateEvent = mockk<GalleryItemStateEvent>()
     private val stubLikeItemsUseCase = mockk<LikeItemsUseCase>()
+    private val stubUnlikeItemsUseCase = mockk<UnlikeItemsUseCase>()
     private val stubHideItemsUseCase = mockk<HideItemsUseCase>()
+    private val stubUnhideItemsUseCase = mockk<UnhideItemsUseCase>()
 
     override fun initializeViewModel() = GalleryViewModel(
         dispatchersProvider = stubDispatchersProvider,
@@ -103,7 +107,9 @@ class GalleryViewModelTest : CoreViewModelTest<GalleryViewModel>() {
         getAllGalleryUseCase = stubGetAllGalleryUseCase,
         galleryItemStateEvent = stubGalleryItemStateEvent,
         likeItemsUseCase = stubLikeItemsUseCase,
+        unlikeItemsUseCase = stubUnlikeItemsUseCase,
         hideItemsUseCase = stubHideItemsUseCase,
+        unhideItemsUseCase = stubUnhideItemsUseCase,
     )
 
     @Before

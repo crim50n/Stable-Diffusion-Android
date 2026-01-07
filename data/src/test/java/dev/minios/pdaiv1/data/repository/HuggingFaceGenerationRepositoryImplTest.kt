@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.mocks.mockAiGenerationResult
 import dev.minios.pdaiv1.data.mocks.mockImageToImagePayload
 import dev.minios.pdaiv1.data.mocks.mockTextToImagePayload
@@ -26,14 +27,16 @@ class HuggingFaceGenerationRepositoryImplTest {
     private val stubRemoteDataSource = mockk<HuggingFaceGenerationDataSource.Remote>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     private val stubMediaFileManager = mockk<MediaFileManager>()
+    private val stubBlurHashEncoder = mockk<BlurHashEncoder>()
 
     private val repository = HuggingFaceGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
-        preferenceManager = stubPreferenceManager,
         backgroundWorkObserver = stubBackgroundWorkObserver,
         mediaFileManager = stubMediaFileManager,
+        blurHashEncoder = stubBlurHashEncoder,
+        preferenceManager = stubPreferenceManager,
         remoteDataSource = stubRemoteDataSource,
     )
 

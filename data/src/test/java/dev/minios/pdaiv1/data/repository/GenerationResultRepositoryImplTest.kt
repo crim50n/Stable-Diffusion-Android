@@ -389,9 +389,11 @@ class GenerationResultRepositoryImplTest {
 
     @Test
     fun `given attempt to toggle like, local returns data, expected boolean value`() {
+        val toggledResult = mockAiGenerationResult.copy(liked = true)
+        
         every {
             stubLocalDataSource.queryById(any())
-        } returns Single.just(mockAiGenerationResult)
+        } returns Single.just(mockAiGenerationResult) andThen Single.just(toggledResult)
 
         every {
             stubLocalDataSource.insert(any())

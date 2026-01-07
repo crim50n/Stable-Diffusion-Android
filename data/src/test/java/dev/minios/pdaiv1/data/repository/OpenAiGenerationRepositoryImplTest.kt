@@ -1,6 +1,7 @@
 package dev.minios.pdaiv1.data.repository
 
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.mocks.mockAiGenerationResult
 import dev.minios.pdaiv1.data.mocks.mockTextToImagePayload
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
@@ -25,6 +26,7 @@ class OpenAiGenerationRepositoryImplTest {
     private val stubRemoteDataSource = mockk<OpenAiGenerationDataSource.Remote>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     private val stubMediaFileManager = mockk<MediaFileManager>()
+    private val stubBlurHashEncoder = mockk<BlurHashEncoder>()
 
     private val repository = OpenAiGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
@@ -33,6 +35,7 @@ class OpenAiGenerationRepositoryImplTest {
         preferenceManager = stubPreferenceManager,
         backgroundWorkObserver = stubBackgroundWorkObserver,
         mediaFileManager = stubMediaFileManager,
+        blurHashEncoder = stubBlurHashEncoder,
         remoteDataSource = stubRemoteDataSource,
     )
 

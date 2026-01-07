@@ -1,8 +1,10 @@
 package dev.minios.pdaiv1.data.repository
 
 import android.graphics.Bitmap
+import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.imageprocessing.BitmapToBase64Converter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.mocks.mockImageToImagePayload
 import dev.minios.pdaiv1.data.mocks.mockTextToImagePayload
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
@@ -14,7 +16,6 @@ import dev.minios.pdaiv1.domain.feature.qnn.QnnGenerationResult
 import dev.minios.pdaiv1.domain.feature.work.BackgroundWorkObserver
 import dev.minios.pdaiv1.domain.gateway.MediaStoreGateway
 import dev.minios.pdaiv1.domain.preference.PreferenceManager
-import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.rxjava3.core.Completable
@@ -45,14 +46,16 @@ class QnnGenerationRepositoryImplTest {
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     private val stubMediaFileManager = mockk<MediaFileManager>()
     private val stubSchedulersProvider = mockk<SchedulersProvider>()
+    private val stubBlurHashEncoder = mockk<BlurHashEncoder>()
 
     private val repository = QnnGenerationRepositoryImpl(
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
-        preferenceManager = stubPreferenceManager,
         backgroundWorkObserver = stubBackgroundWorkObserver,
         mediaFileManager = stubMediaFileManager,
+        blurHashEncoder = stubBlurHashEncoder,
+        preferenceManager = stubPreferenceManager,
         localQnn = stubLocalQnn,
         bitmapToBase64Converter = stubBitmapToBase64Converter,
         schedulersProvider = stubSchedulersProvider,

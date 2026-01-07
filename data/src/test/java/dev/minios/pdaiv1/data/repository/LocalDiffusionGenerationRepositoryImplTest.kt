@@ -5,6 +5,7 @@ import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.common.schedulers.SchedulersToken
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.imageprocessing.BitmapToBase64Converter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.data.mocks.mockLocalAiModel
 import dev.minios.pdaiv1.data.mocks.mockTextToImagePayload
 import dev.minios.pdaiv1.domain.datasource.DownloadableModelDataSource
@@ -43,6 +44,7 @@ class LocalDiffusionGenerationRepositoryImplTest {
     private val stubDownloadableLocalDataSource = mockk<DownloadableModelDataSource.Local>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     private val stubMediaFileManager = mockk<MediaFileManager>()
+    private val stubBlurHashEncoder = mockk<BlurHashEncoder>()
 
     private val stubSchedulersProvider = object : SchedulersProvider {
         override val io: Scheduler = Schedulers.trampoline()
@@ -55,9 +57,10 @@ class LocalDiffusionGenerationRepositoryImplTest {
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
-        preferenceManager = stubPreferenceManager,
         backgroundWorkObserver = stubBackgroundWorkObserver,
         mediaFileManager = stubMediaFileManager,
+        blurHashEncoder = stubBlurHashEncoder,
+        preferenceManager = stubPreferenceManager,
         localDiffusion = stubLocalDiffusion,
         downloadableLocalDataSource = stubDownloadableLocalDataSource,
         bitmapToBase64Converter = stubBitmapToBase64Converter,

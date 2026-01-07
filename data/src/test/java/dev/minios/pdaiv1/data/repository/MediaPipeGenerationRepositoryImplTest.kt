@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import dev.minios.pdaiv1.core.common.schedulers.SchedulersProvider
 import dev.minios.pdaiv1.core.imageprocessing.Base64ToBitmapConverter
 import dev.minios.pdaiv1.core.imageprocessing.BitmapToBase64Converter
+import dev.minios.pdaiv1.core.imageprocessing.blurhash.BlurHashEncoder
 import dev.minios.pdaiv1.domain.datasource.GenerationResultDataSource
 import dev.minios.pdaiv1.domain.feature.MediaFileManager
 import dev.minios.pdaiv1.domain.feature.mediapipe.MediaPipe
@@ -33,6 +34,7 @@ class MediaPipeGenerationRepositoryImplTest {
     private val stubMediaPipe = mockk<MediaPipe>()
     private val stubBackgroundWorkObserver = mockk<BackgroundWorkObserver>()
     private val stubMediaFileManager = mockk<MediaFileManager>()
+    private val stubBlurHashEncoder = mockk<BlurHashEncoder>()
 
     private val stubSchedulersProvider = object : SchedulersProvider {
         override val io: Scheduler = Schedulers.trampoline()
@@ -45,9 +47,10 @@ class MediaPipeGenerationRepositoryImplTest {
         mediaStoreGateway = stubMediaStoreGateway,
         base64ToBitmapConverter = stubBase64ToBitmapConverter,
         localDataSource = stubLocalDataSource,
-        preferenceManager = stubPreferenceManager,
         backgroundWorkObserver = stubBackgroundWorkObserver,
         mediaFileManager = stubMediaFileManager,
+        preferenceManager = stubPreferenceManager,
+        blurHashEncoder = stubBlurHashEncoder,
         schedulersProvider = stubSchedulersProvider,
         mediaPipe = stubMediaPipe,
         bitmapToBase64Converter = stubBitmapToBase64Converter,

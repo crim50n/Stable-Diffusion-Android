@@ -23,10 +23,12 @@ val mockGenerationResultEntity = GenerationResultEntity(
     subSeedStrength = 5598f,
     denoisingStrength = 1504f,
     hidden = false,
+    liked = false,
     mediaPath = "",
     inputMediaPath = "",
     mediaType = "IMAGE",
     modelName = "MockModel",
+    blurHash = "",
 )
 
 val mockGenerationResultEntities = listOf(mockGenerationResultEntity)
