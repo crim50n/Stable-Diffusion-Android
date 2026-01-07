@@ -465,6 +465,62 @@ class GenerationResultRepositoryImplTest {
     }
 
     @Test
+    fun `given attempt to unlike by ids, local success, expected complete value`() {
+        every {
+            stubLocalDataSource.unlikeByIds(any())
+        } returns Completable.complete()
+
+        repository
+            .unlikeByIds(listOf(5598L, 151297L))
+            .test()
+            .assertNoErrors()
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given attempt to unlike by ids, local fails, expected error value`() {
+        every {
+            stubLocalDataSource.unlikeByIds(any())
+        } returns Completable.error(stubException)
+
+        repository
+            .unlikeByIds(listOf(5598L, 151297L))
+            .test()
+            .assertError(stubException)
+            .await()
+            .assertNotComplete()
+    }
+
+    @Test
+    fun `given attempt to unhide by ids, local success, expected complete value`() {
+        every {
+            stubLocalDataSource.unhideByIds(any())
+        } returns Completable.complete()
+
+        repository
+            .unhideByIds(listOf(5598L, 151297L))
+            .test()
+            .assertNoErrors()
+            .await()
+            .assertComplete()
+    }
+
+    @Test
+    fun `given attempt to unhide by ids, local fails, expected error value`() {
+        every {
+            stubLocalDataSource.unhideByIds(any())
+        } returns Completable.error(stubException)
+
+        repository
+            .unhideByIds(listOf(5598L, 151297L))
+            .test()
+            .assertError(stubException)
+            .await()
+            .assertNotComplete()
+    }
+
+    @Test
     fun `given attempt to delete all unliked, local success, expected complete value`() {
         every {
             stubLocalDataSource.deleteAllUnliked()
