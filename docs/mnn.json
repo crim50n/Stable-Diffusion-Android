@@ -1,0 +1,62 @@
+[
+  {
+    "id": "mnn-anything-v5",
+    "name": "Anything V5 (CPU/MNN)",
+    "size": "1.19 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/AnythingV5.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "mnn"
+    }
+  },
+  {
+    "id": "mnn-qteamix",
+    "name": "QteaMix (CPU/MNN)",
+    "size": "1.19 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/QteaMix.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "mnn"
+    }
+  },
+  {
+    "id": "mnn-cuteyukimix",
+    "name": "CuteYukiMix (CPU/MNN)",
+    "size": "1.19 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/CuteYukiMix.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "mnn"
+    }
+  },
+  {
+    "id": "mnn-absolutereality",
+    "name": "Absolute Reality (CPU/MNN)",
+    "size": "1.19 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/AbsoluteReality.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "mnn"
+    }
+  },
+  {
+    "id": "mnn-chilloutmix",
+    "name": "ChilloutMix (CPU/MNN)",
+    "size": "1.2 GB",
+    "sources": [
+      "https://huggingface.co/xororz/sd-mnn/resolve/main/ChilloutMix.zip"
+    ],
+    "metadata": {
+      "src": "https://huggingface.co/xororz/sd-mnn",
+      "type": "mnn"
+    }
+  }
+]
